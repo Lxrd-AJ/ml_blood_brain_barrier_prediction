@@ -1,0 +1,15 @@
+.DS_Store
+books/
+*.pptx
+__pycache__
+*/.idea/*
+
+deliverables/project_report/*.log
+deliverables/project_report/*.tex.bak
+deliverables/project_report/*.aux
+deliverables/project_report/*.lot
+deliverables/project_report/*.toc
+deliverables/project_report/*.synctex.gz
+deliverables/project_report/*.lof
+
+*.sync
