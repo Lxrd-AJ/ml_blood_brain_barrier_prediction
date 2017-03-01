@@ -17,7 +17,7 @@
 \begin{titlepage}
 	\begin{center}
 		%\vspace*{1cm}
-		\includegraphics[scale=1,width=0.4\textwidth]{images/uob_logo} \\
+		\includegraphics[scale=1,width=0.3\textwidth]{images/uob_logo} \\
 		\huge
 		\textbf{Machine Learning in Drug Discovery and Design\\}
 		\vspace{0.5cm}
@@ -51,18 +51,22 @@
 \end{abstract}
 
 \chapter{Introduction}
-	%\textit{citation needed, these are notes made from papers read} \\
-	Chemical data is growing exponentially as there are currently more than 123 million organic and inorganic substances to date \cite{CAS2016}, which means in drug development, there is an abundance of chemical data to analyse in search for ideal candidates for development. \\
+	Chemical data is growing exponentially as there are currently more than 123 million organic and inorganic substances to date \cite{CAS2016}, which means for drug development purposes, there is an abundance of chemical data to analyse in search for ideal candidates for development. \\
+	Machine Learning is a form of artificial intelligence (AI) that enables computer programs to learn concepts from data without being explicitly programmed. This technique of AI can be applied to problems in many domains, which is what this paper aims to do by applying it to chemical data to build computer models, aka Virtual Screening, models which can predict with high accuracy, the probability of a drug to pass through the blood brain barrier (BBB) of living organisms. \\
 	\textit{In Silico} models (computer models) have a profound use in virtual screening as they can enable scientist to scan through a large database of drugs to speed up a time consuming process of analysing drug candidates. \\
-	In CNS (Central Nervous System) drug development, when the drug is absorbed into the blood stream, it needs to be able to 
-	pass through the Blood Brain Barrier (BBB) to its target which could be the brain or the nervous system, an example would an anti-migraine agent, ergotamine, which has to pass through the blood brain barrier to the lining of the brain where it
-	constricts the blood vessels there to decrease the pain from migraine headaches \cite{DrugsCom}. However statistically speaking, only 2\% of the currently known molecules can pass through this blood brain barrier, which translates to more time in the drug discovery pipeline spent on analysing drug candidates that can pass through the BBB barrier. \\
-	This problem of determining the drug candidates that belong to this 2\% is a very challenging one which further opens the pathway for creative solutions. One approach is through the use of computer models, data mining techniques can be applied to a large database of molecules to understand what properties the drugs that can pass through this BBB possesses and in turn predict the probability of an unknown candidate passing through. 
-	\section{Problem Description}
+	In the context of CNS (Central Nervous System) drug development, when a drug is absorbed into the blood stream, it needs to be able to pass through the Blood Brain Barrier (BBB) to its target which could be the brain or the nervous system, an example would an anti-migraine agent, ergotamine, 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=1,width=0.55\textwidth,totalheight=0.3\textheight]{images/Ergotamine-skeletal} 
+			\caption{Chemical Representation of Ergotamine}
+			\label{fig:ergotamine}
+		\end{figure}
+	which has to pass through the blood brain barrier to the lining of the brain where it constricts the blood vessels there to decrease the pain from migraine headaches \cite{DrugsCom}. 
+	%TODO: This needs citation -> 2% of known molecules
+	However statistically speaking, only 2\% of the currently known molecules can pass through this blood brain barrier, which translates to more time in the drug discovery pipeline spent on analysing drug candidates that can pass through the BBB barrier. \\
 	\section{Proposed Solution}
-		The approach taken in this paper, is the use of machine learning techniques to predict the probability of a drug passing 
-		through the BBB. As Ana et al \cite{Anaetal2012} points out, there is a lack of extensive dataset on BBB prediction as most of them are not comprehensive enough to build complex models out of, as a result, they have compiled a dataset of 2040 molecules for use in BBB prediction. Based on analysis carried out \cite{Anaetal2012} by Ana et al, They show that support vector machines and random forests outperform other methods especially for BBB classification tasks. This paper will attempt to recreate that analysis as a baseline model for comparing against Deep neural networks, as Thomas et al \cite{Thomasetal2014} shows that Deep learning techniques have a significant opportunity in virtual screening. So this paper will explore Deep Neural Networks for BBB prediction.
-		%\subsection{Aims and Objectives}
+		This problem of determining the drug candidates that belong to this 2\% is a very challenging one and this paper approaches the problem through the use of computer models built with machine learning techniques, applied to a large database of molecules that pass through the Blood Brain Barrier, with the aim of predicting the probability of an unknown candidate drug passing through the BBB. \\
+		Ana et al \cite{Anaetal2012} points out that there is a lack of extensive dataset on BBB prediction as most of them are not comprehensive enough to build complex models out of, as a result, they have compiled a dataset of 2040 molecules for use in BBB prediction. Based on analysis carried out \cite{Anaetal2012} by Ana et al, They show that certain machine learning classifiers such as support vector machines and random forests outperform other classifiers especially for BBB classification tasks. This paper will attempt utilise that analysis as a baseline for developing our computer models whilst also exploring the possibility of Deep neural networks, as Thomas et al \cite{Thomasetal2014} show that Deep learning techniques have a significant opportunity in virtual screening.
 	\section{Results}
 
 
@@ -161,6 +165,7 @@
 
 \chapter{Model Evaluation and Improvement}
 	\section{Model Evaluation}
+		% Draw a diagram like the one in this link(http://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/) to compare the results of all the classifiers
 	\section{Model Improvement techniques}
 		\subsection{Grid Search}
 	\section{Model Persistence} 

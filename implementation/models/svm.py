@@ -8,8 +8,73 @@ from sklearn.svm import SVC,LinearSVC
 from sklearn.model_selection import cross_val_score
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler,MinMaxScaler
+from sklearn.pipeline import Pipeline,FeatureUnion
+from sklearn.model_selection import cross_val_score, train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
+
+def pipeline_svm(X,y,isFingerprint=False):
+    # split data into train+validation set and test set
+    X_trainval, X_test, y_trainval, y_test = train_test_split(X, y, random_state=0)
+    # split train+validation set into training and validation sets
+    X_train, X_valid, y_train, y_valid = train_test_split( X_trainval, y_trainval, random_state=1)
+    print("Size of training set: {} size of validation set: {} size of test set: {}\n".format(X_train.shape[0], X_valid.shape[0], X_test.shape[0]))
+
+    pipeline = None
+    feature_union = FeatureUnion([
+        ("scaler", StandardScaler()),
+        ("pca", PCA(n_components=50)) #TODO: GridSearch n_components parameter later
+        ])
+    if not isFingerprint:
+        pipeline = Pipeline([
+            ('preprocessors', feature_union),
+            ("svm", SVC(kernel='linear',probability=True,class_weight='balanced'))
+        ])
+    else:
+        pipeline = Pipeline([("svm", SVC(kernel='linear',probability=True,class_weight='balanced'))])
+
+    # Debugging purposes only 
+    # for param,value in pipeline.get_params().items():
+    #     print("Parameter = {:} \t Value= {:}".format(param,value))
+
+    # Grid Searching to select the best parameters for the pipeline
+    best_score = 0
+    best_parameters = {}
+    for gamma in [0.01, 1, 100]: #[0.001, 0.01, 0.1, 1, 10, 100]
+        for C in [0.01, 1, 100]:
+            for pca_n_components in [30,50,80]:
+                for kernel in ['linear','rbf','poly','sigmoid']:
+                    parameters = {
+                        'svm__kernel': kernel,
+                        'svm__C': C,
+                        'svm__gamma': gamma
+                    }
+                    if not isFingerprint:
+                        parameters['preprocessors__pca__n_components'] = pca_n_components
+                    
+                    pipeline.set_params(**parameters)
+
+                    for param, value in parameters.items():
+                        print("-> Training SVM Classifier with {:} = {:}".format(param,value))
+
+                    pipeline.fit(X_train, y_train)
+                    #TODO: Update to use cross validation into_ml_pg_264, although it increases train time
+                    score = pipeline.score(X_valid, y_valid)
+
+                    print("\t -> training score of {:.2f} \n".format(score))
+
+                    if score > best_score:
+                        best_score = score
+                        best_parameters = parameters
+        
+    pipeline.set_params(**best_parameters)
+    pipeline.fit(X_trainval, y_trainval)
+    test_score = pipeline.score(X_test, y_test)
+    print("Best score on validation set: {:.2f}".format(best_score))
+    print("Best parameters: ", best_parameters)
+    print("Test set score with best parameters: {:.2f}".format(test_score))
+
+    return pipeline
 
 def classifier_svc(X,y,should_scale=False,viz_title="./visualisations/decision_svm.png"):
     pca = PCA(n_components=50)
@@ -70,5 +135,5 @@ def plot_decision_surface(X,y,classifiers,titles,viz_name):
         plt.yticks(())
         plt.title(titles[idx])
 
-    plt.savefig(viz_name,format='png',dpi=1080)
+    plt.savefig(viz_name,format='png',dpi=500)
     return

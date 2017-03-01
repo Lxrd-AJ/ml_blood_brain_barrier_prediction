@@ -101,11 +101,11 @@ Support Vector Machines
 print("Using Simple molecular Descriptors")
 viz_title = "./visualisations/mol_decision_svm.png"
 mol_svm = svm.classifier_svc(A,y_a,should_scale=True,viz_title=viz_title)
-# mol_svm = svm.classifier_svc(A,y_a,should_scale=False,viz_title=viz_title)
+mol_svm = svm.classifier_svc(A,y_a,should_scale=False,viz_title=viz_title)
 
-# print("Using the Morgan fingerprint dataset")
-# viz_title = "./visualisations/fps_decision_svm.png"
-# fps_svm = svm.classifier_svc(B,y_b,should_scale=False,viz_title=viz_title)
+print("Using the Morgan fingerprint dataset")
+viz_title = "./visualisations/fps_decision_svm.png"
+fps_svm = svm.classifier_svc(B,y_b,should_scale=False,viz_title=viz_title)
 
 
 
@@ -115,8 +115,8 @@ mol_svm = svm.classifier_svc(A,y_a,should_scale=True,viz_title=viz_title)
 Neural Networks
 ====================================================
 """
-print("Using Simple molecular Descriptors")
-mol_mlp = neural_network.mlp_classifier(A,y_a)
+# print("Using Simple molecular Descriptors")
+# mol_mlp = neural_network.mlp_classifier(A,y_a)
 # print("*****" * 5, "Attempting Automatic Feature Selection", "*****"*5)
 # print("Using Simple molecular Descriptors")
 # viz_name = "neural_network_smd_univariate_matrix.png"
@@ -151,7 +151,7 @@ clustering.dbscan(B,y_b,"",False)
 
 """
 Create an Ensemble voting classifier. See http://scikit-learn.org/stable/modules/ensemble.html#majority-class-labels-majority-hard-voting for more information
-"""
+""" 
 # smd_ensemble_classifier = VotingClassifier(
 #     estimators=[
 #         ("smd_neural_net", mol_mlp),
