@@ -1,8 +1,68 @@
 from sklearn.tree import DecisionTreeClassifier,export_graphviz
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier,ExtraTreesClassifier,AdaBoostClassifier,GradientBoostingClassifier
+from sklearn.pipeline import Pipeline
 import graphviz
 import random
+
+def pipeline_tree_forest(X,y):
+    # split data into train+validation set and test set
+    X_trainval, X_test, y_trainval, y_test = train_test_split(X, y, random_state=0)
+    # split train+validation set into training and validation sets
+    X_train, X_valid, y_train, y_valid = train_test_split( X_trainval, y_trainval, random_state=1)
+    print("Size of training set: {} size of validation set: {} size of test set: {}\n".format(X_train.shape[0], X_valid.shape[0], X_test.shape[0]))
+
+    pipeline = Pipeline([
+        ('clf',None)
+    ])
+
+    # Grid Searching to select the best parameters for the pipeline
+    best_score = 0
+    best_parameters = {}
+    for classifier in [RandomForestClassifier(), ExtraTreesClassifier(), AdaBoostClassifier, GradientBoostingClassifier]:
+        for n_estimators  in [10,50,100,150,200]:
+            for max_depth in [5,10,15,20]:
+                for oob_score in [True,False]:
+                    for algorithm in ['SAMME', 'SAMME.R']:
+                        for loss in ['deviance','exponential']:
+                            for criterion in ['friedman_mse','mse','mae']:
+                                parameters = {
+                                    'clf': classifier,
+                                    'clf__n_estimators': n_estimators,
+                                    'clf__max_depth': max_depth,
+                                    'clf__oob_score': oob_score
+                                }
+
+                                if isinstance(classifier, AdaBoostClassifier):
+                                    del parameters['clf__max_depth']
+                                    parameters['clf__algorithm'] = algorithm
+
+                                if isinstance(classifier, GradientBoostingClassifier):
+                                    del parameters['clf__oob_score']
+                                    parameters['clf__loss'] = loss
+
+                                pipeline.set_params(**parameters)
+
+                                for param, value in parameters.items():
+                                    print("-> Training {:} Classifier with {:} = {:}".format(classifier.__class__.__name__,param,value))
+                                
+                                pipeline.fit(X_train, y_train)
+                                score = pipeline.score(X_valid, y_valid)
+
+                                print("\t -> training score of {:.2f} \n".format(score))
+
+                                if score > best_score:
+                                    best_score = score
+                                    best_parameters = parameters
+        
+    pipeline.set_params(**best_parameters)
+    pipeline.fit(X_trainval, y_trainval)
+    test_score = pipeline.score(X_test, y_test)
+    print("Best score on validation set: {:.2f}".format(best_score))
+    print("Best parameters: ", best_parameters)
+    print("Test set score with best parameters: {:.2f}".format(test_score))
+
+    return pipeline  
 
 def tree(X,y,should_viz=False):
     X_train, X_test, y_train, y_test = train_test_split(X,y,random_state=random.randint(1,50))

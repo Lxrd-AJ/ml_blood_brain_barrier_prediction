@@ -11,75 +11,73 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-def best_knn_pipeline(datasets):
-    """
-    Applies a feature union to each created pipeline for each dataset passed to it
-    and returns the pipeline with the highest average score
-    """
-    molecular_descriptor_pipeline = knn_pipeline_molecular_descriptors(
-        datasets["molecular_descriptors"][0],
-        datasets["molecular_descriptors"][1]
-    )
+def pipeline_knn(X,y,isFingerprint=False):
+    # split data into train+validation set and test set
+    X_trainval, X_test, y_trainval, y_test = train_test_split(X, y, random_state=0)
+    # split train+validation set into training and validation sets
+    X_train, X_valid, y_train, y_valid = train_test_split( X_trainval, y_trainval, random_state=1)
+    print("Size of training set: {} size of validation set: {} size of test set: {}\n".format(X_train.shape[0], X_valid.shape[0], X_test.shape[0]))
 
-    fingerprint_pipeline = knn_pipeline_fingerprint(
-        datasets["morgan_fingerprints"][0],
-        datasets["morgan_fingerprints"][1]
-    )
-
-    pipelines = [molecular_descriptor_pipeline, fingerprint_pipeline]
-    pipelines.sort(key=lambda ps: ps[0]) #sort by their cross val scores
-    pipeline = pipelines[-1] # return the pipeline with the biggest score
-    print("kNN classifier with the highest score => {}".format(pipeline))
-    return pipeline[1] # return pipeline without cross val score
-
-"""
-- Compare different feature vectors {MoleculeDescriptors,Fingerprints}
-- Compare different distance metrics
-"""
-
-def knn_pipeline_molecular_descriptors(X,y):
-    """
-    Using K-Nearest neighbour
-    Predicts the probability of a molecule passing throught the blood brain barrier based on
-    molecules similar to the target molecule.
-    Dataset is rescaled to achieve the best result for simple molecular descriptors
-    Returns the
-    - The feature vectors used here are the simple molecular descriptors
-    - notes:
-        * Without preprocessing the knn classifier performs horribly
-            * The best preprocessor so far is the MinMaxScaler
-        * Optimal prediction value at n = 9 or 10
-    - todo:
-        * Fit the feature union only on the X_train data and not X
-    """
+    pipeline = None
     feature_union = FeatureUnion([
-        ("scaler",MinMaxScaler(feature_range=(-1, 1))),
-        #("poly_feat", PolynomialFeatures(degree=2))
+            ("scaler",MinMaxScaler(feature_range=(-1, 1))),
+            #("poly_feat", PolynomialFeatures(degree=2))
         ])
-    feature_union.fit(X,y)
-    X = feature_union.transform(X)
-    print("Training using the k-nearest neighbour classifier with feature union\n{}".format(feature_union))
-    print("Using Simple Molecular Descriptors as the feature vectors")
-    return knn_pipeline('knn_molecular_descriptors.png',X,y,("molecular_features",feature_union))
+    
+    if not isFingerprint:
+        pipeline = Pipeline([
+            ("feature_union",feature_union),
+            ("knn_classifier",KNeighborsClassifier(metric='minkowski',leaf_size=40,n_jobs=-1))
+        ])
+    else:
+        pipeline = Pipeline([
+            ("knn_classifier",KNeighborsClassifier(metric='dice',leaf_size=40,n_jobs=-1))
+        ])
 
-def knn_pipeline_fingerprint(X,y):
-    """
-    k-nearest neighbour classifier using the molecular fingerprint as the feature vector.
-        - Fingerprints are calculated by using a kernel function to extract features from a molecule
-            which are then hashed to create a bit vector.
-        - More information online at
-            http://rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf
-        - [x] The Tanimoto similarity / Dice measure is used as a distance metric for the knn classifier as they provide better
-            distance metrics than minkowski
-    """
-    print("\n","===" * 15)
-    print("Testing using the k-nearest neighbour classifier")
-    print("Using the Morgan Fingerprints as the feature vectors")
-    return knn_pipeline('knn_morgan_dice_fingerprint.png',X,y,feature_union=None,metric='dice')
+    # Grid Searching to select the best parameters for the pipeline
+    best_score = 0
+    best_parameters = {}
+    for n_neighbors in [5,10,15]:
+        for weights in ['uniform','distance']:
+            for algorithm in ['auto', 'ball_tree', 'kd_tree', 'brute']:
+                for leaf_size in [30,50,70]:
+                    parameters = {
+                        'knn_classifier__n_neighbors': n_neighbors,
+                        'knn_classifier__weights': weights,
+                        'knn_classifier__algorithm': algorithm,
+                        'knn_classifier__leaf_size': leaf_size
+                    }
+    
+                    pipeline.set_params(**parameters)
+
+                    for param, value in parameters.items():
+                        print("-> Training kNN Classifier with {:} = {:}".format(param,value))
+                    
+                    pipeline.fit(X_train, y_train)
+                    score = pipeline.score(X_valid, y_valid)
+
+                    print("\t -> training score of {:.2f} \n".format(score))
+
+                    if score > best_score:
+                        best_score = score
+                        best_parameters = parameters
+                    
+
+    pipeline.set_params(**best_parameters)
+    pipeline.fit(X_trainval, y_trainval)
+    test_score = pipeline.score(X_test, y_test)
+    print("Best score on validation set: {:.2f}".format(best_score))
+    print("Best parameters: ", best_parameters)
+    print("Test set score with best parameters: {:.2f}".format(test_score))
+
+    return pipeline
 
 
-def knn_pipeline(viz_name, X, y, feature_union, metric='minkowski',k_name=""):
+
+
+def knn_classifier(viz_name, X, y, metric='minkowski',k_name=""):
     """
+    TODO: Refactor this function to work indepe
     TODO: Modify knn_pipeline to use cross_validation score instead
     Creates a Pipeline for 1 - 10 nearest neighbor and returns the pipeline with the
     highest test score
@@ -88,6 +86,10 @@ def knn_pipeline(viz_name, X, y, feature_union, metric='minkowski',k_name=""):
     test_accuracy = []
     pipelines = []
     neighbor_range = range(1,11)
+    feature_union = FeatureUnion([
+            ("scaler",MinMaxScaler(feature_range=(-1, 1))),
+            #("poly_feat", PolynomialFeatures(degree=2))
+        ])
     for i in neighbor_range:
         X_train, X_test, y_train, y_test = train_test_split(X,y,random_state=i)
         print("Creating Pipeline using {} neighbor(s)".format(i))
@@ -120,6 +122,45 @@ def knn_pipeline(viz_name, X, y, feature_union, metric='minkowski',k_name=""):
 
     pipelines.sort(key=lambda ts: ts[0]) #take the small training scores
     return pipelines[0]
+
+def knn_pipeline_molecular_descriptors(X,y):
+    """
+    TODO: Deprecate function
+    Using K-Nearest neighbour
+    Predicts the probability of a molecule passing throught the blood brain barrier based on
+    molecules similar to the target molecule.
+    Dataset is rescaled to achieve the best result for simple molecular descriptors
+    Returns the
+    - The feature vectors used here are the simple molecular descriptors
+    - notes:
+        * Without preprocessing the knn classifier performs horribly
+            * The best preprocessor so far is the MinMaxScaler
+        * Optimal prediction value at n = 9 or 10
+    - todo:
+        * Fit the feature union only on the X_train data and not X
+    """
+    
+    feature_union.fit(X,y)
+    X = feature_union.transform(X)
+    print("Training using the k-nearest neighbour classifier with feature union\n{}".format(feature_union))
+    print("Using Simple Molecular Descriptors as the feature vectors")
+    return knn_pipeline('knn_molecular_descriptors.png',X,y,("molecular_features",feature_union))
+
+def knn_pipeline_fingerprint(X,y):
+    """
+    TODO: Deprecate function
+    k-nearest neighbour classifier using the molecular fingerprint as the feature vector.
+        - Fingerprints are calculated by using a kernel function to extract features from a molecule
+            which are then hashed to create a bit vector.
+        - More information online at
+            http://rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf
+        - [x] The Tanimoto similarity / Dice measure is used as a distance metric for the knn classifier as they provide better
+            distance metrics than minkowski
+    """
+    print("\n","===" * 15)
+    print("Testing using the k-nearest neighbour classifier")
+    print("Using the Morgan Fingerprints as the feature vectors")
+    return knn_pipeline('knn_morgan_dice_fingerprint.png',X,y,feature_union=None,metric='dice')
 
 
 def tanimoto_dist(x1,y1):

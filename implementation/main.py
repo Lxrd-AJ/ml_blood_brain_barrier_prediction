@@ -10,6 +10,8 @@ import time
 import pandas as pd
 import numpy as np
 
+#TODO: Use a Logging framework and log the important parameters to file
+
 start_time = time.time()
 
 dataset_url = "./datasets/bbb_penetration_modified.txt"
@@ -97,7 +99,7 @@ fps_gradientboost = decision_tree.gradientboost_trees(B,y_b)
 ====================================================
 Support Vector Machines
 ====================================================
-"""
+
 print("Using Simple molecular Descriptors")
 viz_title = "./visualisations/mol_decision_svm.png"
 mol_svm = svm.classifier_svc(A,y_a,should_scale=True,viz_title=viz_title)
@@ -106,7 +108,7 @@ mol_svm = svm.classifier_svc(A,y_a,should_scale=False,viz_title=viz_title)
 print("Using the Morgan fingerprint dataset")
 viz_title = "./visualisations/fps_decision_svm.png"
 fps_svm = svm.classifier_svc(B,y_b,should_scale=False,viz_title=viz_title)
-
+"""
 
 
 
@@ -115,17 +117,17 @@ fps_svm = svm.classifier_svc(B,y_b,should_scale=False,viz_title=viz_title)
 Neural Networks
 ====================================================
 """
-# print("Using Simple molecular Descriptors")
-# mol_mlp = neural_network.mlp_classifier(A,y_a)
-# print("*****" * 5, "Attempting Automatic Feature Selection", "*****"*5)
-# print("Using Simple molecular Descriptors")
-# viz_name = "neural_network_smd_univariate_matrix.png"
-# mol_mlp = neural_network.mlp_classifier_univariate(A,y_a,viz_name,should_scale=True)
+print("Using Simple molecular Descriptors")
+mol_mlp = neural_network.mlp_classifier(A,y_a)
+print("*****" * 5, "Attempting Automatic Feature Selection", "*****"*5)
+print("Using Simple molecular Descriptors")
+viz_name = "neural_network_smd_univariate_matrix.png"
+mol_mlp = neural_network.mlp_classifier_univariate(A,y_a,viz_name,should_scale=True)
 
-# viz_name = "neural_network_fps_univariate_matrix.png"
-# print("Using the Morgan fingerprint dataset")
-# # fps_mlp = neural_network.mlp_classifier(B,y_b)
-# fps_mlp = neural_network.mlp_classifier_univariate(B,y_b,viz_name)
+viz_name = "neural_network_fps_univariate_matrix.png"
+print("Using the Morgan fingerprint dataset")
+# fps_mlp = neural_network.mlp_classifier(B,y_b)
+fps_mlp = neural_network.mlp_classifier_univariate(B,y_b,viz_name)
 
 
 

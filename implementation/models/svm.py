@@ -40,10 +40,10 @@ def pipeline_svm(X,y,isFingerprint=False):
     # Grid Searching to select the best parameters for the pipeline
     best_score = 0
     best_parameters = {}
-    for gamma in [0.01, 1, 100]: #[0.001, 0.01, 0.1, 1, 10, 100]
-        for C in [0.01, 1, 100]:
-            for kernel in ['linear','rbf','poly','sigmoid']:
-                for pca_n_components in [30]: #[30,50,80]
+    for gamma in [0.001, 0.01, 0.1, 1, 10, 100]: 
+        for C in [0.001, 0.01, 0.1, 1, 10, 100]:
+            for kernel in ['rbf','poly','sigmoid']: #'NB:A Linear kernel takes forever to train so it was removed
+                for pca_n_components in [30,50,80]: 
                     parameters = {
                         'svm__kernel': kernel,
                         'svm__C': C,
@@ -56,7 +56,7 @@ def pipeline_svm(X,y,isFingerprint=False):
 
                     for param, value in parameters.items():
                         print("-> Training SVM Classifier with {:} = {:}".format(param,value))
-
+                    
                     pipeline.fit(X_train, y_train)
                     #TODO: Update to use cross validation into_ml_pg_264, although it increases train time
                     score = pipeline.score(X_valid, y_valid)
