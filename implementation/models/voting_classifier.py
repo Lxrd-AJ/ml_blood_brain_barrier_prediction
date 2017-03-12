@@ -47,6 +47,7 @@ voting_clf = VotingClassifier(estimators=[
     ('forest_classifier', forest_pipeline)
 ], voting="soft", n_jobs=-1)
 
+#TODO: Implement grid search to select the best cv value for cross validation
 scores = cross_val_score(voting_clf, A, y_a,cv=10, scoring='accuracy')
 print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std()))
 print("Program execution took {} (s)".format(time.time() - start_time))
