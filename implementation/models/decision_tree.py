@@ -12,14 +12,12 @@ def pipeline_tree_forest(X,y):
     X_train, X_valid, y_train, y_valid = train_test_split( X_trainval, y_trainval, random_state=1)
     print("Size of training set: {} size of validation set: {} size of test set: {}\n".format(X_train.shape[0], X_valid.shape[0], X_test.shape[0]))
 
-    pipeline = Pipeline([
-        ('clf',None)
-    ])
 
     # Grid Searching to select the best parameters for the pipeline
     best_score = 0
     best_parameters = {}
-    for classifier in [RandomForestClassifier(), ExtraTreesClassifier(), AdaBoostClassifier, GradientBoostingClassifier]:
+    best_classifier = None 
+    for classifier in [RandomForestClassifier(), ExtraTreesClassifier(), AdaBoostClassifier(), GradientBoostingClassifier()]:
         for n_estimators  in [10,50,100,150,200]:
             for max_depth in [5,10,15,20]:
                 for oob_score in [True,False]:
@@ -27,34 +25,39 @@ def pipeline_tree_forest(X,y):
                         for loss in ['deviance','exponential']:
                             for criterion in ['friedman_mse','mse','mae']:
                                 parameters = {
-                                    'clf': classifier,
-                                    'clf__n_estimators': n_estimators,
-                                    'clf__max_depth': max_depth,
-                                    'clf__oob_score': oob_score
+                                    'n_estimators': n_estimators,
+                                    'max_depth': max_depth,
+                                    'oob_score': oob_score
                                 }
-
+                                
                                 if isinstance(classifier, AdaBoostClassifier):
-                                    del parameters['clf__max_depth']
-                                    parameters['clf__algorithm'] = algorithm
+                                    del parameters['max_depth']
+                                    del parameters['oob_score']
+                                    parameters['algorithm'] = algorithm
 
                                 if isinstance(classifier, GradientBoostingClassifier):
-                                    del parameters['clf__oob_score']
-                                    parameters['clf__loss'] = loss
+                                    del parameters['oob_score']
+                                    parameters['loss'] = loss
 
-                                pipeline.set_params(**parameters)
+                                if isinstance(classifier, ExtraTreesClassifier):
+                                    parameters['bootstrap'] = True 
+
+                                classifier.set_params(**parameters)
 
                                 for param, value in parameters.items():
-                                    print("-> Training {:} Classifier with {:} = {:}".format(classifier.__class__.__name__,param,value))
+                                    print("-> Training {:} with {:} = {:}".format(classifier.__class__.__name__,param,value))
                                 
-                                pipeline.fit(X_train, y_train)
-                                score = pipeline.score(X_valid, y_valid)
+                                classifier.fit(X_train, y_train)
+                                score = classifier.score(X_valid, y_valid)
 
                                 print("\t -> training score of {:.2f} \n".format(score))
 
                                 if score > best_score:
                                     best_score = score
                                     best_parameters = parameters
+                                    best_classifier = classifier
         
+    pipeline = best_classifier
     pipeline.set_params(**best_parameters)
     pipeline.fit(X_trainval, y_trainval)
     test_score = pipeline.score(X_test, y_test)

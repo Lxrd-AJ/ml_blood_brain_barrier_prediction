@@ -10,6 +10,9 @@ from rdkit.Chem.AtomPairs import Pairs
 import pandas as pd
 import numpy as np
 import os
+import time
+
+start_time = time.time()
 
 dataset_url = "./../datasets/bbb_penetration_modified.txt"
 desc_url = "./../datasets/bbb_penetration_molecular_descriptors.csv"
@@ -44,6 +47,6 @@ voting_clf = VotingClassifier(estimators=[
     ('forest_classifier', forest_pipeline)
 ], voting="soft", n_jobs=-1)
 
-scores = cross_val_score(voting_clf, A, y_a,cv=5, scoring='accuracy')
+scores = cross_val_score(voting_clf, A, y_a,cv=10, scoring='accuracy')
 print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std()))
-
+print("Program execution took {} (s)".format(time.time() - start_time))
