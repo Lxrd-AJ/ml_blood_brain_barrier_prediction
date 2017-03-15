@@ -7,10 +7,13 @@ from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem
 from sklearn.model_selection import cross_val_score, train_test_split
 from rdkit.Chem.AtomPairs import Pairs
+from sklearn.externals import joblib
 import pandas as pd
 import numpy as np
 import os
 import time
+import datetime 
+
 
 start_time = time.time()
 
@@ -51,3 +54,11 @@ voting_clf = VotingClassifier(estimators=[
 scores = cross_val_score(voting_clf, A, y_a,cv=10, scoring='accuracy')
 print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std()))
 print("Program execution took {} (s)".format(time.time() - start_time))
+
+
+# Save the trained model to disk
+model_name = "brain_{:}_bbb.pkl".format(datetime.date.today())
+print("Saved model as {:}".format(model_name))
+joblib.dump(voting_clf, model_name) 
+
+voting_clf = joblib.load(model_name)
