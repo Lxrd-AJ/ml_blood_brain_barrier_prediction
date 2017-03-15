@@ -1,8 +1,71 @@
 from sklearn.tree import DecisionTreeClassifier,export_graphviz
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier,ExtraTreesClassifier,AdaBoostClassifier,GradientBoostingClassifier
+from sklearn.pipeline import Pipeline
 import graphviz
 import random
+
+def pipeline_tree_forest(X,y):
+    # split data into train+validation set and test set
+    X_trainval, X_test, y_trainval, y_test = train_test_split(X, y, random_state=0)
+    # split train+validation set into training and validation sets
+    X_train, X_valid, y_train, y_valid = train_test_split( X_trainval, y_trainval, random_state=1)
+    print("Size of training set: {} size of validation set: {} size of test set: {}\n".format(X_train.shape[0], X_valid.shape[0], X_test.shape[0]))
+
+
+    # Grid Searching to select the best parameters for the pipeline
+    best_score = 0
+    best_parameters = {}
+    best_classifier = None 
+    for classifier in [RandomForestClassifier(), ExtraTreesClassifier(), AdaBoostClassifier(), GradientBoostingClassifier()]:
+        for n_estimators  in [10,50,100,150,200]:
+            for max_depth in [5,10,15,20]:
+                for oob_score in [True,False]:
+                    for algorithm in ['SAMME', 'SAMME.R']:
+                        for loss in ['deviance','exponential']:
+                            for criterion in ['friedman_mse','mse','mae']:
+                                parameters = {
+                                    'n_estimators': n_estimators,
+                                    'max_depth': max_depth,
+                                    'oob_score': oob_score
+                                }
+                                
+                                if isinstance(classifier, AdaBoostClassifier):
+                                    del parameters['max_depth']
+                                    del parameters['oob_score']
+                                    parameters['algorithm'] = algorithm
+
+                                if isinstance(classifier, GradientBoostingClassifier):
+                                    del parameters['oob_score']
+                                    parameters['loss'] = loss
+
+                                if isinstance(classifier, ExtraTreesClassifier):
+                                    parameters['bootstrap'] = True 
+
+                                classifier.set_params(**parameters)
+
+                                for param, value in parameters.items():
+                                    print("-> Training {:} with {:} = {:}".format(classifier.__class__.__name__,param,value))
+                                
+                                classifier.fit(X_train, y_train)
+                                score = classifier.score(X_valid, y_valid)
+
+                                print("\t -> training score of {:.2f} \n".format(score))
+
+                                if score > best_score:
+                                    best_score = score
+                                    best_parameters = parameters
+                                    best_classifier = classifier
+        
+    pipeline = best_classifier
+    pipeline.set_params(**best_parameters)
+    pipeline.fit(X_trainval, y_trainval)
+    test_score = pipeline.score(X_test, y_test)
+    print("Best score on validation set: {:.2f}".format(best_score))
+    print("Best parameters: ", best_parameters)
+    print("Test set score with best parameters: {:.2f}".format(test_score))
+
+    return pipeline  
 
 def tree(X,y,should_viz=False):
     X_train, X_test, y_train, y_test = train_test_split(X,y,random_state=random.randint(1,50))
