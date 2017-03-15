@@ -42,8 +42,8 @@ def pipeline_svm(X,y,isFingerprint=False):
     best_parameters = {}
     for gamma in [0.01, 1, 100]: #[0.001, 0.01, 0.1, 1, 10, 100]
         for C in [0.01, 1, 100]:
-            for pca_n_components in [30,50,80]:
-                for kernel in ['linear','rbf','poly','sigmoid']:
+            for kernel in ['linear','rbf','poly','sigmoid']:
+                for pca_n_components in [30]: #[30,50,80]
                     parameters = {
                         'svm__kernel': kernel,
                         'svm__C': C,
