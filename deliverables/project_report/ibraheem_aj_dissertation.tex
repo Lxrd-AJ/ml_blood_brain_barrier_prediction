@@ -79,7 +79,7 @@
 	
 	
 	\section{Cheminformatics}
-	Cheminformatics aka Chemoinformatics and Chemical Informatics can be visualised as a cross domain of Chemistry and Computer Science. As defined by Brown, it is the mixing of numerous information that a scientist needs to transform data into information for the intended purpose of making better decisions in drug lead identification and optimisation \cite{FKBrown1998}. \\
+	Cheminformatics also known as Chemoinformatics or Chemical Informatics can be visualised as a cross domain of Chemistry and Computer Science. As defined by Brown, it is the mixing of numerous information that a scientist needs to transform data into information for the intended purpose of making better decisions in drug lead identification and optimisation \cite{FKBrown1998}. \\
 	The applications of Cheminformatics that are of particular interest are \textit{Storage and Retrieval of Chemical Data} and \textit{Virtual Libraries and Screening} as they both would enable the manipulation and transformation of molecular information for our machine learning algorithms. 
 		\subsection{Representing Molecules in Computers}
 		The two most common formats for representing chemical molecules in computers are Simplified Molecular-Input Line Entry System (SMILES) and SMART, with SMART being created by Daylight Chemical Information Systems and both formats being actively supported by them \cite{OpenBabel2017}.
@@ -89,6 +89,9 @@
 				\end{equation*}
 			This format can then be utilised by cheminformatics software to extract meaningful chemical information about the molecule. Throughout the project, the Open-Source Cheminformatics Software, \href{www.rdkit.org}{RDKit}, was used to transform the SMILEs in the dataset and also for the extraction of molecular information, which will be explained below.
 		\subsection{Molecular Representation and Similarity }
+		% Information can be extracted from Smiles
+		% It can be represented as a feature vector of molecular properties or in a molecular fingerprint format
+		% Whatever representation it has can then be used to calculate their similarity measures.
 		The simplest way to cluster molecules together in a chemical database when performing virtual screening is through the concept of \textit{molecular similarity}. It is the core of Molecular Similarity Analysis (MSA) where the similarity measure, that characterizes the degree of proximity between pairs of molecules are manifested by their "molecular patterns", which are compromised of sets of features (chemical descriptors) \cite{Jurgen2004}. \\
 		Many different molecular similarity measures exists and some are more suitable to certain virtual screening tasks than another, which is what prompts the discussion of molecular similarity measures in section \ref{subsubsection_similarity_measures}. The motivation behind the discussion is that it is possible to compare the efficiency of each similarity measure in terms of computer resources (computer memory and time) so as to determine its applicability to the target chemical dataset.\\
 		To determine the similarity between molecules, some form of similarity measure has to exist to compare molecules in the same representation. The similarity measures (similarity coefficient) are functions that maps pairs of compatible molecular representation into a real number. 
