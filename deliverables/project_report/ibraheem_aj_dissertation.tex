@@ -88,30 +88,75 @@
 					CNCCCC1c2ccccc2C=Cc3ccccc13
 				\end{equation*}
 			This format can then be utilised by cheminformatics software to extract meaningful chemical information about the molecule. Throughout the project, the Open-Source Cheminformatics Software, \href{www.rdkit.org}{RDKit}, was used to transform the SMILEs in the dataset and also for the extraction of molecular information, which will be explained below.
-		\subsection{Molecular Representation and Similarity }
-		The simplest way to cluster molecules together in a chemical database when performing virtual screening is through the concept of \textit{molecular similarity}. It is the core of Molecular Similarity Analysis (MSA) where the similarity measure, that characterizes the degree of proximity between pairs of molecules are manifested by their "molecular patterns", which are compromised of sets of features (chemical descriptors) \cite{Jurgen2004}. \\
-		Many different molecular similarity measures exists and some are more suitable to certain virtual screening tasks than another, which is what prompts the discussion of molecular similarity measures in section \ref{subsubsection_similarity_measures}. The motivation behind the discussion is that it is possible to compare the efficiency of each similarity measure in terms of computer resources (computer memory and time) so as to determine its applicability to the target chemical dataset.\\
-		To determine the similarity between molecules, some form of similarity measure has to exist to compare molecules in the same representation. The similarity measures (similarity coefficient) are functions that maps pairs of compatible molecular representation into a real number. 
-				\subsubsection{Molecular Representation} 
-				%Using the Open-Source Cheminformatics Software, RDKit, it is possible to transform 
-				There also is the notion of a chemical space that maps the chemical features into some form of structure, which are mostly coordinate-based. \\
-				Some common representations of molecules include encoding the molecular data into a set, graph, vector or function-based representation that uses distance as a form of molecular similarity \cite{Jurgen2004}. Each representation has its advantages and disadvantages, where graphs have their shortcomings, the molecule could be represented as a feature vector of its chemical properties which can be its molecular fragments, partial atomic charge, molecular weight, logP etc. \\
-				For our blood brain barrier prediction task, the molecules in the training set were transformed into their molecular fingerprint representation and simple molecular descriptors feature set. Here the molecule is represented as a point in a 2D or 3D coordinate space based on the derived features by performing Principal Component Analysis (PCA) or Non-linear Mapping (NLM) on the original set of features of the molecule.  
-				\paragraph{Molecular Fingerprints as a Binary-Valued Feature Vector}
+		\subsection{Molecular Representation and Similarity}
+		Similar molecules exhibit similar properties \cite{JohnMaggiora1990}, with this knowledge, it is possible to approach the BBB problem with the idea that if we know for a given molecule $x$, that it can pass through the Blood Brain Barrier, then we can expect another given molecule $y$ which is similar to $x$ to pass through the barrier. \\
+		This further raises the question of how to represent a molecule (Molecular Representation) in a format that can enable us to compare its similarity to another given molecule. One technique would be to represent the molecule as a linear vector and then use known statistical techniques to compute the distance between another molecule. 
+			\subsubsection{Molecular Representation}
+			For the BBB task, the goal of molecular representation to create a function $f(x)$ that receives as input, the SMILE representation of molecule $x$ and returns as output a feature vector. The \textbf{feature vector} is an n-dimensional vector of numerical features (Real numbers) that represent the molecule. 
+			%TODO: Draw diagram explaining the described function above
+			There are other forms of molecular representation, as Jurgen \cite{Jurgen2004} highlights that other common representations of molecules include encoding the molecular data into a set, graph, vector or function-based representation to enable the use of distance as a form of molecular similarity \cite{Jurgen2004}. Each representation has its advantages and disadvantages, where graphs have their shortcomings, feature-based vectors can prove beneficial depending on the task to the accomplished. Building upon the research of Ana Teixeira et al \cite{Anaetal2012}, we would choose to represent the molecules in our dataset as a feature-vector of its chemical descriptors and as a vector of its molecular fingerprint, both which will be explained in the upcoming paragraphs. The Open-Source Cheminformatics Software, RDKit, implements the functionality we will need to extract the chemical descriptors and the molecular fingerprint vectors.
+				\paragraph{Chemical Descriptors as a Feature Vector:} 
+				Chemical Descriptors, also known as Molecular Descriptors, as defined by Roberto and Viviana, are the final result of a logic and mathematical procedure which transforms chemical information encoded within a symbolic representation of a molecule into a useful number or the result of some standardized experiment.\cite{RobertoViviana2009}.
+				The molecule could be represented as a feature vector of its chemical properties which can be its molecular fragments, partial atomic charge, molecular weight, logP etc. \\
+				For example, the images shown below in \ref{fig:random_molecules}, are random molecules taken from our dataset.
+					\begin{figure}[h!]
+						\centering
+						\includegraphics[width=0.75\textwidth,height=0.35\textheight]{images/random_molecules.png}
+						\caption{Molecular Diagram of Random molecules from the Dataset}
+						\label{fig:random_molecules}
+					\end{figure}
+				Using the RDKit Software library, we can extract the relevant ~chemical descriptors. For our dataset, 206 Chemical descriptors were extracted, shown below in table \ref{table:random_chem_descriptors}, are the same random molecules but with the first 5 descriptors displayed.
+					\begin{table}[ht!]
+						\caption{Chemical Descriptors of 6 Random molecules from the dataset}
+						\centering
+						\begin{tabular}{ | c | c | c | c |   }
+							\hline
+							Molecule Name & MinEStateIndex & ExactMolWt & NumValenceElectrons \\
+							\hline
+							Mofegiline & -0.2557111626 & 197.101605856 & 76 \\
+							\hline
+							Thiotetrabarbital & -0.9513194444 & 256.12454888 & 96 \\
+							\hline
+							Nemonapride & -0.1575794701 & 387.171354752 & 144 \\
+							\hline
+							Milameline & 0.9790277778 & 154.110613068 & 62 \\
+							\hline
+							Duloxetine & 0.1002371504 & 297.118735228 & 108 \\
+							\hline
+							Meclorisone(meclorisone-dibutyrate) & -1.6040011915 & 426.136464736 & 154 \\
+							\hline
+						\end{tabular}
+						\label{table:random_chem_descriptors}
+					\end{table}
+				The beauty of the approach to the BBB problem is that from a statistical stand-point, we do not need a deep knowledge of Chemistry, we can simply make an educated neglect of the molecular name and the headers of the table \ref{table:random_chem_descriptors} and generate the matrix (rounded up to 3 decimal places ) shown as the feature vector
+				\[ \left[ \begin{array}{c c c c}
+					-0.256 & 197.102 & 76 & ... \\
+					-0.951 & 256.125 & 96 & ... \\
+					-0.158 & 387.171 & 144 & ... \\
+					... & ... & ... & ...
+				\end{array}
+				\right]\]
+				of size $2040 \times 206$, where 2040 is the number of molecules processed and 206 is the total number of chemical descriptors generated. This feature vector would then be utilised by the statistical processing techniques that would be described in the upcoming sections.
+				\paragraph{Molecular Fingerprints as a Binary-Valued Feature Vector:}
 				Each fingerprint consists of an n-component bit vector, 2048 bits for a Morgan fingerprint representation but the sizes of the vectors can vary depending on the kernel function used. The vector is given by 
 					\begin{equation}
-					\vec{V_A} = (v_A(x_1), v_A(x_2),...,v_A(x_k),...,v_A(x_n))
+						\vec{V_A} = (v_A(x_1), v_A(x_2),...,v_A(x_k),...,v_A(x_n))
 					\end{equation}
 				where $x_k$ indicates the absence or presence of a given feature \cite{Jurgen2004}. i.e
 					\begin{equation}
-					v_A(x_k) = 
-					\begin{cases}
-					1 & \text{Feature present} \\
-					0 & \text{Feature absent}
-					\end{cases}
+						v_A(x_k) = 
+						\begin{cases}
+							1 & \text{Feature present} \\
+							0 & \text{Feature absent}
+						\end{cases}
 					\end{equation}
+				%TODO: Draw diagrams as the ones shown in http://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf
 			\subsubsection{Similarity Measures} 
 			\label{subsubsection_similarity_measures}
+			The simplest way to cluster molecules together in a chemical database when performing virtual screening is through the concept of \textit{molecular similarity}. It is the core of Molecular Similarity Analysis (MSA) where the similarity measure, that characterizes the degree of proximity between pairs of molecules are manifested by their "molecular patterns", which are compromised of sets of features (chemical descriptors) \cite{Jurgen2004}. \\
+			Many different molecular similarity measures exists and some are more suitable to certain virtual screening tasks than another, which is what prompts the discussion of molecular similarity measures in section \ref{subsubsection_similarity_measures}. 
+			To determine the similarity between molecules, some form of similarity measure has to exist to compare molecules in the same representation. The similarity measures (similarity coefficient) are functions that maps pairs of compatible molecular representation into a real number. 
+			
 			For our prediction task, the main use of molecular similarity measures is in similarity searching when performing the nearest neighbour search. Here the molecules are ordered by their chosen chemical descriptors when we apply our similarity measure to calculate some form of structural relatedness between a target molecule and every other molecule in the dataset. The result is then a sorted list of molecules where the most similar molecules to our target molecule are located at the top of the list and in order of decreasing similarity.\\
 			According to Jurgen \cite{Jurgen2004}, the most important components of similarity measures are
 				\begin{itemize}

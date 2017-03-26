@@ -17,7 +17,7 @@ def load_data(from_url,desc_url):
     data = np.delete(data,fail_idx)
     print("Fail Count: ", len(fail_idx))
     print("{} molecules used in the calculations".format(len(data)))
-    calc_descriptors(desc_url, data)
+    return calc_descriptors(desc_url, data)
 
 def calc_descriptors(file_url,data):
     chem_descriptors = [desc[0] for desc in Descriptors._descList]
@@ -37,3 +37,5 @@ def calc_descriptors(file_url,data):
                     ", ".join(["{}".format(value)
                                for value in calculator.CalcDescriptors(molecule)]) +
                     ",{}\n".format(entry[2]))
+    return data  
+
