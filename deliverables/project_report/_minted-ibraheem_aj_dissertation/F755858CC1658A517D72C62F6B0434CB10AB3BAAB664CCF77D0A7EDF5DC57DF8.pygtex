@@ -1,0 +1,42 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{from} \PYG{n+nn}{rdkit} \PYG{k+kn}{import} \PYG{n}{Chem}
+\PYG{k+kn}{from} \PYG{n+nn}{rdkit.Chem} \PYG{k+kn}{import} \PYG{n}{Descriptors}
+\PYG{k+kn}{from} \PYG{n+nn}{rdkit.ML.Descriptors} \PYG{k+kn}{import} \PYG{n}{MoleculeDescriptors}
+
+\PYG{k}{def} \PYG{n+nf}{load\PYGZus{}data}\PYG{p}{(}\PYG{n}{from\PYGZus{}url}\PYG{p}{,}\PYG{n}{desc\PYGZus{}url}\PYG{p}{):}
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{genfromtxt}\PYG{p}{(}\PYG{n}{from\PYGZus{}url}\PYG{p}{,}\PYG{n}{dtype}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}i4,U256,U256,U256\PYGZdq{}}\PYG{p}{,}
+                         \PYG{n}{comments}\PYG{o}{=}\PYG{n+nb+bp}{None}\PYG{p}{,}\PYG{n}{skip\PYGZus{}header}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{names}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}num\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}name\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}p\PYGZus{}np\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}smiles\PYGZsq{}}\PYG{p}{],}
+                         \PYG{n}{converters}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{n}{k}\PYG{p}{:} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{x}\PYG{o}{.}\PYG{n}{decode}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}utf\PYGZhy{}8\PYGZdq{}}\PYG{p}{)} \PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)\PYGZcb{})}
+    \PYG{n}{fail\PYGZus{}idx} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{k}{for} \PYG{n}{idx}\PYG{p}{,}\PYG{n}{entry} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{data}\PYG{p}{):}
+        \PYG{n}{smiles} \PYG{o}{=} \PYG{n}{entry}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}
+        \PYG{n}{molecule} \PYG{o}{=} \PYG{n}{Chem}\PYG{o}{.}\PYG{n}{MolFromSmiles}\PYG{p}{(}\PYG{n}{smiles}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{molecule} \PYG{o+ow}{is} \PYG{n+nb+bp}{None}\PYG{p}{:}
+            \PYG{n}{fail\PYGZus{}idx}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{idx}\PYG{p}{)}
+            \PYG{k}{continue}
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{delete}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,}\PYG{n}{fail\PYGZus{}idx}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Fail Count: \PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{fail\PYGZus{}idx}\PYG{p}{))}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZob{}\PYGZcb{} molecules used in the calculations\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)))}
+    \PYG{k}{return} \PYG{n}{calc\PYGZus{}descriptors}\PYG{p}{(}\PYG{n}{desc\PYGZus{}url}\PYG{p}{,} \PYG{n}{data}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{calc\PYGZus{}descriptors}\PYG{p}{(}\PYG{n}{file\PYGZus{}url}\PYG{p}{,}\PYG{n}{data}\PYG{p}{):}
+    \PYG{n}{chem\PYGZus{}descriptors} \PYG{o}{=} \PYG{p}{[}\PYG{n}{desc}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{k}{for} \PYG{n}{desc} \PYG{o+ow}{in} \PYG{n}{Descriptors}\PYG{o}{.}\PYG{n}{\PYGZus{}descList}\PYG{p}{]}
+    
+    \PYG{n}{calculator} \PYG{o}{=} \PYG{n}{MoleculeDescriptors}\PYG{o}{.}\PYG{n}{MolecularDescriptorCalculator}\PYG{p}{(}\PYG{n}{chem\PYGZus{}descriptors}\PYG{p}{)}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Using\PYGZdq{}}\PYG{p}{,}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{chem\PYGZus{}descriptors}\PYG{p}{),} \PYG{l+s+s2}{\PYGZdq{}chemical Descriptors\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{k}{with} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{file\PYGZus{}url}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}w\PYGZsq{}}\PYG{p}{)} \PYG{k}{as} \PYG{n}{f}\PYG{p}{:}
+        \PYG{n}{f}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}smiles,\PYGZdq{}} \PYG{o}{+}
+                \PYG{l+s+s2}{\PYGZdq{}, \PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{([}\PYG{l+s+s2}{\PYGZdq{}\PYGZob{}\PYGZcb{}\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{name}\PYG{p}{)} \PYG{k}{for} \PYG{n}{name} \PYG{o+ow}{in} \PYG{n}{calculator}\PYG{o}{.}\PYG{n}{descriptorNames}\PYG{p}{])} \PYG{o}{+}
+                \PYG{l+s+s2}{\PYGZdq{},p\PYGZus{}np}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+        \PYG{k}{for} \PYG{n}{entry} \PYG{o+ow}{in} \PYG{n}{data}\PYG{p}{:}
+            \PYG{n}{smiles} \PYG{o}{=} \PYG{n}{entry}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}
+            \PYG{n}{molecule} \PYG{o}{=} \PYG{n}{Chem}\PYG{o}{.}\PYG{n}{MolFromSmiles}\PYG{p}{(}\PYG{n}{smiles}\PYG{p}{)}
+            \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Calculating chemical descriptors for\PYGZdq{}}\PYG{p}{,}\PYG{n}{smiles}\PYG{p}{)}
+            \PYG{n}{f}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(} \PYG{n}{smiles} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{},\PYGZdq{}} \PYG{o}{+}
+                    \PYG{l+s+s2}{\PYGZdq{}, \PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{([}\PYG{l+s+s2}{\PYGZdq{}\PYGZob{}\PYGZcb{}\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{value}\PYG{p}{)}
+                               \PYG{k}{for} \PYG{n}{value} \PYG{o+ow}{in} \PYG{n}{calculator}\PYG{o}{.}\PYG{n}{CalcDescriptors}\PYG{p}{(}\PYG{n}{molecule}\PYG{p}{)])} \PYG{o}{+}
+                    \PYG{l+s+s2}{\PYGZdq{},\PYGZob{}\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{entry}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]))}
+    \PYG{k}{return} \PYG{n}{data}  
+\end{Verbatim}

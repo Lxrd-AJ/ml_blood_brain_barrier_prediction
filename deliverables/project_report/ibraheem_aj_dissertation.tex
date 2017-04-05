@@ -14,6 +14,7 @@
 \usepackage{mdframed}
 
 \hypersetup{ colorlinks=true, linkcolor=blue, filecolor=magenta, urlcolor=cyan }
+\renewcommand\listoflistingscaption{List of source codes}
 
 \begin{document}
 
@@ -44,6 +45,7 @@
 \newpage
 \listoffigures
 \listoftables
+\listoflistings
 \newpage
 \pagenumbering{arabic}
 
@@ -230,11 +232,18 @@
 			\item \underline{Reinforcement Learning}: This lies in between supervised and unsupervised learning as no correct labels are provided to the training data, however, the algorithm is corrected when it makes a wrong prediction and it is required to iterate over numerous possibilities till it makes the correct prediction
 			\item \underline{Evolutionary Learning}: This is a bio-inspired model where the concept of evolution is applied, numerous solutions are developed and are evaluated based on a fitness score. Models with higher fitness scores progress to the next training iteration whilst the lesser models are dropped till an optimal solution is found.
 		\end{itemize}
-	For the blood brain barrier (BBB) task, supervised learning techniques would be utilised for prediction purposes whilst the unsupervised learning techniques would be used to data exploratory purposes and to further understand and highlight patterns in the BBB dataset. 
+	For the blood brain barrier (BBB) task, supervised learning techniques would be utilised for prediction purposes whilst the unsupervised learning techniques would be used for data exploratory purposes and to further understand and highlight patterns in the BBB dataset. The \href{http://scikit-learn.org/stable/}{Scikit-Learn} software library that would be used extensively for the implementation of the supervised and unsupervised learning models.
+	
 	\section{Data Representation and Preprocessing}
-	% Just like the machine learning concepts section in the Background chapter, the concepts would be described in great detail in the context of drug discovery and the blood brain barrier.
-	% Include notes on the technologies used e.g Numpy and Pandas
-	\section{Feature Engineering}
+	The \href{http://pandas.pydata.org/}{Pandas} and \href{http://www.numpy.org/}{Numpy} libraries are used extensively throughout the project and they are also the underlying library used by Scikit-Learn. 
+		\begin{listing}[!htbp]
+			\inputminted[breaklines=true,breakautoindent=true,linenos=true]{python}{source_code/dataset.py}
+			\caption{Functions to load, preprocess and transform the dataset}
+			\label{code:dataset_preprocess}
+		\end{listing}
+	In listings \ref{code:dataset_preprocess}, the training data is loaded in using Numpy and then converted into the RDKit molecular format; the failed indices are recorded and deleted from the Numpy array and the resulting data is then transformed based on their chemical descriptors and stored in a Numpy array for use by the supervised and unsupervised models.
+	
+	\section{Feature Engineering (Notes)}
 	% Talk about the goals of feature engineering
 		\subsection{Manifold Learning with t-SNE}
 		\paragraph{Manifold Learning with t-SNE}
@@ -317,7 +326,7 @@
 							\caption{3D Scatter Plot after applying the PCA Algorithm (II)}
 							\label{fig:scatter_pca_3D_2}
 						\end{figure}
-	\section{Machine Learning Models}
+	\section{Machine Learning Models (Notes)}
 		\subsection{Decision Trees}
 				Decision trees are an example of non-parametric supervised learning algorithms.
 				After applying the decision tree classifier, an accuracy of $\sim85\%$ was achieved. Examining the internal workings of the Tree, based on the simple molecular descriptor dataset, we can see that the total polar surface area (TPSA) is the defining factor in determining whether a molecule crosses the blood-brain barrier.
@@ -440,7 +449,7 @@
 
 
 
-\chapter{Model Evaluation and Improvement}
+\chapter{Model Evaluation and Improvement (Notes)}
 	\section{Model Evaluation}
 		% Draw a diagram like the one in this link(http://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/) to compare the results of all the classifiers
 		%TODO: Talk about Cross validation, include diagrams like in scikit-learn pg 252, the entire chapter is a valuable resource	
@@ -485,7 +494,7 @@
 		
 
 
-\chapter{Conclusion}
+\chapter{Conclusion (Notes)}
 	\section{Integration into a Web Application}
 	\section{Deployment}
 	\section{Areas for improvement}
