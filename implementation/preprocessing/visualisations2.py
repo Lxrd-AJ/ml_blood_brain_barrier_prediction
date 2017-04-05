@@ -1,6 +1,6 @@
 #from dataset import load_data
-from rdkit import Chem 
-from rdkit.Chem import Descriptors, Draw
+from rdkit import Chem, DataStructs
+from rdkit.Chem import Descriptors, Draw, AllChem
 from rdkit.ML.Descriptors import MoleculeDescriptors
 import random  
 import numpy as np
@@ -52,3 +52,29 @@ with open('./random_molecules_descriptors.csv','w') as f:
                 "\n")
     print("-> Finished writing to the file")
     print("Using",len(chem_descriptors), "chemical Descriptors")
+
+
+"""
+Generating fingerprint information from the molecules
+-> Generate images for each molecule with the smiles-format as its file name
+-> Generate a txt file containing all the smiles and their fingerprint format  
+"""
+print("Generating Fingerprint information")
+random_entries = random_entries[:2]
+random_molecules = random_molecules[:2]
+# Generating images for each molecule 
+with open('./random_fingerprints.txt','w') as f:
+    for idx in range(0,2):
+        filename = random_entries[idx][1] #The molecular name is the filename  
+        Draw.MolToFile(random_molecules[idx],"./../visualisations/fingerprint_stub/" + filename + ".png")
+        # Generate the entry in the txt file  
+        f.write("{:} -> {:}\n".format(filename, random_entries[idx][3]))
+        fingerprint = AllChem.GetMorganFingerprintAsBitVect(random_molecules[idx],2)
+        arr = np.zeros((1,))
+        DataStructs.ConvertToNumpyArray(fingerprint,arr)
+        fingerprint = arr  
+        f.write("{:}\n".format("=" * 10))
+        f.write("{:}\n".format(list(fingerprint)))
+
+        
+

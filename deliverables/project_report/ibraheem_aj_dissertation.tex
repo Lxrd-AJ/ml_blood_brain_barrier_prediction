@@ -9,6 +9,8 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{minted}
+\usepackage{pdflscape}
+\usepackage{rotating}
 
 \hypersetup{ colorlinks=true, linkcolor=blue, filecolor=magenta, urlcolor=cyan }
 
@@ -138,8 +140,9 @@
 				\right]\]
 				of size $2040 \times 206$, where 2040 is the number of molecules processed and 206 is the total number of chemical descriptors generated. This feature vector would then be utilised by the statistical processing techniques that would be described in the upcoming sections.
 				\paragraph{Molecular Fingerprints as a Binary-Valued Feature Vector:}
-				%TODO: Continue Here!
-				Each fingerprint consists of an n-component bit vector, 2048 bits for a Morgan fingerprint representation but the sizes of the vectors can vary depending on the kernel function used. The vector is given by 
+				Another method of representing molecules is as a form of molecular fingerprint. Molecular Fingerprints are an abstract representation of molecular structure and properties of a given molecule in the form of a boolean array \cite{Jurgen2004}.
+				The fingerprint representation is the result of applying a given kernel function to a molecule to generate an n-component bit vector. There are numerous types of formats for a molecular fingerprint; with the Morgan fingerprint (default fingerprint format for our prediction task) having a 2048 bit representation but the sizes of the vectors can vary depending on the kernel function used. \\
+				The vector representation of a fingerprint is given by the general format
 					\begin{equation}
 						\vec{V_A} = (v_A(x_1), v_A(x_2),...,v_A(x_k),...,v_A(x_n))
 					\end{equation}
@@ -151,7 +154,23 @@
 							0 & \text{Feature absent}
 						\end{cases}
 					\end{equation}
-				%TODO: Draw diagrams as the ones shown in http://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf
+				The table \ref{table:random_morgan_fingerprint} shows the transformation of a given molecule from our dataset into its SMILE format and then its fingerprint representation using the RDKit software library.
+					%\begin{sidewaystable}
+					\begin{table}[ht!]
+						\centering
+						\caption{Morgan Fingerprint representation of 2 Random molecules from the dataset}
+						\begin{tabular}{ | c | c | c | c |   }
+							\hline
+							Molecule Name & SMILE & Molecular Representation & Morgan Fingerprint \\
+							\hline
+							111-trifluoro-2-chloroethane & C(CCl)(F)(F)F & \includegraphics[width=2cm,height=2cm]{images/111-trifluoro-2-chloroethane.png} & [0.0, 0.0, 0.0, \ldots, 1.0, 0.0, 0.0, \ldots ,0.0, 0.0, 0.0] \\
+							\hline
+							Butanone & CCC(C)=O & \includegraphics[width=2cm,height=2cm]{images/Butanone.png} & [\ldots, 1.0, 0.0, 0.0, 0.0, \ldots, 0.0, 0.0 ] \\
+							\hline
+						\end{tabular}
+						\label{table:random_morgan_fingerprint}
+					\end{table} 
+					%\end{sidewaystable}
 			\subsubsection{Similarity Measures} 
 			\label{subsubsection_similarity_measures}
 			The simplest way to cluster molecules together in a chemical database when performing virtual screening is through the concept of \textit{molecular similarity}. It is the core of Molecular Similarity Analysis (MSA) where the similarity measure, that characterizes the degree of proximity between pairs of molecules are manifested by their "molecular patterns", which are compromised of sets of features (chemical descriptors) \cite{Jurgen2004}. \\
@@ -172,7 +191,7 @@
 				\frac{\vec{v_i}\bullet\vec{v_j}}
 				{\sum_{k}v_{ik} + \sum_{k}v_{jk} - \vec{v_i}\bullet\vec{v_j}  } 
 				\end{equation}
-			where $\vec{v_i}$ and $\vec{v_j}$ are the bit vectors for molecule $i$ and $j$. There are other similarity coefficients such as the Tversky and Dice, the Dice similarity measure was chose for the k-nearest neighbour calculation of dataset.
+			where $\vec{v_i}$ and $\vec{v_j}$ are the bit vectors for molecule $i$ and $j$. There are other similarity coefficients such as the Tversky and Dice but the Dice similarity measure was chosen for the k-nearest neighbour calculation of dataset.
 	
 	\section{Drug Design and Discovery}
 	According to Dr A.N Boa \cite{hull2016}, the different stages of drug discovery are
