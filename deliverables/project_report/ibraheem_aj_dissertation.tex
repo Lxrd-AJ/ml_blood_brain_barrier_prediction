@@ -11,6 +11,7 @@
 \usepackage{minted}
 \usepackage{pdflscape}
 \usepackage{rotating}
+\usepackage{mdframed}
 
 \hypersetup{ colorlinks=true, linkcolor=blue, filecolor=magenta, urlcolor=cyan }
 
@@ -219,309 +220,278 @@
 				\item \underline{Partition Coefficient (LogP)}: This is sometimes referred to as the \textit{lipophilicity} of the compound and has served as one of the most important factors in drug design. Higher lipophilicity results in drugs with higher metabolic turnover but lower solubility and absorption \cite{Hassanetal2005}. 
 			\end{itemize}
 
-	\section{Machine Learning concepts}
-	% Here the basic concepts about them would be discussed and an overview provided, this section should not pertain to the drug discovery project but machine learning in general
-		\subsection{Models and Classifiers}
+	
+	
+\chapter{Machine Learning Classifiers}
+	\textbf{Machine Learning} is a sub-field of Artificial Intelligence that involves the design of algorithms that can learn, make predictions and improve based on data without being explicitly programmed. There are 4 types of machine learning namely \cite{StephenM2014}
+		\begin{itemize}
+			\item \underline{Supervised Learning}: Here the machine learning algorithms are provided with training data where the correct outputs to the inputs are labelled and the algorithm learns to generalise from the training data.
+			\item \underline{Unsupervised Learning}: This is the opposite of supervised learning, the training data contains only the inputs with no outputs; the algorithm then learns to generalise and cluster similar inputs together.
+			\item \underline{Reinforcement Learning}: This lies in between supervised and unsupervised learning as no correct labels are provided to the training data, however, the algorithm is corrected when it makes a wrong prediction and it is required to iterate over numerous possibilities till it makes the correct prediction
+			\item \underline{Evolutionary Learning}: This is a bio-inspired model where the concept of evolution is applied, numerous solutions are developed and are evaluated based on a fitness score. Models with higher fitness scores progress to the next training iteration whilst the lesser models are dropped till an optimal solution is found.
+		\end{itemize}
+	For the blood brain barrier (BBB) task, supervised learning techniques would be utilised for prediction purposes whilst the unsupervised learning techniques would be used to data exploratory purposes and to further understand and highlight patterns in the BBB dataset. 
+	\section{Data Representation and Preprocessing}
+	% Just like the machine learning concepts section in the Background chapter, the concepts would be described in great detail in the context of drug discovery and the blood brain barrier.
+	% Include notes on the technologies used e.g Numpy and Pandas
+	\section{Feature Engineering}
+	% Talk about the goals of feature engineering
+		\subsection{Manifold Learning with t-SNE}
+		\paragraph{Manifold Learning with t-SNE}
+		Manifold Learning Algorithms excel at data visualisation tasks, they provide more complex mappings and often better data representations but perform poorly for data classification tasks. They perform poorly because they do not allow transformations of new data once they have been fitted.\\
+		The t-SNE algorithm is used because it tries as much as possible to maintain the distance between the data points in the original feature vector space during transformation. It puts more emphasis on points that are close by rather than preserving points that are far apart \cite{Mueller2016}.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_tsne}
+			\caption{2D Scatter Plot after applying the t-SNE Algorithm}
+			\label{fig:scatter_tsne_2D}
+		\end{figure}
+		Looking at the t-SNE scatter plot, there is a small cluster of the molecules that do not pass through (B) at the top and some randomly distributed throughout the plot, whilst the ones that pass through the BBB barrier (A) maintain an even distribution around the feature space, it is worth mentioning that performing passing the simple molecular data to the algorithm, it was preprocessed with a MaxAbsoluteScaler that scales each feature by its maximum value. This doesn't mean that it is impossible to separate the data, as an accuracy of $\sim89\%$ will be achieved in later sections. This result is to be expected as the data is biased towards molecules that cross the barrier and it also hints at the fact that the molecules that do not cross the barrier might share a lot in common with molecules that cross the barrier.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_tsne_mfps}
+			\caption{2D Scatter Plot after applying the t-SNE Algorithm (Morgan Fingerprint dataset)}
+			\label{fig:scatter_tsne_mfps_2D}
+		\end{figure}
+		The scatter plot has no significant difference with the Morgan Fingerprint dataset, it highlights the clusters of the B molecules more visibly. Further analysis would need to be carried to create a more linear separable representation.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_tsne_3D}
+			\caption{3D Scatter Plot after applying the t-SNE Algorithm}
+			\label{fig:scatter_tsne_3D}
+		\end{figure}
+		The 3D scatter plot of the simple molecular descriptor data looks slightly more separable than its 2D counterpart.
+		\subsection{Clustering}
+			\subsubsection{K-Means Clustering}
+			In our further attempts to have some form of linearly separable data, we select the 2 principal components of our datasets and apply the k-means clustering algorithm on them.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/kmeans_smd_scatter}
+				\caption{2D Scatter Plot found by k-means on Simple Molecular Descriptors. \textit{Original data points on the right and clusters found on the left}}
+				\label{fig:kmeans_smd_scatter}
+			\end{figure}
+			We can see that the clustering algorithm performs poorly on the simple molecular descriptor dataset. Examining the data, it clustered 2039 molecules to class 0 and clustered just 1 molecule to class 1. \\
+			However, promising results were achieved using the Morgan fingerprint dataset.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/kmeans_morgan_scatter}
+				\caption{2D Scatter Plot found by k-means on fingerprint dataset. \textit{Original data points on the right and clusters found on the left}}
+				\label{fig:kmeans_morgan_scatter}
+			\end{figure}
+			The plot looks linearly separable now, an accuracy of 84\% was achieved classify the red points (molecules that pass through the barrier (A)) and a 59\% accuracy of classifying the blue points.The yellow triangles in the diagram represent the centers of each clusters.
+			\subsubsection{Agglomerative Clustering}
+			For the Simple Molecular dataset, the entire dataset was scaled to have a minimum of -1 and a maximum of 1. Then the 2 principal components were selected, a ward agglomerative cluster algorithm was applied and it created 2 clusters with cluster 1 having 1442 samples and cluster 2 having 598 samples. The original dataset had 1563 molecules passing through the barrier and 477 molecules not passing through, most likely cluster 1 represents the molecules that pass through
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/agg_smd_scatter}
+				\caption{2D Scatter Plot of clusters found by the agglomerative ward algorithm on the simple molecular dataset}
+				\label{fig:agg_smd_scatter}
+			\end{figure}
+			Applying the same cluster to the Morgan fingerprint dataset, without preprocessing the data, it created 2 clusters; cluster 1 with 1894 samples and cluster 2 with 146 samples. The simple molecular descriptor dataset proves to be a better dataset for this clustering algorithm as it achieves a lower error rate
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/agg_morgan_scatter}
+				\caption{2D Scatter Plot of clusters found by the agglomerative ward algorithm on the Morgan Fingerprint dataset}
+				\label{fig:agg_morgan_scatter}
+			\end{figure}
 		\subsection{Feature Extraction}
-	
-	
+			\subsubsection{Principal Component Analysis (PCA)}
+						In the 2D representation shown below, the data points are tightly clustered in the middle, and looks like it is linearly inseparable.
+						\begin{figure}[H]
+							\centering
+							\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_pca}
+							\caption{2D Scatter Plot after applying the PCA Algorithm}
+							\label{fig:scatter_pca_2D}
+						\end{figure}
+						Remembering that the dataset is biased towards the molecules that pass through the barrier, as they represent around 70\% of the data. A significant proportion of the molecules that do not pass through the barrier(B) are clustered in the same space as the ones that pass through the barrier (A). Although majority of A stays clustered in the same space with the exception of a few outliers.\\
+						To further examine the data, we look at creating a 3D representation, the next 3 principal components are selected to create data for the 3D plot. The 3D plot has shown below also has the same clustering of a significant proportion of the B molecules in the same space as the A molecules but looks more linearly separable than the 2D plot
+						\begin{figure}[H]
+							\centering
+							\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D}
+							\caption{3D Scatter Plot after applying the PCA Algorithm (I)}
+							\label{fig:scatter_pca_3D}
+						\end{figure}
+						\begin{figure}[H]
+							\centering
+							\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D_2}
+							\caption{3D Scatter Plot after applying the PCA Algorithm (II)}
+							\label{fig:scatter_pca_3D_2}
+						\end{figure}
+	\section{Machine Learning Models}
+		\subsection{Decision Trees}
+				Decision trees are an example of non-parametric supervised learning algorithms.
+				After applying the decision tree classifier, an accuracy of $\sim85\%$ was achieved. Examining the internal workings of the Tree, based on the simple molecular descriptor dataset, we can see that the total polar surface area (TPSA) is the defining factor in determining whether a molecule crosses the blood-brain barrier.
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/bbb_tree_smd}
+					\caption{Decision Tree: Simple Molecular Descriptors}
+					\label{fig:bbb_tree_smd}
+				\end{figure}		
+				\subsubsection{Extra Trees}
+				The extra trees tend to perform slightly better than the random forests. On the simple molecular dataset, the extra trees score an accuracy of $\sim90\%$ and on the Morgan fingerprint dataset, the extra trees score an accuracy of $\sim89\%$, performing just slightly less than the random forest on the same dataset. The number of extra trees was set to 20
+				\subsubsection{AdaBoost Decision Trees}
+				Applying the AdaBoost algorithm to the decision trees, an accuracy of $\sim83\%$ was achieved on the simple molecular descriptor dataset, and an accuracy of $\sim81\%$ on the Morgan fingerprint dataset. Both rounds of classification with number of trees = 200. Strangely, the Adaboosted decision trees ought to provide better results than the random forest or extra trees classifiers. 
+				\subsubsection{Gradient Tree Boosting}
+				With a little bit of tuning the parameters of the gradient boosted classifier, by increasing the number of estimators to around 150 and reducing the learning rate to 0.45. An accuracy score of $\sim86\%$ was achieved on the simple molecular descriptors and $\sim82\%$ on the Morgan fingerprint dataset.
+			\subsubsection{Random Forests}
+				An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset. The number of trees in the random forest was set to 20.
+		\subsection{K-Nearest Neighbours (kNN)}
+				The kNN classifier, at $k=10$ has an accuracy of roughly around $\sim85\%$ using only the simple molecular descriptors. By engineering the feature vector to have unit variance and a Gaussian mean of 0, we then have an accuracy of around $\sim89\%$ at 10 neighbours. 
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/knn_molecular_descriptors}
+					\caption{kNN classifier for 10 neighbours using the Simple Molecular Descriptors}
+					\label{fig:knn_smd}
+				\end{figure}
+				Also using the Morgan fingerprint has the data for the kNN classifier, we have an accuracy of around $\sim89\%$. Without scaling the simple molecular descriptors, the Morgan fingerprint dataset provides better results.
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/knn_morgan_dice_fingerprint}
+					\caption{kNN classifier for 10 neighbours using the Morgan Fingerprint dataset}
+					\label{fig:knn_mfps}
+				\end{figure}
+		\subsection{Support Vector Machines}
+				Scaling the data using a Standard Scaler and selecting the top 100 principal component, a mean accuracy of 84.9\% was achieved using both datasets
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/mol_decision_svm}
+					\caption{Support Vector Machines with different kernel functions on Simple Molecular Dataset}
+					\label{fig:svm_mol}
+				\end{figure}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/fps_decision_svm}
+					\caption{Support Vector Machines with different kernel functions on Morgan Fingerprint Dataset}
+					\label{fig:svm_fps}
+				\end{figure}
+		\subsection{Neural Networks}
+				The Human brain is a very fascinating and robust system, the basic processing unit of the brain is the nerve cell or neuron and there are around 100 billion neurons in the brain all connected together by synapses. These neurons are electrically excitable, they pass signals from one neuron to the next by electrical and chemical signals when the membrane potential reaches some threshold, which can be inhibited if the threshold is not exceeded. A Neural Network is a computational model inspired by the human brain, it consists of a network of neurons connected together by axons. The inspiration behind the model is that if learning occurs in the brain and if we can represent this in a computational model then we can achieve some form of intelligence in our systems.
+				\paragraph{Hebbian Learning}
+				This is a learning concept of the brain based on the mechanism neural plasticity proposed by Donald Hebb. The rule formulated states that changes in the strength of synaptic connections are proportional to the correlation in the firing of the two connecting neurons, the strength of the connection is proportional to the frequency of excitement between them. However, the connection between two neurons that never fire will eventually be broken. \\
+				The idea of repetition enhances retention can also be applied here, where actions that are repeated continuously will create retention in the brain \cite{Cunninghametal1984}. An example is in the experiment carried out by Ivan Pavlov, where his dogs were conditioned to associate the ringing of a bell to the presence of food. As a result, the neurons responsible for salivating over food and for hearing the bell would have a very strong connection to the extent that merely hearing the bell was sufficient to cause the salivating neurons to fire. 
+				\subsubsection{Multi Layer Perceptron}
+				The Perceptron can also be referred to a collection of neurons along with a vector of inputs and a vector of weights to fasten the inputs to the neuron. This neuron in this network consists of its inputs, weights, threshold and activation function. Each neuron,receives an input along with the strength of the input i.e weight, which it multiplies together and if the value is greater than the threshold, the neuron fires. \\
+				For our dataset the input $X = [x_1,x_2,x_3,...,x_n]$ to a Perceptron could be either a simple molecular feature vector value e.g the number of hydrogen atoms in the molecule or vectors of 1s and 0s if we're using the Morgan fingerprint dataset to train the network. Each neuron is also given a vector of small random positive and negative values as its weights. The neuron calculates its activation value as 
+				\begin{equation}
+				h = \sum_{i=1}^{m}w_ix_i
+				\end{equation}
+				This activation value is then passed on to the activation function $f(h)$ which fires if the activation value is greater than the threshold. A threshold value of 0 was used irrespective of the training dataset. The output value of the function is given by
+				\begin{equation}
+				output = f(h) = 
+				\begin{cases}
+				1 & \text{if h} \textgreater \theta \\
+				0 & \text{if h} \le \theta
+				\end{cases}
+				\end{equation}
+				\paragraph{Multi Layer Perceptron}
+				The Input layer to the neuron is the same as the length of the feature vector plus one (the fixed bias input). For the simple molecular feature dataset, the number of inputs $n$ to the network is 196, as that is the number of simple chemical descriptors that were calculated. For the Morgan Fingerprint dataset, $n = 2048$ where $n$ represents the length of the bit vector. \\
+				The bias input is used as a control value to adjust the value that the neuron fires at. An example is when the feature vector to a neuron is all zeros and the neuron should fire. By our activation function, the neuron wouldn't fire because its activation value does not exceed the threshold. By adding a fixed value (bias) of $\pm1$ to the feature vector, we can then adjust the weight to make the neuron fire or not.
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/multilayerperceptronnetwork}
+					\caption{Multi Layer Perceptron \cite{ScikitLearn2016}}
+					\label{fig:mlp}
+				\end{figure}
+				\subsubsection{Application to the Blood Brain Barrier prediction}
+				We are undertaking a form of supervised learning in the BBB prediction. The dataset we have compiled is labelled with the correct class and this data is fed to the neural network in order for the it to generalise what it has learned about our data. The network will then find patterns in the molecules that cross the blood-brain barrier and predict if an unknown molecule will cross it or not. \\
+				Let $X = [x_1,x_2,x_3,...,x_n]$ be the input vector to our network for $n$ features and $W=[w_1,w_2,w_3,...,w_n]$ , the weights. Each neuron calculates whether it should fire or not based on its activation vector. We then examine the wrong neurons i.e the neurons that fired when they should have not. For each wrong neuron $i$, we calculate the difference in weights for it $\Delta w_i = -(y_i - t_i) * x_i$ where $y_i$ is the output and $t_i$ is the target output, the weight for neuron $i$ is then updated as $w_i = w_i + \Delta w_i\eta$, where $\eta$ is the learning rate (usually around $0.1 < \eta < 0.4$) which determines how much to change the weights by and as a result, determines how fast the network learns. The training is run again till the algorithm converges and the network gets all of its input right.
+				\begin{mdframed}[]
+					\paragraph{The Learning Algorithm \cite{StephenM2014}}
+					\begin{itemize}
+						\item \textbf{Initialisation}
+						\\ $n$ small (positive and negative) random numbers are assigned as weights $w_{ij}$ where $i$ is the number of weights and $j$ represents the neuron being examined.
+						\item \textbf{Training} for T iterations or until all the outputs are correct
+						\begin{itemize}
+							\item[-] For each input vector $X = [x_1,x_2,x_3,...,x_n]$
+							\begin{itemize}
+								\item[*] Compute the activation value ($h$) of each neuron $j$: \\
+								\begin{equation}
+								h = \sum_{i=0}^{n}w_{ij}x_i
+								\end{equation}
+								\item[*] Calculate the activation ($y$) of neuron $j$ using the activation function $g$: \\
+								\begin{equation}
+								y_j = g(h) = 
+								\begin{cases}
+								1 & \text{if h} \textgreater \theta \\
+								0 & \text{if h} \le \theta
+								\end{cases}
+								\end{equation}
+								\item[*] Update the weights of neuron $j$ using the formula: \\
+								\begin{eqnarray}
+								\Delta w_{ij} = - \eta(y_j - t_j) * x_i & \\
+								w_{ij} = \Delta w_ij + w_ij
+								\end{eqnarray}
+								
+							\end{itemize}
+						\end{itemize}
+						\item \textbf{Recall or Prediction}	
+						\\To predict the value of new molecule with feature vector $X$ using:
+						\begin{equation}
+						y_j = g(\sum_{i=0}^{m}w_{ij}x_i) = 
+						\begin{cases}
+						1 & \text{if } w_{ij}x_i \textgreater 0 \\
+						0 & \text{if } w_{ij}x_i \le 0
+						\end{cases}
+						\end{equation}
+						where 1 represents a molecule that passes through the barrier and 0 a molecule that doesn't.
+					\end{itemize}
+				\end{mdframed}
+		\subsection{Ensemble Classifiers}
 
-\chapter{Data Representation and Feature Engineering}
-% Just like the machine learning concepts section in the Background chapter, the concepts would be described in great detail in the context of drug discovery and the blood brain barrier.
-	\section{Data Preprocessing}
-		% Include notes on the technologies used e.g Numpy and Pandas
-	\section{Feature Extraction}
-	
-\chapter{Machine Learning Classifier Training}
-	\section{Neural Networks}
-	\section{Ensemble Classifiers}
+
 
 \chapter{Model Evaluation and Improvement}
 	\section{Model Evaluation}
 		% Draw a diagram like the one in this link(http://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/) to compare the results of all the classifiers
-	\section{Model Improvement techniques}
-		\subsection{Grid Search}
-	\section{Model Persistence} 
-	%How you will use pickle to persist the model
-		
-\chapter{Conclusion}
-	\section{Integration into a Web Application}
-	\section{Deployment}
-	\section{Areas for improvement}
-
-
-\chapter[Notes]{Notes: Machine Learning in Drug Design (Will be removed later)}
-	With the recent explosion in chemical data available, it is possible to combine them with machine learning techniques to create models of molecules that have a strong binding affinity to their target proteins. According to Antonio (2015) \cite{Antonio2015}, Virtual screening techniques can either be Structure-Based or Ligand-Based. Structural screening used the idea of molecular docking as described earlier whilst Ligand-Based screening uses the idea that similar molecules exhibit similar properties e.g QSAR. 
-	\\
-	With Ligand-Based Virtual Screening being the core focus of this paper, we can further classify them into either similarity searching or compound classification \cite{Antonio2015}. Antonio (2015) \cite{Antonio2015} further highlights that the following are the most popular and successful techniques for Ligand-Based Virtual Screening:
-	\begin{itemize}
-		\item Support Vector Machines
-		\item Decision Trees
-		\item Random Forests (An Ensemble of Decision Trees)
-		\item Naive Bayesian Classifiers
-		\item k-Nearest neighbours
-		\item Artificial Neural Networks
-	\end{itemize}
-	\section{Data Preprocessing and Feature Engineering}
-		\subsection{Data Visualisations}
-		Attempting to explore how the data looks, we start with a scatter plot of the data. Due to the high dimensionality of the data. It is near impossible to plot a scatter plot in 2D, so we apply a Principal Component Analysis (PCA) on the data to extract the two most important component as shown below
-			\paragraph{Manifold Learning with t-SNE}
-			Manifold Learning Algorithms excel at data visualisation tasks, they provide more complex mappings and often better data representations but perform poorly for data classification tasks. They perform poorly because they do not allow transformations of new data once they have been fitted.\\
-			The t-SNE algorithm is used because it tries as much as possible to maintain the distance between the data points in the original feature vector space during transformation. It puts more emphasis on points that are close by rather than preserving points that are far apart \cite{Mueller2016}.
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_tsne}
-					\caption{2D Scatter Plot after applying the t-SNE Algorithm}
-					\label{fig:scatter_tsne_2D}
-				\end{figure}
-			Looking at the t-SNE scatter plot, there is a small cluster of the molecules that do not pass through (B) at the top and some randomly distributed throughout the plot, whilst the ones that pass through the BBB barrier (A) maintain an even distribution around the feature space, it is worth mentioning that performing passing the simple molecular data to the algorithm, it was preprocessed with a MaxAbsoluteScaler that scales each feature by its maximum value. This doesn't mean that it is impossible to separate the data, as an accuracy of $\sim89\%$ will be achieved in later sections. This result is to be expected as the data is biased towards molecules that cross the barrier and it also hints at the fact that the molecules that do not cross the barrier might share a lot in common with molecules that cross the barrier.
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_tsne_mfps}
-					\caption{2D Scatter Plot after applying the t-SNE Algorithm (Morgan Fingerprint dataset)}
-					\label{fig:scatter_tsne_mfps_2D}
-				\end{figure}
-			The scatter plot has no significant difference with the Morgan Fingerprint dataset, it highlights the clusters of the B molecules more visibly. Further analysis would need to be carried to create a more linear separable representation.
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_tsne_3D}
-					\caption{3D Scatter Plot after applying the t-SNE Algorithm}
-					\label{fig:scatter_tsne_3D}
-				\end{figure}
-			The 3D scatter plot of the simple molecular descriptor data looks slightly more separable than its 2D counterpart.
-			\paragraph{Principal Component Analysis (PCA)} 
-			In the 2D representation shown below, the data points are tightly clustered in the middle, and looks like it is linearly inseparable.
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_pca}
-					\caption{2D Scatter Plot after applying the PCA Algorithm}
-					\label{fig:scatter_pca_2D}
-				\end{figure}
-			Remembering that the dataset is biased towards the molecules that pass through the barrier, as they represent around 70\% of the data. A significant proportion of the molecules that do not pass through the barrier(B) are clustered in the same space as the ones that pass through the barrier (A). Although majority of A stays clustered in the same space with the exception of a few outliers.\\
-			To further examine the data, we look at creating a 3D representation, the next 3 principal components are selected to create data for the 3D plot. The 3D plot has shown below also has the same clustering of a significant proportion of the B molecules in the same space as the A molecules but looks more linearly separable than the 2D plot
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D}
-					\caption{3D Scatter Plot after applying the PCA Algorithm (I)}
-					\label{fig:scatter_pca_3D}
-				\end{figure}
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D_2}
-					\caption{3D Scatter Plot after applying the PCA Algorithm (II)}
-					\label{fig:scatter_pca_3D_2}
-				\end{figure}
-			\subsubsection{Clustering}
-				\paragraph{k-Means Clustering}
-				In our further attempts to have some form of linearly separable data, we select the 2 principal components of our datasets and apply the k-means clustering algorithm on them.
-					\begin{figure}[H]
-						\centering
-						\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/kmeans_smd_scatter}
-						\caption{2D Scatter Plot found by k-means on Simple Molecular Descriptors. \textit{Original data points on the right and clusters found on the left}}
-						\label{fig:kmeans_smd_scatter}
-					\end{figure}
-				We can see that the clustering algorithm performs poorly on the simple molecular descriptor dataset. Examining the data, it clustered 2039 molecules to class 0 and clustered just 1 molecule to class 1. \\
-				However, promising results were achieved using the Morgan fingerprint dataset.
-					\begin{figure}[H]
-						\centering
-						\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/kmeans_morgan_scatter}
-						\caption{2D Scatter Plot found by k-means on fingerprint dataset. \textit{Original data points on the right and clusters found on the left}}
-						\label{fig:kmeans_morgan_scatter}
-					\end{figure}
-				The plot looks linearly separable now, an accuracy of 84\% was achieved classify the red points (molecules that pass through the barrier (A)) and a 59\% accuracy of classifying the blue points.The yellow triangles in the diagram represent the centers of each clusters.
-				\paragraph{Agglomerative Clustering}
-				For the Simple Molecular dataset, the entire dataset was scaled to have a minimum of -1 and a maximum of 1. Then the 2 principal components were selected, a ward agglomerative cluster algorithm was applied and it created 2 clusters with cluster 1 having 1442 samples and cluster 2 having 598 samples. The original dataset had 1563 molecules passing through the barrier and 477 molecules not passing through, most likely cluster 1 represents the molecules that pass through
-					\begin{figure}[H]
-						\centering
-						\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/agg_smd_scatter}
-						\caption{2D Scatter Plot of clusters found by the agglomerative ward algorithm on the simple molecular dataset}
-						\label{fig:agg_smd_scatter}
-					\end{figure}
-				Applying the same cluster to the Morgan fingerprint dataset, without preprocessing the data, it created 2 clusters; cluster 1 with 1894 samples and cluster 2 with 146 samples. The simple molecular descriptor dataset proves to be a better dataset for this clustering algorithm as it achieves a lower error rate
-					\begin{figure}[H]
-						\centering
-						\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/agg_morgan_scatter}
-						\caption{2D Scatter Plot of clusters found by the agglomerative ward algorithm on the Morgan Fingerprint dataset}
-						\label{fig:agg_morgan_scatter}
-					\end{figure}
-				
-				
-	
-	\section{Machine Learning Classifiers/Models}
-		A Detailed explanation of the selected classifiers based on literature review
-		\subsection{Decision Tree}
-		Decision trees are an example of non-parametric supervised learning algorithms.
-		After applying the decision tree classifier, an accuracy of $\sim85\%$ was achieved. Examining the internal workings of the Tree, based on the simple molecular descriptor dataset, we can see that the total polar surface area (TPSA) is the defining factor in determining whether a molecule crosses the blood-brain barrier.
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/bbb_tree_smd}
-				\caption{Decision Tree: Simple Molecular Descriptors}
-				\label{fig:bbb_tree_smd}
-			\end{figure}
-			\subsubsection{Random Forests}
-			An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset. The number of trees in the random forest was set to 20.
-			\subsubsection{Extra Trees}
-			The extra trees tend to perform slightly better than the random forests. On the simple molecular dataset, the extra trees score an accuracy of $\sim90\%$ and on the Morgan fingerprint dataset, the extra trees score an accuracy of $\sim89\%$, performing just slightly less than the random forest on the same dataset. The number of extra trees was set to 20
-			\subsubsection{AdaBoost Decision Trees}
-			Applying the AdaBoost algorithm to the decision trees, an accuracy of $\sim83\%$ was achieved on the simple molecular descriptor dataset, and an accuracy of $\sim81\%$ on the Morgan fingerprint dataset. Both rounds of classification with number of trees = 200. Strangely, the Adaboosted decision trees ought to provide better results than the random forest or extra trees classifiers. 
-			\subsubsection{Gradient Tree Boosting}
-			With a little bit of tuning the parameters of the gradient boosted classifier, by increasing the number of estimators to around 150 and reducing the learning rate to 0.45. An accuracy score of $\sim86\%$ was achieved on the simple molecular descriptors and $\sim82\%$ on the Morgan fingerprint dataset.
-			
-		\subsection{K-Nearest Neighbours (kNN)}
-		The kNN classifier, at $k=10$ has an accuracy of roughly around $\sim85\%$ using only the simple molecular descriptors. By engineering the feature vector to have unit variance and a Gaussian mean of 0, we then have an accuracy of around $\sim89\%$ at 10 neighbours. 
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/knn_molecular_descriptors}
-				\caption{kNN classifier for 10 neighbours using the Simple Molecular Descriptors}
-				\label{fig:knn_smd}
-			\end{figure}
-		Also using the Morgan fingerprint has the data for the kNN classifier, we have an accuracy of around $\sim89\%$. Without scaling the simple molecular descriptors, the Morgan fingerprint dataset provides better results.
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/knn_morgan_dice_fingerprint}
-				\caption{kNN classifier for 10 neighbours using the Morgan Fingerprint dataset}
-				\label{fig:knn_mfps}
-			\end{figure}
-		
-		\subsection{Support Vector Machines}
-		Scaling the data using a Standard Scaler and selecting the top 100 principal component, a mean accuracy of 84.9\% was achieved using both datasets
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/mol_decision_svm}
-				\caption{Support Vector Machines with different kernel functions on Simple Molecular Dataset}
-				\label{fig:svm_mol}
-			\end{figure}
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/fps_decision_svm}
-				\caption{Support Vector Machines with different kernel functions on Morgan Fingerprint Dataset}
-				\label{fig:svm_fps}
-			\end{figure}
-		\subsection{Neural Networks}
-		The Human brain is a very fascinating and robust system, the basic processing unit of the brain is the nerve cell or neuron and there are around 100 billion neurons in the brain all connected together by synapses. These neurons are electrically excitable, they pass signals from one neuron to the next by electrical and chemical signals when the membrane potential reaches some threshold, which can be inhibited if the threshold is not exceeded. A Neural Network is a computational model inspired by the human brain, it consists of a network of neurons connected together by axons. The inspiration behind the model is that if learning occurs in the brain and if we can represent this in a computational model then we can achieve some form of intelligence in our systems.
-			\paragraph{Hebbian Learning}
-			This is a learning concept of the brain based on the mechanism neural plasticity proposed by Donald Hebb. The rule formulated states that changes in the strength of synaptic connections are proportional to the correlation in the firing of the two connecting neurons, the strength of the connection is proportional to the frequency of excitement between them. However, the connection between two neurons that never fire will eventually be broken. \\
-			The idea of repetition enhances retention can also be applied here, where actions that are repeated continuously will create retention in the brain \cite{Cunninghametal1984}. An example is in the experiment carried out by Ivan Pavlov, where his dogs were conditioned to associate the ringing of a bell to the presence of food. As a result, the neurons responsible for salivating over food and for hearing the bell would have a very strong connection to the extent that merely hearing the bell was sufficient to cause the salivating neurons to fire. 
-			\subsubsection{Multi Layer Perceptron}
-			The Perceptron can also be referred to a collection of neurons along with a vector of inputs and a vector of weights to fasten the inputs to the neuron. This neuron in this network consists of its inputs, weights, threshold and activation function. Each neuron,receives an input along with the strength of the input i.e weight, which it multiplies together and if the value is greater than the threshold, the neuron fires. \\
-			For our dataset the input $X = [x_1,x_2,x_3,...,x_n]$ to a Perceptron could be either a simple molecular feature vector value e.g the number of hydrogen atoms in the molecule or vectors of 1s and 0s if we're using the Morgan fingerprint dataset to train the network. Each neuron is also given a vector of small random positive and negative values as its weights. The neuron calculates its activation value as 
-			\begin{equation}
-				h = \sum_{i=1}^{m}w_ix_i
-			\end{equation}
-			This activation value is then passed on to the activation function $f(h)$ which fires if the activation value is greater than the threshold. A threshold value of 0 was used irrespective of the training dataset. The output value of the function is given by
-			\begin{equation}
-				output = f(h) = 
-				\begin{cases}
-					1 & \text{if h} \textgreater \theta \\
-					0 & \text{if h} \le \theta
-				\end{cases}
-			\end{equation}
-			\paragraph{Multi Layer Perceptron}
-			The Input layer to the neuron is the same as the length of the feature vector plus one (the fixed bias input). For the simple molecular feature dataset, the number of inputs $n$ to the network is 196, as that is the number of simple chemical descriptors that were calculated. For the Morgan Fingerprint dataset, $n = 2048$ where $n$ represents the length of the bit vector. \\
-			The bias input is used as a control value to adjust the value that the neuron fires at. An example is when the feature vector to a neuron is all zeros and the neuron should fire. By our activation function, the neuron wouldn't fire because its activation value does not exceed the threshold. By adding a fixed value (bias) of $\pm1$ to the feature vector, we can then adjust the weight to make the neuron fire or not.
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/multilayerperceptronnetwork}
-				\caption{Multi Layer Perceptron \cite{ScikitLearn2016}}
-				\label{fig:mlp}
-			\end{figure}
-			\subsubsection{Application to the Blood Brain Barrier prediction}
-			We are undertaking a form of supervised learning in the BBB prediction. The dataset we have compiled is labelled with the correct class and this data is fed to the neural network in order for the it to generalise what it has learned about our data. The network will then find patterns in the molecules that cross the blood-brain barrier and predict if an unknown molecule will cross it or not. \\
-			Let $X = [x_1,x_2,x_3,...,x_n]$ be the input vector to our network for $n$ features and $W=[w_1,w_2,w_3,...,w_n]$ , the weights. Each neuron calculates whether it should fire or not based on its activation vector. We then examine the wrong neurons i.e the neurons that fired when they should have not. For each wrong neuron $i$, we calculate the difference in weights for it $\Delta w_i = -(y_i - t_i) * x_i$ where $y_i$ is the output and $t_i$ is the target output, the weight for neuron $i$ is then updated as $w_i = w_i + \Delta w_i\eta$, where $\eta$ is the learning rate (usually around $0.1 < \eta < 0.4$) which determines how much to change the weights by and as a result, determines how fast the network learns. The training is run again till the algorithm converges and the network gets all of its input right.
-			\paragraph{The Learning Algorithm \cite{StephenM2014}}
-			\begin{itemize}
-				\item \textbf{Initialisation}
-					\\ $n$ small (positive and negative) random numbers are assigned as weights $w_{ij}$ where $i$ is the number of weights and $j$ represents the neuron being examined.
-				\item \textbf{Training} for T iterations or until all the outputs are correct
-					\begin{itemize}
-						\item[-] For each input vector $X = [x_1,x_2,x_3,...,x_n]$
-							\begin{itemize}
-								\item[*] Compute the activation value ($h$) of each neuron $j$: \\
-									\begin{equation}
-										h = \sum_{i=0}^{n}w_{ij}x_i
-									\end{equation}
-								\item[*] Calculate the activation ($y$) of neuron $j$ using the activation function $g$: \\
-									\begin{equation}
-										y_j = g(h) = 
-										\begin{cases}
-											1 & \text{if h} \textgreater \theta \\
-											0 & \text{if h} \le \theta
-										\end{cases}
-									\end{equation}
-								\item[*] Update the weights of neuron $j$ using the formula: \\
-									\begin{eqnarray}
-										\Delta w_{ij} = - \eta(y_j - t_j) * x_i & \\
-										w_{ij} = \Delta w_ij + w_ij
-									\end{eqnarray}
-								
-							\end{itemize}
-					\end{itemize}
-				\item \textbf{Recall or Prediction}	
-					\\To predict the value of new molecule with feature vector $X$ using:
-					\begin{equation}
-						y_j = g(\sum_{i=0}^{m}w_{ij}x_i) = 
-						\begin{cases}
-							1 & \text{if } w_{ij}x_i \textgreater 0 \\
-							0 & \text{if } w_{ij}x_i \le 0
-						\end{cases}
-					\end{equation}
-					where 1 represents a molecule that passes through the barrier and 0 a molecule that doesn't.
-			\end{itemize}
-		\paragraph{Model Training}
-		For both datasets (simple molecular descriptors and fingerprint), they were rescaled to have a minimum of -1 and a Maximum of 1. The transformed data was then trained on a neural network and an accuracy of $\sim86\%$ was achieved. \\
-		\subparagraph{Model Selection on the datasets for training} 
-		The following model selection techniques were applied to both datasets
-			\begin{itemize}
-				\item \underline{Univariate Model Selection}: Here for each feature, we compute whether there is a statistical relationship between the feature and the target. The features which are calculated to be highly unrelated to the target are then dropped from the dataset. Applying this model selection to the molecular descriptor dataset and using a percentile of 50 gives us the features in figure \ref{fig:neuralnetworksmdunivariate}.
+		%TODO: Talk about Cross validation, include diagrams like in scikit-learn pg 252, the entire chapter is a valuable resource	
+				\paragraph{Model Training}
+				For both datasets (simple molecular descriptors and fingerprint), they were rescaled to have a minimum of -1 and a Maximum of 1. The transformed data was then trained on a neural network and an accuracy of $\sim86\%$ was achieved. \\
+				\subparagraph{Model Selection on the datasets for training} 
+				The following model selection techniques were applied to both datasets
+				\begin{itemize}
+					\item \underline{Univariate Model Selection}: Here for each feature, we compute whether there is a statistical relationship between the feature and the target. The features which are calculated to be highly unrelated to the target are then dropped from the dataset. Applying this model selection to the molecular descriptor dataset and using a percentile of 50 gives us the features in figure \ref{fig:neuralnetworksmdunivariate}.
 					\begin{figure}[h]
 						\centering
 						\includegraphics[width=\textwidth,scale=1]{images/neural_network_smd_univariate_matrix}
 						\caption{Matrix diagram of selected features}
 						\label{fig:neuralnetworksmdunivariate}
 					\end{figure}
-				The neural network was then trained with the new feature vector and a percentage increase in accuracy was achieved - with a new accuracy of $\sim87\%$ on the molecular descriptor dataset and an accuracy of $\sim88\%$ on the fingerprint dataset.
-			\end{itemize}
-			\subsection{Classifier Performance Comparison}
-			\begin{table}[ht]
-				\caption{Classifier average performance on different datasets}
-				\centering
-				\begin{tabular}{c|c|c}	
-					\hline\hline
-					Classifier & Simple Molecular descriptors(\%) & Morgan Fingerprint(\%) \\
-					\hline
-					Decision Tree & 80 & 79 \\
-					Extra Trees & 86 & 84 \\
-					Random Forests & 85 & 84 \\
-					AdaBoost Decision Trees & 84 & 82 \\
-					Gradient Boosted Trees & 86 & 82 \\
-					k-Nearest Neighbours & 87 & 89 \\ 
-					Support Vector Machines & 84.9 & 84.9 \\
-					Neural Networks & 87 & 88 \\
-					\hline
-				\end{tabular}
-			\end{table}
-			%\subsubsection{Deep Learning}
-		%\subsection{Naïve Bayesian Classifier}
+					The neural network was then trained with the new feature vector and a percentage increase in accuracy was achieved - with a new accuracy of $\sim87\%$ on the molecular descriptor dataset and an accuracy of $\sim88\%$ on the fingerprint dataset.
+				\end{itemize}
+		\subsection{Classifier Performance Comparison}
+		\begin{table}[ht]
+			\caption{Classifier average performance on different datasets}
+			\centering
+			\begin{tabular}{c|c|c}	
+				\hline\hline
+				Classifier & Simple Molecular descriptors(\%) & Morgan Fingerprint(\%) \\
+				\hline
+				Decision Tree & 80 & 79 \\
+				Extra Trees & 86 & 84 \\
+				Random Forests & 85 & 84 \\
+				AdaBoost Decision Trees & 84 & 82 \\
+				Gradient Boosted Trees & 86 & 82 \\
+				k-Nearest Neighbours & 87 & 89 \\ 
+				Support Vector Machines & 84.9 & 84.9 \\
+				Neural Networks & 87 & 88 \\
+				\hline
+			\end{tabular}
+		\end{table}
+	\section{Model Improvement techniques}
+		\subsection{Grid Search}
+	\section{Model Persistence} 
+	%How you will use pickle to persist the model
+		
+		
+
+
+\chapter{Conclusion}
+	\section{Integration into a Web Application}
+	\section{Deployment}
+	\section{Areas for improvement}
 
 
 
-
-	\section{Model Evaluation and Improvement}
-	%TODO: Talk about Cross validation, include diagrams like in scikit-learn pg 252, the entire chapter is a valuable resource	
-
-%\chapter{Requirements}
-
-
-%\chapter{Design}
-
-
-%\chapter{Implementation}
-
-
-%\chapter{Testing and Evaluation}
-
-
-%\chapter{Results}
 
 \bibliographystyle{plain}
 \bibliography{ibraheem_aj_dissertation}

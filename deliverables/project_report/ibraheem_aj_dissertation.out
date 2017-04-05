@@ -7,31 +7,25 @@
 \BOOKMARK [2][-]{subsection.2.1.2}{Molecular Representation and Similarity}{section.2.1}% 7
 \BOOKMARK [1][-]{section.2.2}{Drug Design and Discovery}{chapter.2}% 8
 \BOOKMARK [1][-]{section.2.3}{CNS Drug Design and the Blood Brain Barrier}{chapter.2}% 9
-\BOOKMARK [1][-]{section.2.4}{Machine Learning concepts}{chapter.2}% 10
-\BOOKMARK [2][-]{subsection.2.4.1}{Models and Classifiers}{section.2.4}% 11
-\BOOKMARK [2][-]{subsection.2.4.2}{Feature Extraction}{section.2.4}% 12
-\BOOKMARK [0][-]{chapter.3}{Data Representation and Feature Engineering}{}% 13
-\BOOKMARK [1][-]{section.3.1}{Data Preprocessing}{chapter.3}% 14
-\BOOKMARK [1][-]{section.3.2}{Feature Extraction}{chapter.3}% 15
-\BOOKMARK [0][-]{chapter.4}{Machine Learning Classifier Training}{}% 16
-\BOOKMARK [1][-]{section.4.1}{Neural Networks}{chapter.4}% 17
-\BOOKMARK [1][-]{section.4.2}{Ensemble Classifiers}{chapter.4}% 18
-\BOOKMARK [0][-]{chapter.5}{Model Evaluation and Improvement}{}% 19
-\BOOKMARK [1][-]{section.5.1}{Model Evaluation}{chapter.5}% 20
-\BOOKMARK [1][-]{section.5.2}{Model Improvement techniques}{chapter.5}% 21
-\BOOKMARK [2][-]{subsection.5.2.1}{Grid Search}{section.5.2}% 22
-\BOOKMARK [1][-]{section.5.3}{Model Persistence}{chapter.5}% 23
-\BOOKMARK [0][-]{chapter.6}{Conclusion}{}% 24
-\BOOKMARK [1][-]{section.6.1}{Integration into a Web Application}{chapter.6}% 25
-\BOOKMARK [1][-]{section.6.2}{Deployment}{chapter.6}% 26
-\BOOKMARK [1][-]{section.6.3}{Areas for improvement}{chapter.6}% 27
-\BOOKMARK [0][-]{chapter.7}{Notes}{}% 28
-\BOOKMARK [1][-]{section.7.1}{Data Preprocessing and Feature Engineering}{chapter.7}% 29
-\BOOKMARK [2][-]{subsection.7.1.1}{Data Visualisations}{section.7.1}% 30
-\BOOKMARK [1][-]{section.7.2}{Machine Learning Classifiers/Models}{chapter.7}% 31
-\BOOKMARK [2][-]{subsection.7.2.1}{Decision Tree}{section.7.2}% 32
-\BOOKMARK [2][-]{subsection.7.2.2}{K-Nearest Neighbours \(kNN\)}{section.7.2}% 33
-\BOOKMARK [2][-]{subsection.7.2.3}{Support Vector Machines}{section.7.2}% 34
-\BOOKMARK [2][-]{subsection.7.2.4}{Neural Networks}{section.7.2}% 35
-\BOOKMARK [2][-]{subsection.7.2.5}{Classifier Performance Comparison}{section.7.2}% 36
-\BOOKMARK [1][-]{section.7.3}{Model Evaluation and Improvement}{chapter.7}% 37
+\BOOKMARK [0][-]{chapter.3}{Machine Learning Classifiers}{}% 10
+\BOOKMARK [1][-]{section.3.1}{Data Representation and Preprocessing}{chapter.3}% 11
+\BOOKMARK [1][-]{section.3.2}{Feature Engineering}{chapter.3}% 12
+\BOOKMARK [2][-]{subsection.3.2.1}{Manifold Learning with t-SNE}{section.3.2}% 13
+\BOOKMARK [2][-]{subsection.3.2.2}{Clustering}{section.3.2}% 14
+\BOOKMARK [2][-]{subsection.3.2.3}{Feature Extraction}{section.3.2}% 15
+\BOOKMARK [1][-]{section.3.3}{Machine Learning Models}{chapter.3}% 16
+\BOOKMARK [2][-]{subsection.3.3.1}{Decision Trees}{section.3.3}% 17
+\BOOKMARK [2][-]{subsection.3.3.2}{K-Nearest Neighbours \(kNN\)}{section.3.3}% 18
+\BOOKMARK [2][-]{subsection.3.3.3}{Support Vector Machines}{section.3.3}% 19
+\BOOKMARK [2][-]{subsection.3.3.4}{Neural Networks}{section.3.3}% 20
+\BOOKMARK [2][-]{subsection.3.3.5}{Ensemble Classifiers}{section.3.3}% 21
+\BOOKMARK [0][-]{chapter.4}{Model Evaluation and Improvement}{}% 22
+\BOOKMARK [1][-]{section.4.1}{Model Evaluation}{chapter.4}% 23
+\BOOKMARK [2][-]{subsection.4.1.1}{Classifier Performance Comparison}{section.4.1}% 24
+\BOOKMARK [1][-]{section.4.2}{Model Improvement techniques}{chapter.4}% 25
+\BOOKMARK [2][-]{subsection.4.2.1}{Grid Search}{section.4.2}% 26
+\BOOKMARK [1][-]{section.4.3}{Model Persistence}{chapter.4}% 27
+\BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 28
+\BOOKMARK [1][-]{section.5.1}{Integration into a Web Application}{chapter.5}% 29
+\BOOKMARK [1][-]{section.5.2}{Deployment}{chapter.5}% 30
+\BOOKMARK [1][-]{section.5.3}{Areas for improvement}{chapter.5}% 31
