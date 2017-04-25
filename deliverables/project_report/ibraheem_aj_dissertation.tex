@@ -133,7 +133,7 @@
 						\end{tabular}
 						\label{table:random_chem_descriptors}
 					\end{table}
-				The beauty of the approach to the BBB problem is that from a statistical stand-point, we do not need a deep knowledge of Chemistry, we can simply make an educated neglect of the molecular names and the headers of the table \ref{table:random_chem_descriptors} and generate the matrix (rounded up to 3 decimal places ) shown as the feature vector
+				The beauty of the approach to the BBB problem is that from a statistical stand-point, we do not need a deep knowledge of Chemistry, we can simply make an educated neglect of the molecular names and the headers of the table \ref{table:random_chem_descriptors} and generate the matrix (rounded up to 3 decimal places ) shown as the feature vector \label{matrix:samp_feat_vec}
 				\[ \left[ \begin{array}{c c c c}
 					-0.256 & 197.102 & 76 & ... \\
 					-0.951 & 256.125 & 96 & ... \\
@@ -232,20 +232,56 @@
 			\item \underline{Reinforcement Learning}: This lies in between supervised and unsupervised learning as no correct labels are provided to the training data, however, the algorithm is corrected when it makes a wrong prediction and it is required to iterate over numerous possibilities till it makes the correct prediction
 			\item \underline{Evolutionary Learning}: This is a bio-inspired model where the concept of evolution is applied, numerous solutions are developed and are evaluated based on a fitness score. Models with higher fitness scores progress to the next training iteration whilst the lesser models are dropped till an optimal solution is found.
 		\end{itemize}
-	For the blood brain barrier (BBB) task, supervised learning techniques would be utilised for prediction purposes whilst the unsupervised learning techniques would be used for data exploratory purposes and to further understand and highlight patterns in the BBB dataset. The \href{http://scikit-learn.org/stable/}{Scikit-Learn} software library that would be used extensively for the implementation of the supervised and unsupervised learning models.
+	For the blood brain barrier (BBB) task, supervised learning techniques would be utilised for prediction purposes whilst the unsupervised learning techniques would be used for data exploratory purposes and to further understand and highlight patterns in the BBB dataset. The \href{http://scikit-learn.org/stable/}{Scikit-Learn} software library would be used extensively for the implementation of the supervised and unsupervised learning models.
 	
 	\section{Data Representation and Preprocessing}
-	The \href{http://pandas.pydata.org/}{Pandas} and \href{http://www.numpy.org/}{Numpy} libraries are used extensively throughout the project and they are also the underlying library used by Scikit-Learn. 
+	The \href{http://pandas.pydata.org/}{Pandas} and \href{http://www.numpy.org/}{Numpy} libraries are used throughout the project and they are also the underlying library used by Scikit-Learn. 
 		\begin{listing}[!htbp]
 			\inputminted[breaklines=true,breakautoindent=true,linenos=true]{python}{source_code/dataset.py}
 			\caption{Functions to load, preprocess and transform the dataset}
 			\label{code:dataset_preprocess}
 		\end{listing}
-	In listings \ref{code:dataset_preprocess}, the training data is loaded in using Numpy and then converted into the RDKit molecular format; the failed indices are recorded and deleted from the Numpy array and the resulting data is then transformed based on their chemical descriptors and stored in a Numpy array for use by the supervised and unsupervised models.
+	In code listings \ref{code:dataset_preprocess}, the training data is loaded in using Numpy and then converted into the RDKit molecular format; the failed indices are recorded and deleted from the Numpy array and the resulting data is then transformed based on their chemical descriptors and stored in a Numpy array for use by the supervised and unsupervised models.
 	
-	\section{Feature Engineering (Notes)}
-	% Talk about the goals of feature engineering
-		\subsection{Manifold Learning with t-SNE}
+	
+	
+	
+	
+	\section{Unsupervised Learning}
+	Before training the classifiers with the preprocessed data; it is usually best to carry out some form of exploration into the dataset to enable educated guesses about the best machine learning models to utilise for the prediction task. In this section, unsupervised learning techniques would be used to gain insights into the bbb dataset with the aim being to determine if it is possible to linearly fit a classifier symbolically to divide between the molecules that pass through the barrier and the ones that do not. The main areas focused on would be the transformation of the dataset using the Manifold learning algorithms and the clustering of the data points.
+	
+		\subsection{Principal Component Analysis (PCA)}
+		\textbf{Principal Component Analysis (PCA)} is a form of dimensionality reduction technique that aims to reduce the number of dimensions of the data mainly for visualisation purposes whilst still preserving the statistical meaning of the data and reducing the number of important (principal) components; Here only a small subset of the features of the data are selected according to how important they are; 
+		
+		To illustrate further using the feature vector shown in \ref{matrix:samp_feat_vec}, the vector has a dimensional size of 206 features, as all the 2040 molecules have a chemical descriptor size of 206. Plotting a single molecule on a graph with 206 dimensions would be nearly impossible as 2D and 3D data are the best ways to illustrate statistical data for humans. By applying the Principal Component algorithm to the feature vector, it proceeds to find the direction of maximum variance for each molecule that is, it returns a new vector that contains the most information. The directions of maximum variance returned are referred to as the \textit{principal components}.
+		
+		In order to gain a deeper understanding of our data, the PCA algorithm is applied with the number of principal components set to 2 i.e (n\_components = 2). In the 2D representation shown below in figure \ref{fig:scatter_pca_2D}, the data points are tightly clustered in the middle, and whilst this looks like it is linearly inseparable, with some clustering techniques that would be shown later, a better representation where it is more distinguishible between the data points would be shown
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_pca}
+			\caption{2D Scatter Plot after applying the PCA Algorithm}
+			\label{fig:scatter_pca_2D}
+		\end{figure}
+	
+		To further examine the data, the next 3 principal components are selected to create a 3D plot. The 3D plot as shown in figure \ref{fig:scatter_pca_3D} and \ref{fig:scatter_pca_3D_2} also has the same clustering of a significant proportion of the blue molecules in the same space as the red molecules but looks more linearly separable than the 2D plot. This highlights that would a little bit of feature engineering, it would be possible to seperate the data points into 2 clusters of red and blue i.e molecules that pass through the barrier and the ones that do not. 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D}
+			\caption{3D Scatter Plot after applying the PCA Algorithm (I)}
+			\label{fig:scatter_pca_3D}
+		\end{figure}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D_2}
+			\caption{3D Scatter Plot after applying the PCA Algorithm (II)}
+			\label{fig:scatter_pca_3D_2}
+		\end{figure}
+		
+		A major benefit of exploratory data anlysis as we have seen here is that it is worth gaining insights into the dataset to determine the kind of feature engineering required to achieve high performing machine learning models.
+	
+	
+	
+		\subsection{Manifold Learning with t-SNE (Notes)}
 		\paragraph{Manifold Learning with t-SNE}
 		Manifold Learning Algorithms excel at data visualisation tasks, they provide more complex mappings and often better data representations but perform poorly for data classification tasks. They perform poorly because they do not allow transformations of new data once they have been fitted.\\
 		The t-SNE algorithm is used because it tries as much as possible to maintain the distance between the data points in the original feature vector space during transformation. It puts more emphasis on points that are close by rather than preserving points that are far apart \cite{Mueller2016}.
@@ -270,6 +306,13 @@
 			\label{fig:scatter_tsne_3D}
 		\end{figure}
 		The 3D scatter plot of the simple molecular descriptor data looks slightly more separable than its 2D counterpart.
+		
+		
+		
+		
+		
+		
+		
 		\subsection{Clustering}
 			\subsubsection{K-Means Clustering}
 			In our further attempts to have some form of linearly separable data, we select the 2 principal components of our datasets and apply the k-means clustering algorithm on them.
@@ -303,29 +346,8 @@
 				\caption{2D Scatter Plot of clusters found by the agglomerative ward algorithm on the Morgan Fingerprint dataset}
 				\label{fig:agg_morgan_scatter}
 			\end{figure}
-		\subsection{Feature Extraction}
-			\subsubsection{Principal Component Analysis (PCA)}
-						In the 2D representation shown below, the data points are tightly clustered in the middle, and looks like it is linearly inseparable.
-						\begin{figure}[H]
-							\centering
-							\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_pca}
-							\caption{2D Scatter Plot after applying the PCA Algorithm}
-							\label{fig:scatter_pca_2D}
-						\end{figure}
-						Remembering that the dataset is biased towards the molecules that pass through the barrier, as they represent around 70\% of the data. A significant proportion of the molecules that do not pass through the barrier(B) are clustered in the same space as the ones that pass through the barrier (A). Although majority of A stays clustered in the same space with the exception of a few outliers.\\
-						To further examine the data, we look at creating a 3D representation, the next 3 principal components are selected to create data for the 3D plot. The 3D plot has shown below also has the same clustering of a significant proportion of the B molecules in the same space as the A molecules but looks more linearly separable than the 2D plot
-						\begin{figure}[H]
-							\centering
-							\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D}
-							\caption{3D Scatter Plot after applying the PCA Algorithm (I)}
-							\label{fig:scatter_pca_3D}
-						\end{figure}
-						\begin{figure}[H]
-							\centering
-							\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D_2}
-							\caption{3D Scatter Plot after applying the PCA Algorithm (II)}
-							\label{fig:scatter_pca_3D_2}
-						\end{figure}
+			
+
 	\section{Machine Learning Models (Notes)}
 		\subsection{Decision Trees}
 				Decision trees are an example of non-parametric supervised learning algorithms.
@@ -342,7 +364,7 @@
 				Applying the AdaBoost algorithm to the decision trees, an accuracy of $\sim83\%$ was achieved on the simple molecular descriptor dataset, and an accuracy of $\sim81\%$ on the Morgan fingerprint dataset. Both rounds of classification with number of trees = 200. Strangely, the Adaboosted decision trees ought to provide better results than the random forest or extra trees classifiers. 
 				\subsubsection{Gradient Tree Boosting}
 				With a little bit of tuning the parameters of the gradient boosted classifier, by increasing the number of estimators to around 150 and reducing the learning rate to 0.45. An accuracy score of $\sim86\%$ was achieved on the simple molecular descriptors and $\sim82\%$ on the Morgan fingerprint dataset.
-			\subsubsection{Random Forests}
+				\subsubsection{Random Forests}
 				An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset. The number of trees in the random forest was set to 20.
 		\subsection{K-Nearest Neighbours (kNN)}
 				The kNN classifier, at $k=10$ has an accuracy of roughly around $\sim85\%$ using only the simple molecular descriptors. By engineering the feature vector to have unit variance and a Gaussian mean of 0, we then have an accuracy of around $\sim89\%$ at 10 neighbours. 

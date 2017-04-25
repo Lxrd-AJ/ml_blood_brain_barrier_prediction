@@ -9,10 +9,10 @@
 \BOOKMARK [1][-]{section.2.3}{CNS Drug Design and the Blood Brain Barrier}{chapter.2}% 9
 \BOOKMARK [0][-]{chapter.3}{Machine Learning Classifiers}{}% 10
 \BOOKMARK [1][-]{section.3.1}{Data Representation and Preprocessing}{chapter.3}% 11
-\BOOKMARK [1][-]{section.3.2}{Feature Engineering \(Notes\)}{chapter.3}% 12
-\BOOKMARK [2][-]{subsection.3.2.1}{Manifold Learning with t-SNE}{section.3.2}% 13
-\BOOKMARK [2][-]{subsection.3.2.2}{Clustering}{section.3.2}% 14
-\BOOKMARK [2][-]{subsection.3.2.3}{Feature Extraction}{section.3.2}% 15
+\BOOKMARK [1][-]{section.3.2}{Unsupervised Learning}{chapter.3}% 12
+\BOOKMARK [2][-]{subsection.3.2.1}{Principal Component Analysis \(PCA\)}{section.3.2}% 13
+\BOOKMARK [2][-]{subsection.3.2.2}{Manifold Learning with t-SNE \(Notes\)}{section.3.2}% 14
+\BOOKMARK [2][-]{subsection.3.2.3}{Clustering}{section.3.2}% 15
 \BOOKMARK [1][-]{section.3.3}{Machine Learning Models \(Notes\)}{chapter.3}% 16
 \BOOKMARK [2][-]{subsection.3.3.1}{Decision Trees}{section.3.3}% 17
 \BOOKMARK [2][-]{subsection.3.3.2}{K-Nearest Neighbours \(kNN\)}{section.3.3}% 18
