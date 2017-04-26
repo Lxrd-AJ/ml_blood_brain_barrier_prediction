@@ -243,6 +243,8 @@
 		\end{listing}
 	In code listings \ref{code:dataset_preprocess}, the training data is loaded in using Numpy and then converted into the RDKit molecular format; the failed indices are recorded and deleted from the Numpy array and the resulting data is then transformed based on their chemical descriptors and stored in a Numpy array for use by the supervised and unsupervised models.
 	
+	It is worth noting the dataset used is a highly biased one; After preprocessing and cleaning, there are a total of 1563 molecules that pass through the blood brain barrier and a total of 477 molecules that do not pass through the barrier. This bias would be accounted for during the training phase as the machine learning classifiers would be cross validated as explained in the model evaluation section.
+	
 	
 	
 	
@@ -255,7 +257,7 @@
 		
 		To illustrate further using the feature vector shown in \ref{matrix:samp_feat_vec}, the vector has a dimensional size of 206 features, as all the 2040 molecules have a chemical descriptor size of 206. Plotting a single molecule on a graph with 206 dimensions would be nearly impossible as 2D and 3D data are the best ways to illustrate statistical data for humans. By applying the Principal Component algorithm to the feature vector, it proceeds to find the direction of maximum variance for each molecule that is, it returns a new vector that contains the most information. The directions of maximum variance returned are referred to as the \textit{principal components}.
 		
-		In order to gain a deeper understanding of our data, the PCA algorithm is applied with the number of principal components set to 2 i.e (n\_components = 2). In the 2D representation shown below in figure \ref{fig:scatter_pca_2D}, the data points are tightly clustered in the middle, and whilst this looks like it is linearly inseparable, with some clustering techniques that would be shown later, a better representation where it is more distinguishible between the data points would be shown
+		In order to gain a deeper understanding of our data, the PCA algorithm is applied with the number of principal components set to 2 i.e (n\_components = 2). In the 2D representation shown below in figure \ref{fig:scatter_pca_2D}, the data points are tightly clustered in the middle, and whilst this looks like it is linearly inseparable, with some clustering techniques that would be shown later, a better representation where it is more distinguishible between the data points would be shown.
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_pca}
@@ -263,7 +265,7 @@
 			\label{fig:scatter_pca_2D}
 		\end{figure}
 	
-		To further examine the data, the next 3 principal components are selected to create a 3D plot. The 3D plot as shown in figure \ref{fig:scatter_pca_3D} and \ref{fig:scatter_pca_3D_2} also has the same clustering of a significant proportion of the blue molecules in the same space as the red molecules but looks more linearly separable than the 2D plot. This highlights that would a little bit of feature engineering, it would be possible to seperate the data points into 2 clusters of red and blue i.e molecules that pass through the barrier and the ones that do not. 
+		To further examine the data, the next 3 principal components are selected to create a 3D plot. The 3D plot as shown in figures \ref{fig:scatter_pca_3D} and \ref{fig:scatter_pca_3D_2} also has the same clustering of a significant proportion of the blue molecules in the same space as the red molecules but looks more linearly separable than the 2D plot. This highlights that would a little bit of feature engineering, it would be possible to seperate the data points into 2 clusters of red and blue i.e molecules that pass through the barrier and the ones that do not. 
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D}
@@ -281,17 +283,19 @@
 	
 	
 	
-		\subsection{Manifold Learning with t-SNE (Notes)}
-		\paragraph{Manifold Learning with t-SNE}
-		Manifold Learning Algorithms excel at data visualisation tasks, they provide more complex mappings and often better data representations but perform poorly for data classification tasks. They perform poorly because they do not allow transformations of new data once they have been fitted.\\
-		The t-SNE algorithm is used because it tries as much as possible to maintain the distance between the data points in the original feature vector space during transformation. It puts more emphasis on points that are close by rather than preserving points that are far apart \cite{Mueller2016}.
+		\subsection{Manifold Learning with t-SNE}
+		\paragraph{Manifold Learning algorithms} are also another form of dimensionalty reduction techniques similar to the Principal Component Analysis algorithm. The t-SNE algorithm, a manifold learning technique, would also be used to further visualise the data in another attempt to further see if it is visually possible to separate between the molecules that do and do not pass through (the red and blue dots). 
+		
+		Manifold Learning Algorithms excel at data visualisation tasks, they provide more complex mappings and often better data representations but perform poorly for data classification tasks. They perform poorly because they do not allow transformations of new data once they have been fitted \cite{Yairetal2008}.\\
+		
+		The t-SNE algorithm is used because it tries as much as possible to maintain the distance between the data points in the original feature vector space during transformation; This way the feature vector can be transformed and reduced to better suit our data exploratory purposes whilst still preserving the integrity of the data. It puts more emphasis on points that are close by rather than preserving points that are far apart \cite{Mueller2016}.
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_tsne}
-			\caption{2D Scatter Plot after applying the t-SNE Algorithm}
+			\caption{2D Scatter Plot after applying the t-SNE Algorithm (Molecular Descriptor dataset)}
 			\label{fig:scatter_tsne_2D}
 		\end{figure}
-		Looking at the t-SNE scatter plot, there is a small cluster of the molecules that do not pass through (B) at the top and some randomly distributed throughout the plot, whilst the ones that pass through the BBB barrier (A) maintain an even distribution around the feature space, it is worth mentioning that performing passing the simple molecular data to the algorithm, it was preprocessed with a MaxAbsoluteScaler that scales each feature by its maximum value. This doesn't mean that it is impossible to separate the data, as an accuracy of $\sim89\%$ will be achieved in later sections. This result is to be expected as the data is biased towards molecules that cross the barrier and it also hints at the fact that the molecules that do not cross the barrier might share a lot in common with molecules that cross the barrier.
+		Looking at the t-SNE scatter plot, there is a small cluster of the molecules that do not pass through (B) at the top and some randomly distributed throughout the plot, whilst the ones that pass through the BBB barrier (A) maintain an even distribution around the feature space. This result is to be expected as the data is biased towards molecules that cross the barrier and it also hints at the fact that the molecules that do not cross the barrier might share a lot in common with molecules that cross the barrier.
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_tsne_mfps}
@@ -302,7 +306,7 @@
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_tsne_3D}
-			\caption{3D Scatter Plot after applying the t-SNE Algorithm}
+			\caption{3D Scatter Plot after applying the t-SNE Algorithm (Molecular Descriptor dataset)}
 			\label{fig:scatter_tsne_3D}
 		\end{figure}
 		The 3D scatter plot of the simple molecular descriptor data looks slightly more separable than its 2D counterpart.

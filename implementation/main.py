@@ -29,6 +29,9 @@ x_cols = [col for col in mol_df.columns if col not in ['p_np','smiles']]
 A = mol_df[x_cols]
 y_a = mol_df.p_np
 
+print("{:} molecules pass through".format(len(np.where(y_a == 'p')[0])))
+print("{:} molecules that do not pass through".format(len(np.where(y_a == 'n')[0])))
+
 # Morgan Fingerprint dataset
 molecules = [Chem.MolFromSmiles(smiles) for smiles in mol_df.smiles]
 fingerprints = [AllChem.GetMorganFingerprintAsBitVect(m,2) for m in molecules]

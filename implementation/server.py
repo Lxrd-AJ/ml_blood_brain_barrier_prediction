@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from flask import Flask
 from sklearn.externals import joblib
+from models.voting_classifier import train_voting_clf
 import sys, getopt
 import os
 
@@ -10,7 +11,9 @@ app = Flask(__name__)
 Co-ordinate this function to utilise models/voting_classifier.py to return a fully trained model
 """
 def train_classifier():
-    return NotImplemented
+    dataset_dir = "./datasets/"
+    return train_voting_clf(dataset_dir)
+
 
 def parse_arguments(argv):
     useage_info = "{:} --model=<model_filename>".format(sys.argv[0])
@@ -37,8 +40,8 @@ def parse_arguments(argv):
             
 
 @app.route("/")
-def hello():
-    return "Hello Cruel World!"
+def information():
+    return "Blood Brain Barrier Prediction Project!"
 
 if __name__ == "__main__":
     arguments = parse_arguments(sys.argv[1:])
@@ -48,5 +51,7 @@ if __name__ == "__main__":
     else:
         print("** No model passed, will have to train classsifiers\n\t- This should take ~30 minutes")
         voting_clf = train_classifier()
+        print("-> Training and Validation of Classifier complete")
+        print(voting_clf)
     app.run()
 
