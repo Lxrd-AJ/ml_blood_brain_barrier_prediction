@@ -319,31 +319,46 @@
 		
 		\subsection{Clustering}
 			\subsubsection{K-Means Clustering}
-			In our further attempts to have some form of linearly separable data, we select the 2 principal components of our datasets and apply the k-means clustering algorithm on them.
-			\begin{figure}[H]
-				\centering
-				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/kmeans_smd_scatter}
-				\caption{2D Scatter Plot found by k-means on Simple Molecular Descriptors. \textit{Original data points on the right and clusters found on the left}}
-				\label{fig:kmeans_smd_scatter}
-			\end{figure}
-			We can see that the clustering algorithm performs poorly on the simple molecular descriptor dataset. Examining the data, it clustered 2039 molecules to class 0 and clustered just 1 molecule to class 1. \\
-			However, promising results were achieved using the Morgan fingerprint dataset.
+			In our further attempts to have some form of linearly separable data, we further explore clustering techniques. Here, the 2 principal components of our feature vector are selected and applied to the k-means clustering algorithm.
+			
+			The K-means algorithm, also known as \textit{Lloyd's algorithm}, aims to find cluster centroids that are representative of regions within the dataset or feature vector. The algorithm selects the approximate center of the clusters and iteratively assigns each data point to this center, and then sets the cluster center again as the average of the data points in the cluster using the equation \ref{equa:kmeans}.
+				\begin{equation}
+					\label{equa:kmeans}
+					\sum_{i=0}^{n}min_{\mu_{j} \in C}(||x_{j} - \mu_{i}||^{2})
+				\end{equation}
+			where $\mu_{j}$ is the mean of the cluster, $C$ is the cluster, $x_{j}$ is the current data point and $\mu_{i}$ is the current mean of the calculation \cite{Sculley2010}.
+			It repeats this process until the cluster centroids do not change significantly.
+			%\begin{figure}[H]
+				%\centering
+				%\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/kmeans_smd_scatter}
+				%\caption{2D Scatter Plot found by k-means on Simple Molecular Descriptors. \textit{Original data points on the right and clusters found on the left}}
+				%\label{fig:kmeans_smd_scatter}
+			%\end{figure}
+
+			Applying the algorithm to a feature vector derived from the Morgan fingerprint dataset. We now have a visualisation showing two clusters with their centroids in yellow, shown in figure \ref{fig:kmeans_morgan_scatter}. This is a more linearly separable diagram as the molecules that pass through the barrier shown in red are clustered around their centroid and also the molecules that do not pass through.
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/kmeans_morgan_scatter}
 				\caption{2D Scatter Plot found by k-means on fingerprint dataset. \textit{Original data points on the right and clusters found on the left}}
 				\label{fig:kmeans_morgan_scatter}
 			\end{figure}
-			The plot looks linearly separable now, an accuracy of 84\% was achieved classify the red points (molecules that pass through the barrier (A)) and a 59\% accuracy of classifying the blue points.The yellow triangles in the diagram represent the centers of each clusters.
+			
+			
 			\subsubsection{Agglomerative Clustering}
-			For the Simple Molecular dataset, the entire dataset was scaled to have a minimum of -1 and a maximum of 1. Then the 2 principal components were selected, a ward agglomerative cluster algorithm was applied and it created 2 clusters with cluster 1 having 1442 samples and cluster 2 having 598 samples. The original dataset had 1563 molecules passing through the barrier and 477 molecules not passing through, most likely cluster 1 represents the molecules that pass through
+			These are a form of hierarchial clustering techniques with major applications in natural language processing. Hierarchial techniques form clusters by continuously merging or splitting data points till it meets the required number of clusters. Agglomerative clustering works in a similar manner where each data point is a cluster of its own and iteratively the algorithm merges the clusters togethers using a \textit{merging strategy}. 
+			
+			The merging strategy used for our dataset was the \textbf{Ward Strategy}, where the algorithm minimises the sum of squared differences within all the clusters, which is similar in a way to the K-Means algorithm.
+			
+			Figures \ref{fig:agg_smd_scatter} and \ref{fig:agg_morgan_scatter} show the result of applying the algorithm to a feature vector derived from the simple molecular descriptors and the morgan fingerprint descriptors. 
+			%For the Simple Molecular dataset, the entire dataset was scaled to have a minimum of -1 and a maximum of 1. Then the 2 principal components were selected, a ward agglomerative cluster algorithm was applied and it created 2 clusters with cluster 1 having 1442 samples and cluster 2 having 598 samples. The original dataset had 1563 molecules passing through the barrier and 477 molecules not passing through, most likely cluster 1 represents the molecules that pass through
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/agg_smd_scatter}
 				\caption{2D Scatter Plot of clusters found by the agglomerative ward algorithm on the simple molecular dataset}
 				\label{fig:agg_smd_scatter}
 			\end{figure}
-			Applying the same cluster to the Morgan fingerprint dataset, without preprocessing the data, it created 2 clusters; cluster 1 with 1894 samples and cluster 2 with 146 samples. The simple molecular descriptor dataset proves to be a better dataset for this clustering algorithm as it achieves a lower error rate
+			%Applying the same cluster to the Morgan fingerprint dataset, without preprocessing the data, it created 2 clusters; cluster 1 with 1894 samples and cluster 2 with 146 samples. The simple molecular descriptor dataset proves to be a better dataset for this clustering algorithm as it achieves a lower error rate
+			With the blue circles being the molecules that pass through the barrier and the triangles being the molecules that do not pass through the barrier.
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/agg_morgan_scatter}
