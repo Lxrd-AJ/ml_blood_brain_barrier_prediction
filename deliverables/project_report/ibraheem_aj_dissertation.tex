@@ -349,7 +349,7 @@
 			
 			The merging strategy used for our dataset was the \textbf{Ward Strategy}, where the algorithm minimises the sum of squared differences within all the clusters, which is similar in a way to the K-Means algorithm.
 			
-			Figures \ref{fig:agg_smd_scatter} and \ref{fig:agg_morgan_scatter} show the result of applying the algorithm to a feature vector derived from the simple molecular descriptors and the morgan fingerprint descriptors. 
+			Figures \ref{fig:agg_smd_scatter} and \ref{fig:agg_morgan_scatter} show the result of applying the algorithm to a feature vector derived from the two principal components of the simple molecular descriptors and the morgan fingerprint descriptors. 
 			%For the Simple Molecular dataset, the entire dataset was scaled to have a minimum of -1 and a maximum of 1. Then the 2 principal components were selected, a ward agglomerative cluster algorithm was applied and it created 2 clusters with cluster 1 having 1442 samples and cluster 2 having 598 samples. The original dataset had 1563 molecules passing through the barrier and 477 molecules not passing through, most likely cluster 1 represents the molecules that pass through
 			\begin{figure}[H]
 				\centering
@@ -367,8 +367,75 @@
 			\end{figure}
 			
 
-	\section{Machine Learning Models (Notes)}
-		\subsection{Decision Trees}
+
+
+	\section{Machine Learning Models}
+		\subsection{K-Nearest Neighbours (k-NN)}
+		k-NN is a form of instance based learning; Instanced-based learning techniques store the training example in memory and utilise them to make predictions. All data points (nearest neighbours) in the feature vector are defined in a form of euclidean space; where a prediction for an instance is made by finding its euclidean distance to its nearest $k$ neighbours. 
+		
+			\begin{mdframed}[]
+				\paragraph{The k-NN training and classification Algorithm \cite{Mitchell1997}}
+				\begin{itemize}
+					\item \textbf{Training Algorithm}
+					\\ For each training example $v$, add it to the list of \textit{training\_examples}
+						\begin{itemize}
+							\item Ensure the elements of the training sample are sorted using the distance function
+								\begin{equation}
+									d(x_i,x_j) \equiv \sqrt{\sum_{r=1}^{n}(a_r(x_i) - a_r(x_j))^2} 
+								\end{equation}
+							where $a_r(x)$ denotes the $r$th attribute of instance $x$ and $x_i,x_j$ are two arbitrary instances to be compared
+						\end{itemize}
+					
+					\item \textbf{Classification Algorithm} 
+					\\ Given a query instance $x_{q}$ to be classified
+					\begin{itemize}
+						\item[] Let $x_1,\dots,x_k$ represent $k$ instances from the \textit{training\_example} that are nearest to $x_q$.
+						
+						\item Return the class of $x_q$ denoted by $\hat{f}(x_q)$; given by
+							\begin{equation}
+								\hat{f}(x_q) \leftarrow argmax_{v \in V} \sum_{i=1}^{k} \partial (x_i)
+							\end{equation}
+						where $V$ is set of all possible classes an instance $x$ can belong to and $\partial(x_i)$ represents the class of the current instance $x_i$ from the $k$ instances.
+					\end{itemize}
+				\end{itemize}
+			\end{mdframed} 
+		
+		Applying the k-NN algorithm to the simple molecular dataset yields the results shown in figure \ref{fig:knn_smd}. The reduction in training accuracy as the number of neighbours increases is a good indicator that the model is not overfitting; Overfitting occurs when the model memorises the training data instead of learning the statistical patterns within them.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/knn_molecular_descriptors}
+			\caption{k-NN classifier for 10 neighbours using the Simple Molecular Descriptors}
+			\label{fig:knn_smd}
+		\end{figure}
+		The algorithm is also applied to the morgan fingerprint dataset, shown in figure \ref{fig:knn_mfps}. There is little or no improvement in accuracy between both datasets with the number of neighbours at 10
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/knn_morgan_dice_fingerprint}
+			\caption{kNN classifier for 10 neighbours using the Morgan Fingerprint dataset}
+			\label{fig:knn_mfps}
+		\end{figure}
+		
+		
+		
+		\subsection{Support Vector Machines(Notes)}
+		Scaling the data using a Standard Scaler and selecting the top 100 principal component, a mean accuracy of 84.9\% was achieved using both datasets
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/mol_decision_svm}
+			\caption{Support Vector Machines with different kernel functions on Simple Molecular Dataset}
+			\label{fig:svm_mol}
+		\end{figure}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/fps_decision_svm}
+			\caption{Support Vector Machines with different kernel functions on Morgan Fingerprint Dataset}
+			\label{fig:svm_fps}
+		\end{figure}
+		
+		
+		
+		
+		\subsection{Decision Trees(Notes)}
 				Decision trees are an example of non-parametric supervised learning algorithms.
 				After applying the decision tree classifier, an accuracy of $\sim85\%$ was achieved. Examining the internal workings of the Tree, based on the simple molecular descriptor dataset, we can see that the total polar surface area (TPSA) is the defining factor in determining whether a molecule crosses the blood-brain barrier.
 				\begin{figure}[H]
@@ -385,36 +452,9 @@
 				With a little bit of tuning the parameters of the gradient boosted classifier, by increasing the number of estimators to around 150 and reducing the learning rate to 0.45. An accuracy score of $\sim86\%$ was achieved on the simple molecular descriptors and $\sim82\%$ on the Morgan fingerprint dataset.
 				\subsubsection{Random Forests}
 				An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset. The number of trees in the random forest was set to 20.
-		\subsection{K-Nearest Neighbours (kNN)}
-				The kNN classifier, at $k=10$ has an accuracy of roughly around $\sim85\%$ using only the simple molecular descriptors. By engineering the feature vector to have unit variance and a Gaussian mean of 0, we then have an accuracy of around $\sim89\%$ at 10 neighbours. 
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/knn_molecular_descriptors}
-					\caption{kNN classifier for 10 neighbours using the Simple Molecular Descriptors}
-					\label{fig:knn_smd}
-				\end{figure}
-				Also using the Morgan fingerprint has the data for the kNN classifier, we have an accuracy of around $\sim89\%$. Without scaling the simple molecular descriptors, the Morgan fingerprint dataset provides better results.
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/knn_morgan_dice_fingerprint}
-					\caption{kNN classifier for 10 neighbours using the Morgan Fingerprint dataset}
-					\label{fig:knn_mfps}
-				\end{figure}
-		\subsection{Support Vector Machines}
-				Scaling the data using a Standard Scaler and selecting the top 100 principal component, a mean accuracy of 84.9\% was achieved using both datasets
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/mol_decision_svm}
-					\caption{Support Vector Machines with different kernel functions on Simple Molecular Dataset}
-					\label{fig:svm_mol}
-				\end{figure}
-				\begin{figure}[H]
-					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/fps_decision_svm}
-					\caption{Support Vector Machines with different kernel functions on Morgan Fingerprint Dataset}
-					\label{fig:svm_fps}
-				\end{figure}
-		\subsection{Neural Networks}
+		
+		
+		\subsection{Neural Networks(Notes)}
 				The Human brain is a very fascinating and robust system, the basic processing unit of the brain is the nerve cell or neuron and there are around 100 billion neurons in the brain all connected together by synapses. These neurons are electrically excitable, they pass signals from one neuron to the next by electrical and chemical signals when the membrane potential reaches some threshold, which can be inhibited if the threshold is not exceeded. A Neural Network is a computational model inspired by the human brain, it consists of a network of neurons connected together by axons. The inspiration behind the model is that if learning occurs in the brain and if we can represent this in a computational model then we can achieve some form of intelligence in our systems.
 				\paragraph{Hebbian Learning}
 				This is a learning concept of the brain based on the mechanism neural plasticity proposed by Donald Hebb. The rule formulated states that changes in the strength of synaptic connections are proportional to the correlation in the firing of the two connecting neurons, the strength of the connection is proportional to the frequency of excitement between them. However, the connection between two neurons that never fire will eventually be broken. \\
@@ -486,7 +526,7 @@
 						where 1 represents a molecule that passes through the barrier and 0 a molecule that doesn't.
 					\end{itemize}
 				\end{mdframed}
-		\subsection{Ensemble Classifiers}
+		\subsection{Ensemble Classifiers(Notes)}
 
 
 
