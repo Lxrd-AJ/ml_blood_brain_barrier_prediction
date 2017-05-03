@@ -370,8 +370,8 @@
 
 
 	\section{Machine Learning Models}
-		\subsection{K-Nearest Neighbours (k-NN)}
-		k-NN is a form of instance based learning; Instanced-based learning techniques store the training example in memory and utilise them to make predictions. All data points (nearest neighbours) in the feature vector are defined in a form of euclidean space; where a prediction for an instance is made by finding its euclidean distance to its nearest $k$ neighbours. 
+		\subsection{K-Nearest Neighbours}
+		K-Nearest Neighbours (k-NN) is a form of instance based learning; Instanced-based learning techniques store the training example in memory and utilise them to make predictions. All data points (nearest neighbours) in the feature vector are defined in a form of euclidean space; where a prediction for an instance is made by finding its euclidean distance to its nearest $k$ neighbours. 
 		
 			\begin{mdframed}[]
 				\paragraph{The k-NN training and classification Algorithm \cite{Mitchell1997}}
@@ -417,14 +417,20 @@
 		
 		
 		
-		\subsection{Support Vector Machines(Notes)}
-		Scaling the data using a Standard Scaler and selecting the top 100 principal component, a mean accuracy of 84.9\% was achieved using both datasets
+		\subsection{Support Vector Machines}
+		Support Vector Machines (SVMs) are a set of supervised learning techniques that make predictions by learning the statistical hyper-plane (support vectors) that determines the categories of data in the input space. They are very effective in high dimensional situations as is the case with our dataset (2048 x 206) and also very memory efficient; as only a subset of the training points in the decision function i.e support vectors are stored in memory. 
+		
+		SVMs are computational intensive and as a result, they do not scale well with large datasets; The driving idea behind SVMs is to infer the hyper-plane that divides the data into categories. Applying this to our BBB dataset, the goal is to have the SVM learn the support vectors that classify a molecule as either positive (passes through the barrier) or negative. Figure \ref{fig:svm_mol} shows the result of applying the SVM classifier to the simple molecular dataset.
+		%Scaling the data using a Standard Scaler and selecting the top 100 principal component, a mean accuracy of 84.9\% was achieved using both datasets
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/mol_decision_svm}
 			\caption{Support Vector Machines with different kernel functions on Simple Molecular Dataset}
 			\label{fig:svm_mol}
 		\end{figure}
+		
+		The figures show the algorithm applied on our datasets using numerous kernel functions. Kernel functions are basically a form of similarity functions, they compute the distances between data points in the input space. To enable the SVM classifier make predictions for a new data point, its distance to the support vectors are calculated using any of the kernel functions (linear, polynomial, sigmoid or Radial Basis function (RBF)) \cite{StephenM2014}. Due to the highly mathematical nature of these kernel functions, their intricate details can be safely ignored and their classification results instead focused on for our BBB classification tasks. 
+		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/fps_decision_svm}
@@ -455,6 +461,7 @@
 		
 		
 		\subsection{Neural Networks(Notes)}
+			%TODO: Visualisation for NN like ML with Python pg 111
 				The Human brain is a very fascinating and robust system, the basic processing unit of the brain is the nerve cell or neuron and there are around 100 billion neurons in the brain all connected together by synapses. These neurons are electrically excitable, they pass signals from one neuron to the next by electrical and chemical signals when the membrane potential reaches some threshold, which can be inhibited if the threshold is not exceeded. A Neural Network is a computational model inspired by the human brain, it consists of a network of neurons connected together by axons. The inspiration behind the model is that if learning occurs in the brain and if we can represent this in a computational model then we can achieve some form of intelligence in our systems.
 				\paragraph{Hebbian Learning}
 				This is a learning concept of the brain based on the mechanism neural plasticity proposed by Donald Hebb. The rule formulated states that changes in the strength of synaptic connections are proportional to the correlation in the firing of the two connecting neurons, the strength of the connection is proportional to the frequency of excitement between them. However, the connection between two neurons that never fire will eventually be broken. \\
