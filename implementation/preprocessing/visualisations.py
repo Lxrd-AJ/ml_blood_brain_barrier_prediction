@@ -146,7 +146,6 @@ def make_viz_per_feature_histogram(X,y):
 
 def discrete_scatter(x1, x2, y=None, markers=None, s=10, ax=None,
                      labels=None, padding=.2, alpha=1, c=None, markeredgewidth=None):
-    #TODO: Discard and use your scatter plotting function
     """Adaption of matplotlib.pyplot.scatter to plot classes or clusters.
 
     Parameters

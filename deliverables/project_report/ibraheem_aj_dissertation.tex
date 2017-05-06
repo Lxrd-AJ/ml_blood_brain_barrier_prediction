@@ -441,23 +441,48 @@
 		
 		
 		
-		\subsection{Decision Trees(Notes)}
-				Decision trees are an example of non-parametric supervised learning algorithms.
-				After applying the decision tree classifier, an accuracy of $\sim85\%$ was achieved. Examining the internal workings of the Tree, based on the simple molecular descriptor dataset, we can see that the total polar surface area (TPSA) is the defining factor in determining whether a molecule crosses the blood-brain barrier.
+		\subsection{Decision Trees}
+			Decision trees are an example of non-parametric supervised learning algorithms; The aim of the algorithm is to have a model that can classify an input data (feature vector) based on simple rules the algorithm has inferred from the features of the dataset. Here observations learnt from the dataset are represented in branches (decision boundaries), which then lead to classifications of the input represented in the leaves. 
+			
+			To illustrate further, an example from the BBB classification is shown in figure \ref{fig:bbb_tree_smd_detailed}. The overview of the algorithm is that it learns the necessary if/else questions to classify an input.
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1,height=0.5\textheight]{images/bbb_tree_smd_larger}
+					\caption{Decision Tree}
+					\label{fig:bbb_tree_smd_detailed}
+				\end{figure}
+			Here in figure \ref{fig:bbb_tree_smd_detailed}, the algorithm performed a search over all the training data and picked \textit{TPSA} (total polar surface area) as the most informative variable in deciding whether a molecule passes through the barrier or not; Splitting the tree into 1277 molecules that do not pass and 253 molecules that pass. The algorithm then recursively searches each branch and further creates more branches till it reaches a node (leaf) that contains a single target value (target classification).
+			
+			Figure \ref{fig:bbb_tree_smd} shows the generated tree after applying the decision tree algorithm to our simple molecular dataset; With the algorithm achieving an accuracy of $\sim85\%$ on the simple molecular dataset.
 				\begin{figure}[H]
 					\centering
 					\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/bbb_tree_smd}
 					\caption{Decision Tree: Simple Molecular Descriptors}
 					\label{fig:bbb_tree_smd}
 				\end{figure}		
-				\subsubsection{Extra Trees}
-				The extra trees tend to perform slightly better than the random forests. On the simple molecular dataset, the extra trees score an accuracy of $\sim90\%$ and on the Morgan fingerprint dataset, the extra trees score an accuracy of $\sim89\%$, performing just slightly less than the random forest on the same dataset. The number of extra trees was set to 20
-				\subsubsection{AdaBoost Decision Trees}
-				Applying the AdaBoost algorithm to the decision trees, an accuracy of $\sim83\%$ was achieved on the simple molecular descriptor dataset, and an accuracy of $\sim81\%$ on the Morgan fingerprint dataset. Both rounds of classification with number of trees = 200. Strangely, the Adaboosted decision trees ought to provide better results than the random forest or extra trees classifiers. 
-				\subsubsection{Gradient Tree Boosting}
-				With a little bit of tuning the parameters of the gradient boosted classifier, by increasing the number of estimators to around 150 and reducing the learning rate to 0.45. An accuracy score of $\sim86\%$ was achieved on the simple molecular descriptors and $\sim82\%$ on the Morgan fingerprint dataset.
-				\subsubsection{Random Forests}
-				An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset. The number of trees in the random forest was set to 20.
+			
+			\paragraph{Ensembles of Decision Trees}
+			Ensembles in the context of machine learning refers to the combination of numerous machine learning models to create a more powerful model. This technique would be utilised in section \ref{subsection:ensemble}, where all the machine models that would be discussed will be combined to create an even more powerful and stable model.
+			
+			Decision trees tend to overfit and learn the rules only in the training data and perform poorly when presented with new data \cite{Mueller2016}. To overcome this problem, numerous decision trees would be combined to create an ensemble of decision trees: random forests, gradient boosted decision trees, extra trees and Adaboost decision trees.
+			\subsubsection{Random Forests}
+			Random forests are an ensemble of decision trees where each decision tree has been trained with a subsection of the dataset with the knowledge that the said tree would overfit on that part of the dataset. The overfitting of the random forest is reduced by averaging the result from all the individual trees to return a classification.
+			
+			An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset;With the number of trees in the random forest set to 20.
+				
+			\subsubsection{Extremely Randomized Trees}
+			Extremely randomized trees also known as \textit{Extra Trees} are very similar to Random Forests. The difference between them is that at each step of the algorithm the entire dataset is used as opposed to partial datasets in random forests and the decision boundary is also chosen at random instead of the best one \cite{Pierre2006}.
+			
+			The extra trees algorithm performed slightly better than the random forests algorithm; On the simple molecular dataset, the extra trees score an accuracy of $\sim90\%$ and on the Morgan fingerprint dataset, the extra trees score an accuracy of $\sim89\%$, performing just slightly less than the random forest on the same dataset with the number of extra trees was set to 20.
+			
+			\subsubsection{Gradient Tree Boosting}
+			Gradient boosted trees differ from random forests in the sense that in gradient tree boosting, very small trees called \textit{weak learners} are trained serially where the current tree learns from the mistakes of the previous tree. The weak learners usually have a shallow dept of 5 and can therefore make faster predictions. The learning rate is also another parameter of the gradient boosted trees that can be optimised; the learning rate is the degree to which the current tree learns from its predecessors \cite{Mueller2016} with a higher rate resulting in stronger corrections.
+			
+			Applying the gradient boosted trees algorithm to both derivations of our dataset with
+			the number of estimators set to 150 and the learning rate to 0.45. An accuracy score of $\sim86\%$ was achieved on the simple molecular descriptors and $\sim82\%$ on the Morgan fingerprint dataset.
+				
+			%\subsubsection{AdaBoost Decision Trees}
+			%Applying the AdaBoost algorithm to the decision trees, an accuracy of $\sim83\%$ was achieved on the simple molecular descriptor dataset, and an accuracy of $\sim81\%$ on the Morgan fingerprint dataset. Both rounds of classification with number of trees = 200. Strangely, the Adaboosted decision trees ought to provide better results than the random forest or extra trees classifiers. 
 		
 		
 		\subsection{Neural Networks(Notes)}
@@ -485,13 +510,21 @@
 				The bias input is used as a control value to adjust the value that the neuron fires at. An example is when the feature vector to a neuron is all zeros and the neuron should fire. By our activation function, the neuron wouldn't fire because its activation value does not exceed the threshold. By adding a fixed value (bias) of $\pm1$ to the feature vector, we can then adjust the weight to make the neuron fire or not.
 				\begin{figure}[H]
 					\centering
-					\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/multilayerperceptronnetwork}
+					\includegraphics[width=0.9\textwidth,scale=1,totalheight=0.5\textheight]{images/multilayerperceptronnetwork}
 					\caption{Multi Layer Perceptron \cite{ScikitLearn2016}}
 					\label{fig:mlp}
 				\end{figure}
 				\subsubsection{Application to the Blood Brain Barrier prediction}
 				We are undertaking a form of supervised learning in the BBB prediction. The dataset we have compiled is labelled with the correct class and this data is fed to the neural network in order for the it to generalise what it has learned about our data. The network will then find patterns in the molecules that cross the blood-brain barrier and predict if an unknown molecule will cross it or not. \\
 				Let $X = [x_1,x_2,x_3,...,x_n]$ be the input vector to our network for $n$ features and $W=[w_1,w_2,w_3,...,w_n]$ , the weights. Each neuron calculates whether it should fire or not based on its activation vector. We then examine the wrong neurons i.e the neurons that fired when they should have not. For each wrong neuron $i$, we calculate the difference in weights for it $\Delta w_i = -(y_i - t_i) * x_i$ where $y_i$ is the output and $t_i$ is the target output, the weight for neuron $i$ is then updated as $w_i = w_i + \Delta w_i\eta$, where $\eta$ is the learning rate (usually around $0.1 < \eta < 0.4$) which determines how much to change the weights by and as a result, determines how fast the network learns. The training is run again till the algorithm converges and the network gets all of its input right.
+				
+					\begin{figure}[H]
+						\centering
+						\includegraphics[width=0.8\textwidth,scale=1,totalheight=0.5\textheight]{images/neural_network_activation}
+						\caption{Heat map showing the weights learnt in the first layer of the neural network}
+						\label{fig:neural_net_activation}
+					\end{figure}
+				
 				\begin{mdframed}[]
 					\paragraph{The Learning Algorithm \cite{StephenM2014}}
 					\begin{itemize}
@@ -533,7 +566,7 @@
 						where 1 represents a molecule that passes through the barrier and 0 a molecule that doesn't.
 					\end{itemize}
 				\end{mdframed}
-		\subsection{Ensemble Classifiers(Notes)}
+		\subsection{Ensemble Classifiers(Notes)} \label{subsection:ensemble}
 
 
 
@@ -588,6 +621,14 @@
 	\section{Areas for improvement}
 
 
+
+\chapter*{Appendix}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth,scale=1,height=\textheight]{images/bbb_tree_smd}
+	\caption{Decision Tree: Simple Molecular Descriptors}
+	\label{fig:bbb_tree_smd_large}
+\end{figure}
 
 
 \bibliographystyle{plain}
