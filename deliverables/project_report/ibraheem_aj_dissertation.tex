@@ -486,44 +486,47 @@
 		
 		
 		\subsection{Neural Networks(Notes)}
-			%TODO: Visualisation for NN like ML with Python pg 111
-				The Human brain is a very fascinating and robust system, the basic processing unit of the brain is the nerve cell or neuron and there are around 100 billion neurons in the brain all connected together by synapses. These neurons are electrically excitable, they pass signals from one neuron to the next by electrical and chemical signals when the membrane potential reaches some threshold, which can be inhibited if the threshold is not exceeded. A Neural Network is a computational model inspired by the human brain, it consists of a network of neurons connected together by axons. The inspiration behind the model is that if learning occurs in the brain and if we can represent this in a computational model then we can achieve some form of intelligence in our systems.
-				\paragraph{Hebbian Learning}
-				This is a learning concept of the brain based on the mechanism neural plasticity proposed by Donald Hebb. The rule formulated states that changes in the strength of synaptic connections are proportional to the correlation in the firing of the two connecting neurons, the strength of the connection is proportional to the frequency of excitement between them. However, the connection between two neurons that never fire will eventually be broken. \\
-				The idea of repetition enhances retention can also be applied here, where actions that are repeated continuously will create retention in the brain \cite{Cunninghametal1984}. An example is in the experiment carried out by Ivan Pavlov, where his dogs were conditioned to associate the ringing of a bell to the presence of food. As a result, the neurons responsible for salivating over food and for hearing the bell would have a very strong connection to the extent that merely hearing the bell was sufficient to cause the salivating neurons to fire. 
-				\subsubsection{Multi Layer Perceptron}
-				The Perceptron can also be referred to a collection of neurons along with a vector of inputs and a vector of weights to fasten the inputs to the neuron. This neuron in this network consists of its inputs, weights, threshold and activation function. Each neuron,receives an input along with the strength of the input i.e weight, which it multiplies together and if the value is greater than the threshold, the neuron fires. \\
-				For our dataset the input $X = [x_1,x_2,x_3,...,x_n]$ to a Perceptron could be either a simple molecular feature vector value e.g the number of hydrogen atoms in the molecule or vectors of 1s and 0s if we're using the Morgan fingerprint dataset to train the network. Each neuron is also given a vector of small random positive and negative values as its weights. The neuron calculates its activation value as 
+				%The Human brain is a very fascinating and robust system, the basic processing unit of the brain is the nerve cell or neuron and there are around 100 billion neurons in the brain all connected together by synapses. These neurons are electrically excitable, they pass signals from one neuron to the next by electrical and chemical signals when the membrane potential reaches some threshold, which can be inhibited if the threshold is not exceeded. 
+			A Neural Network is a computational model inspired by the human brain, it consists of a network of neurons connected together by axons. The inspiration behind the model is that if learning occurs in the brain and if we can represent this in a computational model then we can achieve some form of intelligence in our systems.
+				%\paragraph{Hebbian Learning}
+				%This is a learning concept of the brain based on the mechanism neural plasticity proposed by Donald Hebb. The rule formulated states that changes in the strength of synaptic connections are proportional to the correlation in the firing of the two connecting neurons, the strength of the connection is proportional to the frequency of excitement between them. However, the connection between two neurons that never fire will eventually be broken. \\
+				%The idea of repetition enhances retention can also be applied here, where actions that are repeated continuously will create retention in the brain \cite{Cunninghametal1984}. An example is in the experiment carried out by Ivan Pavlov, where his dogs were conditioned to associate the ringing of a bell to the presence of food. As a result, the neurons responsible for salivating over food and for hearing the bell would have a very strong connection to the extent that merely hearing the bell was sufficient to cause the salivating neurons to fire. 
+			\subsubsection{Multi Layer Perceptron}
+			The Perceptron can also be referred to a collection of neurons along with a vector of inputs and a vector of weights to fasten the inputs to the neuron. This neuron in this network consists of its inputs, weights, threshold and activation function. Each neuron,receives an input along with the strength of the input i.e weight, which it multiplies together and if the value is greater than the threshold, the neuron fires. \\
+			For our dataset the input $X = [x_1,x_2,x_3,...,x_n]$ to a Perceptron could be either a simple molecular feature vector value e.g the number of hydrogen atoms in the molecule or vectors of 1s and 0s if we're using the Morgan fingerprint dataset to train the network. Each neuron is also given a vector of small random positive and negative values as its weights. The neuron calculates its activation value as 
 				\begin{equation}
 				h = \sum_{i=1}^{m}w_ix_i
 				\end{equation}
-				This activation value is then passed on to the activation function $f(h)$ which fires if the activation value is greater than the threshold. A threshold value of 0 was used irrespective of the training dataset. The output value of the function is given by
+			This activation value is then passed on to the activation function $f(h)$ which fires if the activation value is greater than the threshold. A threshold value of 0 was used irrespective of the training dataset. The output value of the function is given by
 				\begin{equation}
-				output = f(h) = 
-				\begin{cases}
-				1 & \text{if h} \textgreater \theta \\
-				0 & \text{if h} \le \theta
-				\end{cases}
+					output = f(h) = 
+					\begin{cases}
+					1 & \text{if h} \textgreater \theta \\
+					0 & \text{if h} \le \theta
+					\end{cases}
 				\end{equation}
-				\paragraph{Multi Layer Perceptron}
-				The Input layer to the neuron is the same as the length of the feature vector plus one (the fixed bias input). For the simple molecular feature dataset, the number of inputs $n$ to the network is 196, as that is the number of simple chemical descriptors that were calculated. For the Morgan Fingerprint dataset, $n = 2048$ where $n$ represents the length of the bit vector. \\
-				The bias input is used as a control value to adjust the value that the neuron fires at. An example is when the feature vector to a neuron is all zeros and the neuron should fire. By our activation function, the neuron wouldn't fire because its activation value does not exceed the threshold. By adding a fixed value (bias) of $\pm1$ to the feature vector, we can then adjust the weight to make the neuron fire or not.
+			\paragraph{Multi Layer Perceptron}
+			The Input layer to the neuron is the same as the length of the feature vector plus one (the fixed bias input) as shown in figure \ref{fig:mlp}. For the simple molecular feature dataset, the number of inputs $n$ to the network is 206, as that is the number of simple chemical descriptors that were calculated. For the Morgan Fingerprint dataset, $n = 2048$ where $n$ represents the length of the bit vector. 
+			
+			The bias input is used as a control value to adjust the value that the neuron fires at. An example is when the feature vector to a neuron is all zeros and the neuron should fire. By our activation function, the neuron wouldn't fire because its activation value does not exceed the threshold. By adding a fixed value (bias) of $\pm1$ to the feature vector, we can then adjust the weight to make the neuron fire or not.
 				\begin{figure}[H]
 					\centering
 					\includegraphics[width=0.9\textwidth,scale=1,totalheight=0.5\textheight]{images/multilayerperceptronnetwork}
 					\caption{Multi Layer Perceptron \cite{ScikitLearn2016}}
 					\label{fig:mlp}
 				\end{figure}
-				\subsubsection{Application to the Blood Brain Barrier prediction}
-				We are undertaking a form of supervised learning in the BBB prediction. The dataset we have compiled is labelled with the correct class and this data is fed to the neural network in order for the it to generalise what it has learned about our data. The network will then find patterns in the molecules that cross the blood-brain barrier and predict if an unknown molecule will cross it or not. \\
-				Let $X = [x_1,x_2,x_3,...,x_n]$ be the input vector to our network for $n$ features and $W=[w_1,w_2,w_3,...,w_n]$ , the weights. Each neuron calculates whether it should fire or not based on its activation vector. We then examine the wrong neurons i.e the neurons that fired when they should have not. For each wrong neuron $i$, we calculate the difference in weights for it $\Delta w_i = -(y_i - t_i) * x_i$ where $y_i$ is the output and $t_i$ is the target output, the weight for neuron $i$ is then updated as $w_i = w_i + \Delta w_i\eta$, where $\eta$ is the learning rate (usually around $0.1 < \eta < 0.4$) which determines how much to change the weights by and as a result, determines how fast the network learns. The training is run again till the algorithm converges and the network gets all of its input right.
+			\subsubsection{Application to the Blood Brain Barrier prediction}
+			%We are undertaking a form of supervised learning in the BBB prediction. The dataset we have compiled is labelled with the correct class and this data is fed to the neural network in order for the it to generalise what it has learned about our data. The network will then find patterns in the molecules that cross the blood-brain barrier and predict if an unknown molecule will cross it or not. \\
+			Let $X = [x_1,x_2,x_3,...,x_n]$ be the input vector to our network for $n$ features and $W=[w_1,w_2,w_3,...,w_n]$ the weights. Each neuron calculates whether it should fire or not based on its activation vector. We then examine the wrong neurons i.e the neurons that fired when they should have not. Figure \ref{fig:neural_net_activation} shows the activations of the neurons in the first layer of the neural network during the training phase with the darkest color representing no activation.
+			
+			For each wrong neuron $i$, we calculate the difference in weights for it $\Delta w_i = -(y_i - t_i) * x_i$ where $y_i$ is the output and $t_i$ is the target output, the weight for neuron $i$ is then updated as $w_i = w_i + \Delta w_i\eta$, where $\eta$ is the learning rate (usually around $0.1 < \eta < 0.4$) which determines how much to change the weights by and as a result, determines how fast the network learns. The training is run again till the algorithm converges and the network gets all of its input right.
 				
-					\begin{figure}[H]
-						\centering
-						\includegraphics[width=0.8\textwidth,scale=1,totalheight=0.5\textheight]{images/neural_network_activation}
-						\caption{Heat map showing the weights learnt in the first layer of the neural network}
-						\label{fig:neural_net_activation}
-					\end{figure}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth,scale=1,totalheight=0.5\textheight]{images/neural_network_activation}
+					\caption{Heat map showing the weights learnt in the first layer of the neural network}
+					\label{fig:neural_net_activation}
+				\end{figure}
 				
 				\begin{mdframed}[]
 					\paragraph{The Learning Algorithm \cite{StephenM2014}}
@@ -566,28 +569,35 @@
 						where 1 represents a molecule that passes through the barrier and 0 a molecule that doesn't.
 					\end{itemize}
 				\end{mdframed}
-		\subsection{Ensemble Classifiers(Notes)} \label{subsection:ensemble}
-
-
+			%\paragraph{Model Training}
+			%For both datasets (simple molecular descriptors and fingerprint), they were rescaled to have a minimum of -1 and a Maximum of 1. The transformed data was then trained on a neural network and an accuracy of $\sim86\%$ was achieved. \\
+			\paragraph{Optimisations for Model Training} 
+			\underline{Univariate Model Selection}: \\
+			Here for each input data point in the feature vector, we compute whether there is a statistical relationship between the input and the target. The input features which are calculated to be highly unrelated to the target are then dropped from the dataset. Applying this model selection to the molecular descriptor dataset with a percentile of 50 gives us the features in figure \ref{fig:neuralnetworksmdunivariate}.
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=\textwidth,scale=1]{images/neural_network_smd_univariate_matrix}
+					\caption{Matrix diagram of selected features}
+					\label{fig:neuralnetworksmdunivariate}
+				\end{figure}
+			The neural network was then trained with the new feature vector and a percentage increase in accuracy was achieved - with a new accuracy of $\sim87\%$ on the molecular descriptor dataset and an accuracy of $\sim88\%$ on the fingerprint dataset.
+			
+			
+			
+		\subsection{Ensemble Classifiers} \label{subsection:ensemble}
+		Ensembles were used earlier to combine many decision trees to achieve better classification results. 
+		
+		Ensembles have the benefit that they tend to perform better than single classifiers \cite{Dietterich}; With this knowledge, all the previously trained classifier were combined to create an ensemble learner that makes predictions by taking a weighted vote of the individual prediction of the classifiers its composed of.
+		
+		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners.
+		
+		
 
 \chapter{Model Evaluation and Improvement (Notes)}
 	\section{Model Evaluation}
 		% Draw a diagram like the one in this link(http://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/) to compare the results of all the classifiers
 		%TODO: Talk about Cross validation, include diagrams like in scikit-learn pg 252, the entire chapter is a valuable resource	
-				\paragraph{Model Training}
-				For both datasets (simple molecular descriptors and fingerprint), they were rescaled to have a minimum of -1 and a Maximum of 1. The transformed data was then trained on a neural network and an accuracy of $\sim86\%$ was achieved. \\
-				\subparagraph{Model Selection on the datasets for training} 
-				The following model selection techniques were applied to both datasets
-				\begin{itemize}
-					\item \underline{Univariate Model Selection}: Here for each feature, we compute whether there is a statistical relationship between the feature and the target. The features which are calculated to be highly unrelated to the target are then dropped from the dataset. Applying this model selection to the molecular descriptor dataset and using a percentile of 50 gives us the features in figure \ref{fig:neuralnetworksmdunivariate}.
-					\begin{figure}[h]
-						\centering
-						\includegraphics[width=\textwidth,scale=1]{images/neural_network_smd_univariate_matrix}
-						\caption{Matrix diagram of selected features}
-						\label{fig:neuralnetworksmdunivariate}
-					\end{figure}
-					The neural network was then trained with the new feature vector and a percentage increase in accuracy was achieved - with a new accuracy of $\sim87\%$ on the molecular descriptor dataset and an accuracy of $\sim88\%$ on the fingerprint dataset.
-				\end{itemize}
+				
 		\subsection{Classifier Performance Comparison}
 		\begin{table}[ht]
 			\caption{Classifier average performance on different datasets}
