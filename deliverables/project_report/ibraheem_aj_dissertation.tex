@@ -589,7 +589,7 @@
 		
 		Ensembles have the benefit that they tend to perform better than single classifiers \cite{Dietterich}; With this knowledge, all the previously trained classifier were combined to create an ensemble learner that makes predictions by taking a weighted vote of the individual prediction of the classifiers its composed of.
 		
-		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset with its learning curve shown in figure ; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners.
+		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset with its learning curve shown in figure \ref{fig:learning_curve_ensemble}; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners and also that the ensemble classifier can achieve a much higher performance if trained with more data.
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1]{images/learning_curve_ensemble_clf}
@@ -601,8 +601,6 @@
 
 \chapter{Model Evaluation and Persistence}
 	\section{Model Evaluation}
-		% Draw a diagram like the one in this link(http://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/) to compare the results of all the classifiers
-		%TODO: Talk about Cross validation, include diagrams like in scikit-learn pg 252, the entire chapter is a valuable resource	
 		The next step after training the classifier is to evaluate their performance. There are a myriad of techniques available for evaluating classifier performace and these techniques help us answer two basic questions about the model, which are:
 			\begin{itemize}
 				\item How accurate is the machine learning model?
@@ -610,31 +608,50 @@
 			\end{itemize}
 			
 		\subsection{Measuring Accuracy using K-Fold Cross Validation}
+		To avoid a machine learning model from overfitting (i.e failing to make meaningful predictions on new data), we employ a technique known as cross-validation. Here, a portion of the dataset is removed during the training phase and then used to evaluate the model during the test phase. Which further brings us to the concept of $k$-fold cross validation; In $k$-fold cross validation, the entire dataset is divided into $k$ equal folds and the model is trained $k$ times iteratively. In each iteration, the model is trained with the remaining $k-1$ folds and tested with the $k^{th}$ fold.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth,scale=1]{images/model_comparison}
+				\caption{Box and whisker plot comparing the accuracy ranges of the classifiers}
+				\label{fig:box_plot_comparison}
+			\end{figure}
+		Applying the k-Fold Cross validation metric to the ensemble classifier on the simple molecular dataset with the number of folds set to $10$ yields the accuracy results shown in figure \ref{fig:box_plot_comparison}.
 		
 		\subsection{Understanding models using Confusion matrices}
-		A confusion matrix shows a detailed breakdown of the miscalculations of a machine learning model and it is sometimes known as an error matrix. It highlights in a table of two dimensions (\textit{actual} and \textit{predicted}) where the model made a correct and wrong prediction. The following terms are used when describing the parameters of a confusion matrix:
-			\begin{itemize}
-				\item True Positives (TP)
-				\item False Positive (FP)
-				\item True Negatives (TN)
-				\item False Negatives (FN)
-			\end{itemize} 
-		With these parameters, we can further calculate certain observations about the model such as its precision and recall, explained below
-			\begin{itemize}
-				\item \underline{Precision:} This refers to the ability of a classifier to correctly label a positive sample as positive and a negative sample as negative. Its formula is given by
-					\begin{equation}
-						precision = \frac{TP}{TP + FP}
-					\end{equation}
-				\item \underline{Recall:} This is the ability of the classifier to correctly label all the positive samples as postive, given by the formula
-					\begin{equation}
-						recall = \frac{TP}{TP + FN}
-					\end{equation}
-			\end{itemize}
+		A confusion matrix shows a detailed breakdown of the miscalculations of a machine learning model and it is sometimes known as an error matrix. It highlights in a table of two dimensions (\textit{actual} and \textit{predicted}) where the model made a correct and wrong prediction. 
+		%Removed
+		%The following terms are used when describing the parameters of a confusion matrix:
+		%	\begin{itemize}
+		%		\item True Positives (TP)
+		%		\item False Positive (FP)
+		%		\item True Negatives (TN)
+		%		\item False Negatives (FN)
+		%	\end{itemize} 
+		%With these parameters, we can further calculate certain observations about the model such as its precision and recall, explained below
+		%	\begin{itemize}
+		%		\item \underline{Precision:} This refers to the ability of a classifier to correctly label a positive sample as positive and a negative sample as negative. Its formula is given by
+		%			\begin{equation}
+		%				precision = \frac{TP}{TP + FP}
+		%			\end{equation}
+		%		\item \underline{Recall:} This is the ability of the classifier to correctly label all the positive samples as postive, given by the formula
+		%			\begin{equation}
+		%				recall = \frac{TP}{TP + FN}
+		%			\end{equation}
+		%	\end{itemize}
+		%EnD remove
+		
+		Applying the confusion matrix metric to the ensemble classifier, the result is shown in figure \ref{fig:confusion_matrix}; The diagonals represent the number accuracte predictions made for each class, while the non-diagonals represent the misclassifications of the model. For example,in the confusion matrix, the ensemble classifier correctly predicted 454 moleculesas being able to passing through the barrier and falsely classified the remaining 15 molecules as not being able to pass.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth,scale=1]{images/confusion_matrix}
+				\caption{Confusion Matrix of the Ensemble classifier}
+				\label{fig:confusion_matrix}
+			\end{figure}
 			
 			\subsubsection{Reciever Operating Characteristic Curve (ROC curve)}
 			The ROC curve according to Tom Fawcett is a technique for visualizing, organizing and selecting classifiers based on their performance \cite{TFawcett2005}.
 			
-			The ROC curve is illustrated by plotting the True Positive Rate (TPR; The fraction of true positives out of the positives) against the False Positive Rate (FPR; The fraction of False positives out of the negatives) at various thresholds \cite{TFawcett2005}. Shown in figure \ref{fig:roc} is the ROC curve of the Ensemble classifier when evaluated with the simple molecular descriptor dataset.
+			The ROC curve is illustrated by plotting the True Positive Rate (TPR; The fraction of true positives out of the positive classifications) against the False Positive Rate (FPR; The fraction of False positives out of the negative classifications) at various thresholds \cite{TFawcett2005}. Shown in figure \ref{fig:roc} is the ROC curve of the Ensemble classifier when evaluated with the simple molecular descriptor dataset. The diagonal represents the expected curve if the model were simply guessing randomly.
 				\begin{figure}[H]
 					\centering
 					\includegraphics[width=\textwidth,scale=1]{images/roc_curve}
@@ -643,6 +660,7 @@
 				\end{figure}
 		
 		\subsection{Classifier Performance Comparison}
+		The table below simply shows the average performance of the individual machine learning models applied to the Blood-Brain Barrier datasets.
 		\begin{table}[ht]
 			\caption{Classifier average performance on different datasets}
 			\centering
@@ -661,18 +679,28 @@
 				\hline
 			\end{tabular}
 		\end{table}
-	%\section{Model Improvement techniques}
-		%\subsection{Grid Search}
+
 	\section{Model Persistence} 
-	%How you will use pickle to persist the model
-		
+	Using the \textit{joblib} function made available in the \textit{scikit-learn} library, it is possible to export a trained model to disk so it is available to use without having to retrain the model.
+	
+	The model can be saved to disk using the code snippet below
+		\begin{minted}[obeytabs=false,tabsize=2]{python}
+			from sklearn.externals import joblib
+
+			model_name = "brain_{:}_bbb.pkl".format(datetime.date.today())
+			print("Saved model as {:}".format(model_name))
+			joblib.dump(voting_clf, model_name) 
+		\end{minted}
+	And it can then be retrieved for use later using
+		\begin{minted}[obeytabs=false,tabsize=2]{python}
+			voting_clf = joblib.load(model_name)
+		\end{minted}
 		
 
 
 \chapter{Conclusion}
 	\section{Integration into a Web Application}
-	
-	\section{Deployment}
+		\subsection{Deployment}
 	\section{Areas for improvement}
 
 

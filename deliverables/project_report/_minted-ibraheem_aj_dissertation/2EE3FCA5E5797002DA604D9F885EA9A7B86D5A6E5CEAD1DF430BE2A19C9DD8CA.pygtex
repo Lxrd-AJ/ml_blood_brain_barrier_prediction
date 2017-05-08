@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+			\PYG{n}{voting\PYGZus{}clf} \PYG{o}{=} \PYG{n}{joblib}\PYG{o}{.}\PYG{n}{load}\PYG{p}{(}\PYG{n}{model\PYGZus{}name}\PYG{p}{)}
+\end{Verbatim}

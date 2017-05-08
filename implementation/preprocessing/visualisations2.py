@@ -6,9 +6,10 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler,MinMaxScaler,label_binarize
 from sklearn.externals import joblib
-from sklearn.model_selection import train_test_split, learning_curve, ShuffleSplit
-from sklearn.metrics import roc_curve, auc
+from sklearn.model_selection import train_test_split, learning_curve, ShuffleSplit, KFold, cross_val_score
+from sklearn.metrics import roc_curve, auc, confusion_matrix
 import random  
+import itertools
 import numpy as np
 import matplotlib.pyplot as plt 
 import pandas as pd 
@@ -155,7 +156,7 @@ plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
+plt.title('Receiver operating characteristic curve')
 plt.legend(loc="lower right")
 #plt.show()
 plt.savefig("./../visualisations/roc_curve.png",format='png',dpi=700)
@@ -165,9 +166,10 @@ plt.savefig("./../visualisations/roc_curve.png",format='png',dpi=700)
 
 """
 Learning curve plot for the voting Classifier
-"""
-cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
-train_size, train_scores, test_scores = learning_curve(voting_clf, A, y_a, cv=cv)
+===
+
+cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+train_sizes, train_scores, test_scores = learning_curve(voting_clf, A, y_a, cv=cv)
 plt.figure()
 plt.title("Learning curve Ensemble Classifier")
 plt.xlabel("Training examples")
@@ -184,4 +186,64 @@ plt.plot(train_sizes, train_scores_mean, 'o-', color="r", label="Training score"
 plt.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score")
 plt.legend(loc="best")
 plt.savefig("./../visualisations/learning_curve_ensemble_clf.png",format='png',dpi=700)
+plt.show()
+"""
+
+
+
+"""
+Box plot comparing all the classifiers in the pipeline and also the ensemble classifiers
+===
+
+models = []
+results = []
+names = []
+models.extend(voting_clf.estimators)
+models.append(("Ensemble", voting_clf))
+for name, model in models:
+	kfold = KFold(n_splits=10, random_state=9)
+	cv_results = cross_val_score(model, A, y_a, cv=kfold, scoring='accuracy')
+	results.append(cv_results)
+	names.append(name)
+	msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
+	print(msg)
+# boxplot algorithm comparison
+fig = plt.figure()
+fig.suptitle('Algorithm Comparison')
+ax = fig.add_subplot(111)
+plt.boxplot(results)
+ax.set_xticklabels(names)
+plt.savefig("./../visualisations/model_comparison.png",format='png',dpi=700)
+plt.show()
+"""
+
+
+
+"""
+Confusion Matrix for the ensemble classifier 
+===
+"""
+X_train, X_test, y_train, y_test = train_test_split(A, y_a, test_size=.3,random_state=10)
+y_pred = voting_clf.fit(X_train, y_train).predict(X_test)
+conf_matrix = confusion_matrix(y_test, y_pred)
+classes = voting_clf.classes_
+classes = ["Not Pass" if x == "n" else "Pass" for x in classes]
+print(conf_matrix)
+print(classes)
+plt.imshow(conf_matrix, interpolation="nearest", cmap=plt.cm.Blues)
+plt.title("Confusion Matrix of the Ensemble Classifier")
+plt.colorbar()
+tick_marks = np.arange(len(classes))
+plt.xticks(tick_marks, classes) #, rotation=45
+plt.yticks(tick_marks, classes)
+thresh = conf_matrix.max() / 2.
+for i, j in itertools.product(range(conf_matrix.shape[0]), range(conf_matrix.shape[1])):
+    plt.text(j, i, conf_matrix[i, j],
+                horizontalalignment="center",
+                color="white" if conf_matrix[i, j] > thresh else "black")
+
+plt.tight_layout()
+plt.ylabel('True label')
+plt.xlabel('Predicted label')
+plt.savefig("./../visualisations/confusion_matrix.png",format='png',dpi=700)
 plt.show()

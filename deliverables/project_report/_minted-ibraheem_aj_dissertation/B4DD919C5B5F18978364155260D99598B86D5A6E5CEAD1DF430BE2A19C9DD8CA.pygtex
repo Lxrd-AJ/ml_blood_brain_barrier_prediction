@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+			\PYG{k+kn}{from} \PYG{n+nn}{sklearn.externals} \PYG{k+kn}{import} \PYG{n}{joblib}
+
+			\PYG{n}{model\PYGZus{}name} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}brain\PYGZus{}\PYGZob{}:\PYGZcb{}\PYGZus{}bbb.pkl\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{datetime}\PYG{o}{.}\PYG{n}{date}\PYG{o}{.}\PYG{n}{today}\PYG{p}{())}
+			\PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Saved model as \PYGZob{}:\PYGZcb{}\PYGZdq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{model\PYGZus{}name}\PYG{p}{))}
+			\PYG{n}{joblib}\PYG{o}{.}\PYG{n}{dump}\PYG{p}{(}\PYG{n}{voting\PYGZus{}clf}\PYG{p}{,} \PYG{n}{model\PYGZus{}name}\PYG{p}{)}
+\end{Verbatim}
