@@ -63,4 +63,8 @@ def train_voting_clf(training_folder):
 
     voting_clf = joblib.load(model_name)
 
+    """
+    Plot the algorithm comparison
+    """
+
     return voting_clf

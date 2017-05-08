@@ -584,20 +584,64 @@
 			
 			
 			
-		\subsection{Ensemble Classifiers} \label{subsection:ensemble}
+		\subsection{Ensemble Classifier} \label{subsection:ensemble}
 		Ensembles were used earlier to combine many decision trees to achieve better classification results. 
 		
 		Ensembles have the benefit that they tend to perform better than single classifiers \cite{Dietterich}; With this knowledge, all the previously trained classifier were combined to create an ensemble learner that makes predictions by taking a weighted vote of the individual prediction of the classifiers its composed of.
 		
-		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners.
+		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset with its learning curve shown in figure ; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth,scale=1]{images/learning_curve_ensemble_clf}
+				\caption{Learning Curve for the Ensemble classifier}
+				\label{fig:learning_curve_ensemble}
+			\end{figure}
 		
 		
 
-\chapter{Model Evaluation and Persistence(Notes)}
+\chapter{Model Evaluation and Persistence}
 	\section{Model Evaluation}
 		% Draw a diagram like the one in this link(http://machinelearningmastery.com/compare-machine-learning-algorithms-python-scikit-learn/) to compare the results of all the classifiers
 		%TODO: Talk about Cross validation, include diagrams like in scikit-learn pg 252, the entire chapter is a valuable resource	
-				
+		The next step after training the classifier is to evaluate their performance. There are a myriad of techniques available for evaluating classifier performace and these techniques help us answer two basic questions about the model, which are:
+			\begin{itemize}
+				\item How accurate is the machine learning model?
+				\item How wrong is the model when it is wrong?
+			\end{itemize}
+			
+		\subsection{Measuring Accuracy using K-Fold Cross Validation}
+		
+		\subsection{Understanding models using Confusion matrices}
+		A confusion matrix shows a detailed breakdown of the miscalculations of a machine learning model and it is sometimes known as an error matrix. It highlights in a table of two dimensions (\textit{actual} and \textit{predicted}) where the model made a correct and wrong prediction. The following terms are used when describing the parameters of a confusion matrix:
+			\begin{itemize}
+				\item True Positives (TP)
+				\item False Positive (FP)
+				\item True Negatives (TN)
+				\item False Negatives (FN)
+			\end{itemize} 
+		With these parameters, we can further calculate certain observations about the model such as its precision and recall, explained below
+			\begin{itemize}
+				\item \underline{Precision:} This refers to the ability of a classifier to correctly label a positive sample as positive and a negative sample as negative. Its formula is given by
+					\begin{equation}
+						precision = \frac{TP}{TP + FP}
+					\end{equation}
+				\item \underline{Recall:} This is the ability of the classifier to correctly label all the positive samples as postive, given by the formula
+					\begin{equation}
+						recall = \frac{TP}{TP + FN}
+					\end{equation}
+			\end{itemize}
+			
+			\subsubsection{Reciever Operating Characteristic Curve (ROC curve)}
+			The ROC curve according to Tom Fawcett is a technique for visualizing, organizing and selecting classifiers based on their performance \cite{TFawcett2005}.
+			
+			The ROC curve is illustrated by plotting the True Positive Rate (TPR; The fraction of true positives out of the positives) against the False Positive Rate (FPR; The fraction of False positives out of the negatives) at various thresholds \cite{TFawcett2005}. Shown in figure \ref{fig:roc} is the ROC curve of the Ensemble classifier when evaluated with the simple molecular descriptor dataset.
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth,scale=1]{images/roc_curve}
+					\caption{ROC for the Ensemble classifier}
+					\label{fig:roc}
+				\end{figure}
+		
 		\subsection{Classifier Performance Comparison}
 		\begin{table}[ht]
 			\caption{Classifier average performance on different datasets}

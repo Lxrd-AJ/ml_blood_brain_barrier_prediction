@@ -4,12 +4,16 @@ from rdkit.Chem import Descriptors, Draw, AllChem
 from rdkit.ML.Descriptors import MoleculeDescriptors
 from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler,MinMaxScaler
+from sklearn.preprocessing import StandardScaler,MinMaxScaler,label_binarize
+from sklearn.externals import joblib
+from sklearn.model_selection import train_test_split, learning_curve, ShuffleSplit
+from sklearn.metrics import roc_curve, auc
 import random  
 import numpy as np
 import matplotlib.pyplot as plt 
 import pandas as pd 
-import mglearn
+
+
 
 def load_data(from_url):
     data = np.genfromtxt(from_url,dtype="i4,U256,U256,U256",
@@ -44,7 +48,7 @@ random_molecules = [Chem.MolFromSmiles(entry[3]) for entry in random_entries]
 """
 Draw a chart of random molecules and also create a file containing the chemical 
 descriptors for the molecules 
-"""
+=====
 mol_images = Draw.MolsToGridImage(random_molecules, molsPerRow=3, subImgSize=(200,200),legends=[entry[1] for entry in random_entries])
 mol_images.save("./../visualisations/random_molecules.png")
 #create a file containing the chemical descriptors for the molecules
@@ -64,13 +68,13 @@ with open('./random_molecules_descriptors.csv','w') as f:
                 "\n")
     print("-> Finished writing to the file")
     print("Using",len(chem_descriptors), "chemical Descriptors")
-
+"""
 
 """
 Generating fingerprint information from the molecules
 -> Generate images for each molecule with the smiles-format as its file name
 -> Generate a txt file containing all the smiles and their fingerprint format  
-"""
+===
 print("Generating Fingerprint information")
 random_entries = random_entries[:2]
 random_molecules = random_molecules[:2]
@@ -87,11 +91,11 @@ with open('./random_fingerprints.txt','w') as f:
         fingerprint = arr  
         f.write("{:}\n".format("=" * 10))
         f.write("{:}\n".format(list(fingerprint)))
-
+"""
         
 """
 Generate visualisations on how the neural network divides the data
-"""
+===
 print("\nGenerating visualisations for neural networks")
 fig, axes = plt.subplots(2,4,figsize=(20,8))
 pca = PCA(n_components=10, whiten=True)
@@ -118,4 +122,66 @@ for i, ax in enumerate(axes.ravel()):
     # mglearn.discrete_scatter(X_train[:,0], X_train[:,1], y_a, ax=ax)
     # #plt.scatter(X_train[:,0], X_train[:,1], y_a)
     # plt.savefig("./../visualisations/neural_network_classification.png",format='png',dpi=700)
-    
+"""  
+
+
+brain_url = "./../brain_2017-05-01_bbb.pkl"
+voting_clf = joblib.load(brain_url)
+
+
+
+"""
+ROC Curve plotting
+===
+
+y = label_binarize(y_a, classes=['p','n'])
+X_train, X_test, y_train, y_test = train_test_split(A, y, test_size=.5,random_state=0)
+n_classes = y.shape[1]
+y_score = voting_clf.fit(X_train, y_train).predict_proba(X_test)
+
+fpr = dict()
+tpr = dict()
+roc_auc = dict()
+
+for i in range(n_classes):
+    tpr[i], fpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+plt.figure()
+lw = 2
+plt.plot(fpr[0], tpr[0], color='darkorange',lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[0])
+plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic example')
+plt.legend(loc="lower right")
+#plt.show()
+plt.savefig("./../visualisations/roc_curve.png",format='png',dpi=700)
+"""
+
+
+
+"""
+Learning curve plot for the voting Classifier
+"""
+cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
+train_size, train_scores, test_scores = learning_curve(voting_clf, A, y_a, cv=cv)
+plt.figure()
+plt.title("Learning curve Ensemble Classifier")
+plt.xlabel("Training examples")
+plt.ylabel("Score")
+plt.ylim((0.7, 1.01))
+train_scores_mean = np.mean(train_scores, axis=1)
+train_scores_std = np.std(train_scores, axis=1)
+test_scores_mean = np.mean(test_scores, axis=1)
+test_scores_std = np.std(test_scores, axis=1)
+plt.grid()
+plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, alpha=0.1, color="r")
+plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, alpha=0.1, color="g")
+plt.plot(train_sizes, train_scores_mean, 'o-', color="r", label="Training score")
+plt.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score")
+plt.legend(loc="best")
+plt.savefig("./../visualisations/learning_curve_ensemble_clf.png",format='png',dpi=700)
+plt.show()
