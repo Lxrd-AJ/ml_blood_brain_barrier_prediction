@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+			\PYGZdl{} curl \PYGZhy{}H \PYG{l+s+s2}{\PYGZdq{}Content\PYGZhy{}Type: application/json\PYGZdq{}} \PYGZhy{}X POST \PYGZhy{}d
+			    \PYG{l+s+s1}{\PYGZsq{}\PYGZob{}\PYGZdq{}smile\PYGZdq{}:\PYGZdq{}Cn1c2CCC(Cn3ccnc3C)C(=O)c2c4ccccc14\PYGZdq{}\PYGZcb{}\PYGZsq{}}
+			    http://localhost:5000/api/prediction
+\end{Verbatim}

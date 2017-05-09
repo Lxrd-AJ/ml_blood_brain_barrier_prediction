@@ -1,0 +1,11 @@
+version: '2'
+
+services: 
+  web:
+    build: .
+    ports: 
+      - "5000:5000"
+    environment: 
+      - PORT = 8090
+      - DB_NAME = database
+      - model = brain_2017--05-01_bbb.pkl

@@ -620,6 +620,8 @@
 		\subsection{Understanding models using Confusion matrices}
 		A confusion matrix shows a detailed breakdown of the miscalculations of a machine learning model and it is sometimes known as an error matrix. It highlights in a table of two dimensions (\textit{actual} and \textit{predicted}) where the model made a correct and wrong prediction. 
 		%Removed
+		% http://www.icmla-conference.org/icmla11/PE_Tutorial.pdf
+		% http://www.comp.dit.ie/bmacnamee/materials/ml/lectures/Evaluation.pdf
 		%The following terms are used when describing the parameters of a confusion matrix:
 		%	\begin{itemize}
 		%		\item True Positives (TP)
@@ -699,9 +701,27 @@
 
 
 \chapter{Conclusion}
+	In Chapter 1, we learnt that there is an abundance of chemical data and that machine learning methods can help discover patterns in these data especially in the field of Central Nervous System drug discovery.
+	
+	Different data exploratory techniques were applied to our dataset and after the visualisations highlighted that it was possible to detect the statistical pattern in the dataset, we then proceeded to training numerous machine learning models with our data. Eventually, an Ensemble classifier combining all the previously trained models, was created for use in any prediction task.
 	\section{Integration into a Web Application}
-		\subsection{Deployment}
-	\section{Areas for improvement}
+		The Ensemble classifier was wrapped in a Web server written in python using the Flask framework. It exposes an API on the endpoint "/api/prediction" where a simple POST request with the smile data shown below
+		\begin{minted}[obeytabs=false,tabsize=2]{bash}
+			$ curl -H "Content-Type: application/json" -X POST -d 
+			    '{"smile":"Cn1c2CCC(Cn3ccnc3C)C(=O)c2c4ccccc14"}'   
+			    http://localhost:5000/api/prediction
+		\end{minted}
+		should return a JSON object containing the prediction result as shown in figure x, where the classification result and prediction probabilities are returned to the user
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.6\textwidth,scale=1]{images/sample_prediction_result}
+				\caption{Sample prediction result for the BBB Rest API}
+				\label{fig:bbb_sample_prediction_result}
+			\end{figure}
+		The entire application is then further wrapped in a docker container to enable deployment and training on any platform.
+	%\section{Areas for improvement}
+	%	\subsection{Automatic calculation of smile from molecule name}
+	%	\subsection{Deep Learning in virtual screening}
 
 
 
