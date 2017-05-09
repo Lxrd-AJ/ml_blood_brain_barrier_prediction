@@ -51,14 +51,18 @@
 
 
 \begin{abstract}
-	Drug design and discovery is a very expensive process and lots of new compounds are being developed rapidly. Only roughly about 2\% of drugs can pass through the blood brain barrier, this presents a problem in Central Nervous System (CNS) drug development. \\
+	Drug design and discovery is a very expensive process and numerous new compounds are being developed at a rapid rate. Only about 2\% of known drugs can pass through the blood brain barrier and this presents a problem in Central Nervous System (CNS) drug development. \\
 	This Project aims to develop a solution that can predict with high confidence, the probability of a drug passing through this blood brain barrier in hopes that this can speed up the process of developing a CNS drug.
 \end{abstract}
 
 \chapter{Introduction}
-	Chemical data is growing exponentially as there are currently more than 123 million organic and inorganic substances to date \cite{CAS2016}, which means for drug development purposes, there is an abundance of chemical data to analyse in search for ideal candidates for development. \\
-	Machine Learning is a form of artificial intelligence (AI) that enables computer programs to learn concepts from data without being explicitly programmed. This technique of AI can be applied to problems in many domains, which is what this paper aims to do by applying it to chemical data to build computer models, aka Virtual Screening, models which can predict with high accuracy, the probability of a drug to pass through the blood brain barrier (BBB) of living organisms. \\
-	\textit{In Silico} models (computer models) have a profound use in virtual screening as they can enable scientist to scan through a large database of drugs to speed up a time consuming process of analysing drug candidates. \\
+	Chemical data is growing exponentially as there are currently more than 123 million organic and inorganic substances to date \cite{CAS2016}, which means for drug development purposes, there is an abundance of chemical data to analyse in search for potential drugs. 
+	
+	Machine Learning is a form of artificial intelligence (AI) that enables computer programs to learn concepts from data without being explicitly programmed. This technique of AI can be applied to problems in many domains, which is what this paper aims to perform, by applying it to chemical datasets to build computer models, aka Virtual Screening, models which can predict with high accuracy, the probability of a drug passing through the blood brain barrier (BBB) of living organisms. 
+	\\
+	
+	\textit{In Silico} models (computer models) have a profound use in virtual screening as they can enable scientist to scan through a large database of drugs to speed up a time consuming process of analysing drug candidates. 
+	
 	In the context of CNS (Central Nervous System) drug development, when a drug is absorbed into the blood stream, it needs to be able to pass through the Blood Brain Barrier (BBB) to its target which could be the brain or the nervous system, an example would an anti-migraine agent, ergotamine, 
 		\begin{figure}[H]
 			\centering
@@ -67,20 +71,20 @@
 			\label{fig:ergotamine}
 		\end{figure}
 	which has to pass through the blood brain barrier to the lining of the brain where it constricts the blood vessels there to decrease the pain from migraine headaches \cite{DrugsCom}. 
-	%TODO: This needs citation -> 2% of known molecules
-	However statistically speaking, only 2\% of the currently known molecules can pass through this blood brain barrier, which translates to more time in the drug discovery pipeline spent on analysing drug candidates that can pass through the BBB barrier. \\
+
+	According to Ana Teixeira et al, 2012 \cite{Anaetal2012}, only 2\% of the currently known small molecules can pass through the blood brain barrier, which translates to more time in the drug discovery pipeline spent on analysing drug candidates that can pass through the BBB barrier. \\
 	\section{Proposed Solution}
-		This problem of determining the drug candidates that belong to this 2\% is a very challenging one and this paper approaches the problem through the use of computer models built with machine learning techniques, applied to a large database of molecules that pass through the Blood Brain Barrier, with the aim of predicting the probability of an unknown candidate drug passing through the BBB. \\
-		Ana et al \cite{Anaetal2012} points out that there is a lack of extensive dataset on BBB prediction as most of them are not comprehensive enough to build complex models out of, as a result, they have compiled a dataset of 2040 molecules for use in BBB prediction. Based on analysis carried out \cite{Anaetal2012} by Ana et al, They show that certain machine learning classifiers such as support vector machines and random forests outperform other classifiers especially for BBB classification tasks. This paper will attempt utilise that analysis as a baseline for developing our computer models whilst also exploring the possibility of Deep neural networks, as Thomas et al \cite{Thomasetal2014} show that Deep learning techniques have a significant opportunity in virtual screening.
-	\section{Results}
+		The problem of determining which drug candidates can pass through the blood brain barrier is a very challenging one and this paper approaches the problem through the use of computer models built with machine learning techniques, applied to a large database of molecules that pass through the Blood Brain Barrier, with the aim of predicting the probability of an unknown candidate drug passing through the BBB. \\
+		Ana et al \cite{Anaetal2012} points out that there is a lack of extensive dataset on BBB prediction as most of them are not comprehensive enough to build complex models out of, as a result, they have compiled a dataset of 2040 molecules for use in BBB prediction. Based on analysis carried out \cite{Anaetal2012} by Ana et al, They show that certain machine learning classifiers such as support vector machines and random forests outperform other classifiers especially for BBB classification tasks. This paper will attempt utilise that analysis as a baseline for developing our computer models.
+	%\section{Results}
 
 
 \chapter{Background}
 	Everything around us is composed of molecules, they are an electrically neutral group of two or more atoms held together by chemical bonds. They are the smallest particle in a compound that exhibit the chemical properties of the compound. 
 	Trees can be said to be made up of molecules and historically parts of trees have always been used to cure or alleviate symptoms of illness. Over time, the individual molecules in these herbal medicines were recognized for their effects and they were being produced synthetically, which further gave rise to Modern Drug Design and Discovery. \\
-	A potential molecule aka drug candidate is usually screened against a target protein to test its effectiveness and the screening can either be virtual (Virtual Screening) or through a method known as High Throughput Screening (HTS) - a method of experimentation involving the use of robots and control software to conduct millions of scientific tests. These HTS machines can also be credited with the exponential growth in chemical data \cite{Dougetal2008}.
+	A potential molecule i.e drug candidate is usually screened against a target protein to test its effectiveness and the screening can either be virtual (Virtual Screening) or through a method known as High Throughput Screening (HTS) - a method of experimentation involving the use of robots and control software to conduct millions of scientific tests; These HTS machines can also be credited with the exponential growth in chemical data \cite{Dougetal2008}.
 	Drug discovery is a very expensive and time consuming process; It is usually broken down into numerous stages with the most expensive stage being the clinical trials. \\
-	The problem of the Blood Brain Barrier (BBB) prediction evolves around Chemistry and Computer Science being applied to the Drug Design domain with a thorough understanding of the constrainsts imposed by the Central Nervous System. This chapter introduces the necessary concepts needed to understand the solution taken to the BBB prediction problem.
+	The problem of the Blood Brain Barrier (BBB) prediction revolves around Chemistry and Computer Science being applied to the Drug Design domain with a thorough understanding of the constrainsts imposed by the Central Nervous System. This chapter introduces the necessary concepts needed to understand the solution taken to the BBB prediction problem.
 	
 	
 	\section{Cheminformatics}
@@ -92,13 +96,13 @@
 				\begin{equation*}
 					CNCCCC1c2ccccc2C=Cc3ccccc13
 				\end{equation*}
-			This format can then be utilised by cheminformatics software to extract meaningful chemical information about the molecule. Throughout the project, the Open-Source Cheminformatics Software, \href{www.rdkit.org}{RDKit}, was used to transform the SMILEs in the dataset and also for the extraction of molecular information, which will be explained below.
+			This format can then be utilised by cheminformatics software to extract meaningful chemical information about the molecule. Throughout the project, the Open-Source Cheminformatics Software, \href{www.rdkit.org}{RDKit}, will be used to transform the SMILEs in the dataset and also for the extraction of molecular information, which will be explained below.
 		\subsection{Molecular Representation and Similarity}
 		Similar molecules exhibit similar properties \cite{JohnMaggiora1990}, with this knowledge, it is possible to approach the BBB problem with the idea that if we know for a given molecule $x$, that it can pass through the Blood Brain Barrier, then we can expect another given molecule $y$ which is similar to $x$ to pass through the barrier. \\
-		This further raises the question of how to represent a molecule (Molecular Representation) in a format that can enable us to compare its similarity to another given molecule. One technique would be to represent the molecule as a linear vector and then use known statistical techniques to compute the distance between another molecule. 
+		This further raises the question of how to represent a molecule (Molecular Representation) in a format that can enable us to compare its similarity to another given molecule. The approach taken was to represent the molecule as a linear vector and then use known statistical techniques to compute the distance between another molecule. 
 			\subsubsection{Molecular Representation}
-			For the BBB task, the goal of molecular representation to create a function $f(x)$ that receives as input, the SMILE representation of molecule $x$ and returns as output a feature vector. The \textbf{feature vector} is an n-dimensional vector of numerical features (Real numbers) that represent the molecule. 
-			%TODO: Draw diagram explaining the described function above
+			For the BBB task, the goal of molecular representation is to create a function $f(x)$ that receives as input, the SMILE representation of molecule $x$ and returns as output a feature vector. The \textbf{feature vector} is an n-dimensional vector of numerical features (Real numbers) that represent the molecule. 
+			%TODO: Draw diagram explaining the described function above??
 			There are other forms of molecular representation, as Jurgen \cite{Jurgen2004} highlights that other common representations of molecules include encoding the molecular data into a set, graph, vector or function-based representation to enable the use of distance as a form of molecular similarity \cite{Jurgen2004}. Each representation has its advantages and disadvantages, where graphs have their shortcomings, feature-based vectors can prove beneficial depending on the task to the accomplished. Building upon the research of Ana Teixeira et al \cite{Anaetal2012}, we would choose to represent the molecules in our dataset as a feature-vector of its chemical descriptors and as a vector of its molecular fingerprint, both which will be explained in the upcoming paragraphs. The Open-Source Cheminformatics Software, RDKit, implements the functionality we will need to extract the chemical descriptors and the molecular fingerprint vectors.
 				\paragraph{Chemical Descriptors as a Feature Vector:} 
 				Chemical Descriptors, also known as Molecular Descriptors, as defined by Roberto and Viviana, are the final result of a logic and mathematical procedure which transforms chemical information encoded within a symbolic representation of a molecule into a useful number or the result of some standardized experiment.\cite{RobertoViviana2009}.
@@ -111,8 +115,8 @@
 						\label{fig:random_molecules}
 					\end{figure}
 				Using the RDKit Software library, we can extract the relevant ~chemical descriptors. For our dataset, 206 Chemical descriptors were extracted, shown below in table \ref{table:random_chem_descriptors}, are the same random molecules but with the first 5 descriptors displayed.
+				%TODO: Fix the table display
 					\begin{table}[ht!]
-						\caption{Chemical Descriptors of 6 Random molecules from the dataset}
 						\centering
 						\begin{tabular}{ | c | c | c | c |   }
 							\hline
@@ -131,6 +135,7 @@
 							Meclorisone(meclorisone-dibutyrate) & -1.6040011915 & 426.136464736 & 154 \\
 							\hline
 						\end{tabular}
+						\caption{Chemical Descriptors of 6 Random molecules from the dataset}
 						\label{table:random_chem_descriptors}
 					\end{table}
 				The beauty of the approach to the BBB problem is that from a statistical stand-point, we do not need a deep knowledge of Chemistry, we can simply make an educated neglect of the molecular names and the headers of the table \ref{table:random_chem_descriptors} and generate the matrix (rounded up to 3 decimal places ) shown as the feature vector \label{matrix:samp_feat_vec}
@@ -159,9 +164,9 @@
 					\end{equation}
 				The table \ref{table:random_morgan_fingerprint} shows the transformation of a given molecule from our dataset into its SMILE format and then its fingerprint representation using the RDKit software library.
 					%\begin{sidewaystable}
+					%TODO: Fix the table here
 					\begin{table}[ht!]
 						\centering
-						\caption{Morgan Fingerprint representation of 2 Random molecules from the dataset}
 						\begin{tabular}{ | c | c | c | c |   }
 							\hline
 							Molecule Name & SMILE & Molecular Representation & Morgan Fingerprint \\
@@ -171,12 +176,13 @@
 							Butanone & CCC(C)=O & \includegraphics[width=2cm,height=2cm]{images/Butanone.png} & [\ldots, 1.0, 0.0, 0.0, 0.0, \ldots, 0.0, 0.0 ] \\
 							\hline
 						\end{tabular}
+						\caption{Morgan Fingerprint representation of 2 Random molecules from the dataset}
 						\label{table:random_morgan_fingerprint}
 					\end{table} 
 					%\end{sidewaystable}
 			\subsubsection{Similarity Measures} 
 			\label{subsubsection_similarity_measures}
-			The simplest way to cluster molecules together in a chemical database when performing virtual screening is through the concept of \textit{molecular similarity}. It is the core of Molecular Similarity Analysis (MSA) where the similarity measure, that characterizes the degree of proximity between pairs of molecules are manifested by their "molecular patterns", which are compromised of sets of features (chemical descriptors) \cite{Jurgen2004}. \\
+			The simplest way to cluster molecules together in a chemical database when performing virtual screening is through the concept of \textit{molecular similarity}. It is the core of Molecular Similarity Analysis (MSA) where the similarity measure, that characterizes the degree of proximity between pairs of molecules are manifested by their "molecular patterns", which are compromised of sets of features (chemical descriptors or Morgan fingerprint) \cite{Jurgen2004}. \\
 			Many different molecular similarity measures exists and some are more suitable to certain virtual screening tasks than another, which is what prompts the discussion of molecular similarity measures in section \ref{subsubsection_similarity_measures}. 
 			To determine the similarity between molecules, some form of similarity measure has to exist to compare molecules in the same representation. The similarity measures (similarity coefficient) are functions that maps pairs of compatible molecular representation into a real number. 
 			
@@ -187,14 +193,15 @@
 					\item \underline{The Weighing Scheme}: Used to assign differing degrees of importance to the various components of the molecular representation. An extra measure of accuracy in the weighing schemes would be the use of a chemical ontology database (e.g CheBL) when determining the importance of each component \cite{AnaPhd2014}.
 					\item \underline{Similarity Coefficient}: A quantitative measure of the degree of structural relatedness between two molecules.
 				\end{itemize}
-			The main application of any similarity measure is to the fact that \textbf{structurally similar molecules exhibit similar properties} as stated by Johnson and Maggiora (1990) \cite{JohnMaggiora1990}. However, they also noted that an exception to the rule is that sometimes a small change in the structure of the molecule can result in a radical change in the properties that it exhibits. Which is why Ana Teixeira (2014) \cite{AnaPhd2014} notes that the use of a chemical ontology database would be a plausible method to combat this exception. For our prediction task, the exception to this rule is ignored for practical purposes as majority of molecules exhibit similar properties to one another.\\
+			The main application of any similarity measure hinges on the fact that \textbf{structurally similar molecules exhibit similar properties} as stated by Johnson and Maggiora (1990) \cite{JohnMaggiora1990}. However, they also noted that an exception to the rule is that sometimes a small change in the structure of the molecule can result in a radical change in the properties that it exhibits. Which is why Ana Teixeira (2014) \cite{AnaPhd2014} notes that the use of a chemical ontology database would be a plausible method to combat this exception. For our prediction task, the exception to this rule is ignored for practical purposes as majority of molecules exhibit similar properties to one another.\\
 			In similarity measure calculations, the most common measure for calculating fingerprint similarity is the Tanimoto coefficient, given by 
 				\begin{equation}
 				Tanimoto(\vec{v_i}, \vec{v_j}) = 
 				\frac{\vec{v_i}\bullet\vec{v_j}}
 				{\sum_{k}v_{ik} + \sum_{k}v_{jk} - \vec{v_i}\bullet\vec{v_j}  } 
 				\end{equation}
-			where $\vec{v_i}$ and $\vec{v_j}$ are the bit vectors for molecule $i$ and $j$. There are other similarity coefficients such as the Tversky and Dice but the Dice similarity measure was chosen for the k-nearest neighbour calculation of dataset.
+			where $\vec{v_i}$ and $\vec{v_j}$ are the bit vectors for molecule $i$ and $j$. There are also other similarity coefficients such as the Tversky and Dice coefficients.
+			%but the Dice similarity measure was chosen for the k-nearest neighbour calculation of dataset.
 	
 	\section{Drug Design and Discovery}
 	According to Dr A.N Boa \cite{hull2016}, the different stages of drug discovery are
@@ -213,7 +220,7 @@
 	Another Virtual Screening technique usually used is \textit{Quantitative Structure-Activity Relationships} (QSAR), here the underlying idea is that molecules with similar structures behave in the same way, as a result, the activity of a protein against a certain group of compounds is recorded and a QSAR model is the constructed from there and used to determine whether a given compound will bind to the target, thus screening the virtual compound library for drugs of interest.
 	
 	\section[CNS Drug Design and the Blood Brain Barrier]{Central Nervous System Drug Design and the Blood Brain Barrier}
-	CNS Drugs aiming to pass through the Blood Brain Barrier often need to possess certain physical-chemical properties; some of which are Hydrogen bonding, ionization properties, molecular flexibility etc. \cite{Hassanetal2005}. The epithelial cells form an interface between the blood and the brain and these are commonly referred to as the Blood Brain Barrier. This interface occurs in other places within the body but what makes the BBB epithelial cells different are the tight junctions they form which makes it harder for drugs to pass through. Hassan and George (2005) further claim in their article that the majority of BBB penetration is through passive diffusion through the cellular membrane.
+	CNS Drugs aiming to pass through the Blood Brain Barrier often need to possess certain physical-chemical properties; some of which are Hydrogen bonding, ionization properties, molecular flexibility etc. \cite{Hassanetal2005}. The epithelial cells form an interface between the blood and the brain and these are commonly referred to as the Blood Brain Barrier. This interface occurs in other places within the body but what makes the BBB epithelial cells different are the tight junctions they form which makes it harder for drugs to pass through. Hassan and George (2005) further claim in their article that the majority of BBB penetration is passive diffusion through the cellular membrane.
 		\subsubsection{ADME Properties of CNS Drugs}
 		For a CNS drug to be therapeutically effective, it must be easily disposed asides from having a high degree of potency. The ADME properties of a drug refers to its ability to be easily absorbed, distributed, metabolised and excreted. Some properties of CNS drugs affect their ADME properties, some of which are \cite{Hassanetal2005}:
 			\begin{itemize}
@@ -224,8 +231,8 @@
 
 	
 	
-\chapter{Machine Learning Classifiers}
-	\textbf{Machine Learning} is a sub-field of Artificial Intelligence that involves the design of algorithms that can learn, make predictions and improve based on data without being explicitly programmed. There are 4 types of machine learning namely \cite{StephenM2014}
+\chapter{Machine Learning Classifiers} \label{chapter:ml_classifier}
+	\textbf{Machine Learning} is a sub-field of Artificial Intelligence that involves the design of algorithms that can learn, make predictions and improve based on data without being explicitly programmed. There are 4 main categories of machine learning algorithms, namely \cite{StephenM2014}
 		\begin{itemize}
 			\item \underline{Supervised Learning}: Here the machine learning algorithms are provided with training data where the correct outputs to the inputs are labelled and the algorithm learns to generalise from the training data.
 			\item \underline{Unsupervised Learning}: This is the opposite of supervised learning, the training data contains only the inputs with no outputs; the algorithm then learns to generalise and cluster similar inputs together.
@@ -250,10 +257,10 @@
 	
 	
 	\section{Unsupervised Learning}
-	Before training the classifiers with the preprocessed data; it is usually best to carry out some form of exploration into the dataset to enable educated guesses about the best machine learning models to utilise for the prediction task. In this section, unsupervised learning techniques would be used to gain insights into the bbb dataset with the aim being to determine if it is possible to linearly fit a classifier symbolically to divide between the molecules that pass through the barrier and the ones that do not. The main areas focused on would be the transformation of the dataset using the Manifold learning algorithms and the clustering of the data points.
+	Before training the classifiers with the preprocessed data; it is usually best to carry out some form of exploration into the dataset to enable educated guesses about the best machine learning models to utilise for the prediction task. In this section, unsupervised learning techniques would be used to gain insights into the BBB dataset with the aim being to determine if it is possible to linearly fit a classifier that can symbolically divide between the molecules that pass through the barrier and the ones that do not. The main areas focused on would be the transformation of the dataset using the Manifold learning algorithms and the clustering of the data points.
 	
 		\subsection{Principal Component Analysis (PCA)}
-		\textbf{Principal Component Analysis (PCA)} is a form of dimensionality reduction technique that aims to reduce the number of dimensions of the data mainly for visualisation purposes whilst still preserving the statistical meaning of the data and reducing the number of important (principal) components; Here only a small subset of the features of the data are selected according to how important they are; 
+		\textbf{Principal Component Analysis (PCA)} is a form of dimensionality reduction technique that aims to reduce the number of dimensions of the data mainly for visualisation purposes whilst still preserving the statistical meaning of the data and reducing it to its important (principal) components; Here only a small subset of the features of the data are selected according to how important they are; 
 		
 		To illustrate further using the feature vector shown in \ref{matrix:samp_feat_vec}, the vector has a dimensional size of 206 features, as all the 2040 molecules have a chemical descriptor size of 206. Plotting a single molecule on a graph with 206 dimensions would be nearly impossible as 2D and 3D data are the best ways to illustrate statistical data for humans. By applying the Principal Component algorithm to the feature vector, it proceeds to find the direction of maximum variance for each molecule that is, it returns a new vector that contains the most information. The directions of maximum variance returned are referred to as the \textit{principal components}.
 		
@@ -265,7 +272,7 @@
 			\label{fig:scatter_pca_2D}
 		\end{figure}
 	
-		To further examine the data, the next 3 principal components are selected to create a 3D plot. The 3D plot as shown in figures \ref{fig:scatter_pca_3D} and \ref{fig:scatter_pca_3D_2} also has the same clustering of a significant proportion of the blue molecules in the same space as the red molecules but looks more linearly separable than the 2D plot. This highlights that would a little bit of feature engineering, it would be possible to seperate the data points into 2 clusters of red and blue i.e molecules that pass through the barrier and the ones that do not. 
+		To further examine the data, the next 3 principal components are selected to create a 3D plot. The 3D plots are shown in figures \ref{fig:scatter_pca_3D} and \ref{fig:scatter_pca_3D_2} also has the same clustering of a significant proportion of the blue molecules in the same space as the red molecules but looks more linearly separable than the 2D plot. As would be shown in the upcoming sections, with a little bit of feature engineering, it would be possible to seperate the data points into 2 clusters of red and blue i.e molecules that pass through the barrier and the ones that do not. 
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D}
@@ -302,7 +309,7 @@
 			\caption{2D Scatter Plot after applying the t-SNE Algorithm (Morgan Fingerprint dataset)}
 			\label{fig:scatter_tsne_mfps_2D}
 		\end{figure}
-		The scatter plot has no significant difference with the Morgan Fingerprint dataset, it highlights the clusters of the B molecules more visibly. Further analysis would need to be carried to create a more linear separable representation.
+		The scatter plot has no significant difference from the Morgan Fingerprint scatter plot shown in figure \ref{fig:scatter_tsne_mfps_2D}, it highlights the clusters of the B molecules more visibly. Further analysis would need to be carried to create a more linear separable representation.
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_tsne_3D}
@@ -319,14 +326,14 @@
 		
 		\subsection{Clustering}
 			\subsubsection{K-Means Clustering}
-			In our further attempts to have some form of linearly separable data, we further explore clustering techniques. Here, the 2 principal components of our feature vector are selected and applied to the k-means clustering algorithm.
+			In our further attempts to have some form of linearly separable data, we further explore more clustering techniques. Here, the 2 principal components of our feature vector are selected and applied to the k-means clustering algorithm.
 			
 			The K-means algorithm, also known as \textit{Lloyd's algorithm}, aims to find cluster centroids that are representative of regions within the dataset or feature vector. The algorithm selects the approximate center of the clusters and iteratively assigns each data point to this center, and then sets the cluster center again as the average of the data points in the cluster using the equation \ref{equa:kmeans}.
 				\begin{equation}
 					\label{equa:kmeans}
 					\sum_{i=0}^{n}min_{\mu_{j} \in C}(||x_{j} - \mu_{i}||^{2})
 				\end{equation}
-			where $\mu_{j}$ is the mean of the cluster, $C$ is the cluster, $x_{j}$ is the current data point and $\mu_{i}$ is the current mean of the calculation \cite{Sculley2010}.
+			where $C$ is the cluster, $\mu_{j}$ is the mean of the cluster, $x_{j}$ is the current data point and $\mu_{i}$ is the current mean of the calculation \cite{Sculley2010}.
 			It repeats this process until the cluster centroids do not change significantly.
 			%\begin{figure}[H]
 				%\centering
@@ -485,7 +492,7 @@
 			%Applying the AdaBoost algorithm to the decision trees, an accuracy of $\sim83\%$ was achieved on the simple molecular descriptor dataset, and an accuracy of $\sim81\%$ on the Morgan fingerprint dataset. Both rounds of classification with number of trees = 200. Strangely, the Adaboosted decision trees ought to provide better results than the random forest or extra trees classifiers. 
 		
 		
-		\subsection{Neural Networks(Notes)}
+		\subsection{Neural Networks}
 				%The Human brain is a very fascinating and robust system, the basic processing unit of the brain is the nerve cell or neuron and there are around 100 billion neurons in the brain all connected together by synapses. These neurons are electrically excitable, they pass signals from one neuron to the next by electrical and chemical signals when the membrane potential reaches some threshold, which can be inhibited if the threshold is not exceeded. 
 			A Neural Network is a computational model inspired by the human brain, it consists of a network of neurons connected together by axons. The inspiration behind the model is that if learning occurs in the brain and if we can represent this in a computational model then we can achieve some form of intelligence in our systems.
 				%\paragraph{Hebbian Learning}
@@ -719,10 +726,13 @@
 				\label{fig:bbb_sample_prediction_result}
 			\end{figure}
 		The entire application is then further wrapped in a docker container to enable deployment and training on any platform.
-	%\section{Areas for improvement}
-	%	\subsection{Automatic calculation of smile from molecule name}
-	%	\subsection{Deep Learning in virtual screening}
-
+	\section{Areas for improvement}
+		\subsection{Automatic lookup of smile from molecule name}
+		Currently the prediction API expects the molecule SMILE in the POST data, an area that could be improved on would be the use of a molecular lookup database; With such an implementation, the consumer of the API can simply pass the molecule name and the web server can use the molecular lookup database to infer the SMILE representation of the molecule.
+		
+		\subsection{Deep Learning in virtual screening}
+		Whilst considerable success has been made in applying the machine learning models aforementioned in Chapter \ref{chapter:ml_classifier} to our chemical dataset. According to a paper by Thomas et al, 2014 \cite{Thomasetal2014}. They show 
+		that Deep learning techniques have a significant opportunity in virtual screening
 
 
 \chapter*{Appendix}
