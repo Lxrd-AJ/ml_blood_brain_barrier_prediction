@@ -1,0 +1,194 @@
+commit 456052a60b0ab863b1bd0e213b366488a5b441af
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Tue May 9 14:14:03 2017 +0100
+
+    Edits to the report
+
+commit ffb15f6f7279e403787829e650485d63d851f9b5
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Tue May 9 02:06:07 2017 +0100
+
+    docker integration added
+
+commit 8d1bbc9293bb969a6e178c4a558237cfaf238ec5
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Mon May 8 19:10:52 2017 +0100
+
+    Model evaluation and persistence chapter updated
+
+commit 285fa26b994693f76c373c09f3fb369480ee755f
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Mon May 8 14:02:13 2017 +0100
+
+    Model evaluation chapter updated
+
+commit 6086a611892e4fed7b644e68e7c3e0c3203d4ac6
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Mon May 8 08:32:16 2017 +0100
+
+    minor changes
+
+commit 5a2951843769ad5c4ed3cdb5bf05730b2eb8d081
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Sun May 7 20:34:38 2017 +0100
+
+    Machine learning classifier chapter updated
+
+commit 75d253d24b2450373757571c4a0fdadbed336863
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Sat May 6 04:29:25 2017 +0100
+
+    Decision trees chapter complete and neural network chapter updated
+
+commit e03e7b76e3504891423457ca73095ef3bd84a4fe
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Wed May 3 14:57:59 2017 +0100
+
+    Support vector machine chapter updated
+
+commit f1ebaed34f23189b2d14227d478d383ebe197098
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Tue May 2 19:21:32 2017 +0100
+
+    k-NN Chapter updated
+
+commit cdd846b03d4aa50ff38ec31405a2e7444c7c871b
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Sun Apr 30 15:26:22 2017 +0100
+
+    Clustering section updated
+
+commit d8e1a4d6ff3b74188fec73aa9be2c2bf882ba245
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Wed Apr 26 14:30:13 2017 +0100
+
+    Manifold learning with t-SNE section updated
+
+commit 26659a3f336eb8935e9af792ad660bf43a739b90
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Tue Apr 25 03:23:58 2017 +0100
+
+    Principal component analysis section updated and folder restructuring
+
+commit 4c5ba296629bfcdf391b69aa945b8e5a13b601a5
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Wed Apr 5 21:55:11 2017 +0100
+
+    Data Representation and Preprocessing section added
+
+commit 27aa08e4e8c1a4152d0807ed7c012cfc947b619e
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Wed Apr 5 19:21:31 2017 +0100
+
+    Machine learning chapter restructured and introductory text added
+
+commit 0c1762ce8db382fea1e5909e6a40116eb0eb431f
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Wed Apr 5 12:55:29 2017 +0100
+
+    Morgan Fingerprint chapter written
+
+commit 08ad9afd3ccd20959cb906a25b29faf0508af0e5
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Thu Mar 30 09:04:04 2017 +0100
+
+    Notes added
+
+commit 643b53815001178df46b32141547b96438f63e73
+Merge: c528c11 0060ddd
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Sun Mar 26 12:51:42 2017 +0100
+
+    Merge
+
+commit c528c114bc9f6bd0083a289cf8e5ca2832a57b3d
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Sun Mar 26 12:43:31 2017 +0100
+
+    Updated the molecular representation and similarity subsection
+
+commit 0060ddd64e736cc35b15dccb7915748f21b0b5d2
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Thu Mar 23 01:01:04 2017 +0000
+
+    Notes added - Molecular Representation
+
+commit baa6bb4ec256eeb2b2b7620d7980d776dc7c36c3
+Merge: a508717 60ceb42
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Thu Mar 23 00:06:59 2017 +0000
+
+    Merge branch 'master' of https://github.com/Lxrd-AJ/ml_blood_brain_barrier_prediction
+
+commit a508717b6c470c6c3059624134c14579a3ebbc8c
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Thu Mar 23 00:06:54 2017 +0000
+
+    Brain model added
+
+commit 60ceb4231e445d6a59d3f3ca3e13e89409ff79eb
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Wed Mar 22 18:22:43 2017 +0000
+
+    Background-Cheminformatics-Representing Molecules-SMILES chapter update
+
+commit c15906e92b445eb37842f60a1e1de0a05f64c4a4
+Merge: a6ee7f1 3d2b0e3
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Wed Mar 15 23:48:27 2017 +0000
+
+    Fix merge
+
+commit a6ee7f1ea1cbf453b122950ece5de2bddade6431
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Wed Mar 15 23:47:11 2017 +0000
+
+    Prepping for merge
+
+commit 3d2b0e345feaaf9234517147f78d9db24daa152d
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Wed Mar 15 20:24:14 2017 +0000
+
+    Application wrapped in a web server using the Flask framework and option to start the application using a pre-trained scikit-learn model added
+
+commit 4e86ff9b6373cf8bb96cc0fa87e1de5b6e8d58f7
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Sun Mar 12 20:51:34 2017 +0000
+
+    TODO notes
+
+commit 7badbe42c498f8c1578792a8bc24a7c4ee6c7f50
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Sun Mar 12 15:09:50 2017 +0000
+
+    Bug fix to the decision tree pipeline
+
+commit ebf851047c23de8f689ef292dc57b0dfc72fe521
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Sun Mar 12 01:46:49 2017 +0000
+
+    ensemble voting classifier implemented
+
+commit 0c60864304d49ebdb5d6a6a07d0b5598e6880f4c
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Sat Mar 11 22:17:55 2017 +0000
+
+    Staging for commit
+
+commit df6bf5fad379462965de7ebac7d37c0d783de0b3
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Wed Mar 1 15:30:48 2017 +0000
+
+    Model pipelines + Voting classifier
+
+commit 80e23f82299f9df5f32f387221762f790c3ffb82
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Tue Feb 28 11:04:29 2017 +0000
+
+    Custom estimator in progress
+
+commit 0123738dc70b98840360d616dcec72414a444c5f
+Author: Ibraheem AJ <ibraheemaj@icloud.com>
+Date:   Tue Feb 14 18:43:55 2017 +0000
+
+    Reinitialised git repo

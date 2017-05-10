@@ -51,8 +51,8 @@
 
 
 \begin{abstract}
-	Drug design and discovery is a very expensive process and numerous new compounds are being developed at a rapid rate. Only about 2\% of known drugs can pass through the blood brain barrier and this presents a problem in Central Nervous System (CNS) drug development. \\
-	This Project aims to develop a solution that can predict with high confidence, the probability of a drug passing through this blood brain barrier in hopes that this can speed up the process of developing a CNS drug.
+	Drug design and discovery is a very expensive process, with numerous new compounds being developed at a rapid rate. Only around 2\% of known drugs can pass through the BBB, this presents a problem in the Central Nervous System (CNS) drug development. \\
+	This project aims to develop a solution that can predict, with confidence, the probability of a drug passing through the BBB in the hope that this can speed up the process of developing a CNS drug.
 \end{abstract}
 
 \chapter{Introduction}
@@ -84,7 +84,7 @@
 	Trees can be said to be made up of molecules and historically parts of trees have always been used to cure or alleviate symptoms of illness. Over time, the individual molecules in these herbal medicines were recognized for their effects and they were being produced synthetically, which further gave rise to Modern Drug Design and Discovery. \\
 	A potential molecule i.e drug candidate is usually screened against a target protein to test its effectiveness and the screening can either be virtual (Virtual Screening) or through a method known as High Throughput Screening (HTS) - a method of experimentation involving the use of robots and control software to conduct millions of scientific tests; These HTS machines can also be credited with the exponential growth in chemical data \cite{Dougetal2008}.
 	Drug discovery is a very expensive and time consuming process; It is usually broken down into numerous stages with the most expensive stage being the clinical trials. \\
-	The problem of the Blood Brain Barrier (BBB) prediction revolves around Chemistry and Computer Science being applied to the Drug Design domain with a thorough understanding of the constrainsts imposed by the Central Nervous System. This chapter introduces the necessary concepts needed to understand the solution taken to the BBB prediction problem.
+	The problem of the Blood Brain Barrier (BBB) prediction revolves around Chemistry and Computer Science being applied to the Drug Design domain with a thorough understanding of the constraints imposed by the Central Nervous System. This chapter introduces the necessary concepts needed to understand the solution taken to the BBB prediction problem.
 	
 	
 	\section{Cheminformatics}
@@ -596,7 +596,7 @@
 		
 		Ensembles have the benefit that they tend to perform better than single classifiers \cite{Dietterich}; With this knowledge, all the previously trained classifier were combined to create an ensemble learner that makes predictions by taking a weighted vote of the individual prediction of the classifiers its composed of.
 		
-		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset with its learning curve shown in figure \ref{fig:learning_curve_ensemble}; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners and also that the ensemble classifier can achieve a much higher performance if trained with more data.
+		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset with its learning curve shown in figure \ref{fig:learning_curve_ensemble}; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners and also that the ensemble classifier can achieve a much higher performance if trained with more data. Also the reduction in the training score shows that the classifier over fits less with more data.
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1]{images/learning_curve_ensemble_clf}
@@ -608,14 +608,14 @@
 
 \chapter{Model Evaluation and Persistence}
 	\section{Model Evaluation}
-		The next step after training the classifier is to evaluate their performance. There are a myriad of techniques available for evaluating classifier performace and these techniques help us answer two basic questions about the model, which are:
+		The next step after training the classifier is to evaluate their performance. There are a myriad of techniques available for evaluating classifier performance and these techniques help us answer two basic questions about the model, which are:
 			\begin{itemize}
 				\item How accurate is the machine learning model?
 				\item How wrong is the model when it is wrong?
 			\end{itemize}
 			
 		\subsection{Measuring Accuracy using K-Fold Cross Validation}
-		To avoid a machine learning model from overfitting (i.e failing to make meaningful predictions on new data), we employ a technique known as cross-validation. Here, a portion of the dataset is removed during the training phase and then used to evaluate the model during the test phase. Which further brings us to the concept of $k$-fold cross validation; In $k$-fold cross validation, the entire dataset is divided into $k$ equal folds and the model is trained $k$ times iteratively. In each iteration, the model is trained with the remaining $k-1$ folds and tested with the $k^{th}$ fold.
+		To avoid a machine learning model from over fitting (i.e failing to make meaningful predictions on new data), we employ a technique known as cross-validation. Here, a portion of the dataset is removed during the training phase and then used to evaluate the model during the test phase. Which further brings us to the concept of $k$-fold cross validation; In $k$-fold cross validation, the entire dataset is divided into $k$ equal folds and the model is trained $k$ times iteratively. In each iteration, the model is trained with the remaining $k-1$ folds and tested with the $k^{th}$ fold.
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1]{images/model_comparison}
@@ -727,6 +727,8 @@
 			\end{figure}
 		The entire application is then further wrapped in a docker container to enable deployment and training on any platform.
 	\section{Areas for improvement}
+		At the current stage of the project, a REST API has been made available for getting prediction results. This could further be extended into web solution with an intuitive front end where users i.e scientists could perform a bulk upload molecules from a virtual library for prediction results from our web server. \\
+		Other areas for improvements are:
 		\subsection{Automatic lookup of smile from molecule name}
 		Currently the prediction API expects the molecule SMILE in the POST data, an area that could be improved on would be the use of a molecular lookup database; With such an implementation, the consumer of the API can simply pass the molecule name and the web server can use the molecular lookup database to infer the SMILE representation of the molecule.
 		
