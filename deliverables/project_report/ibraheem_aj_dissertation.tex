@@ -58,10 +58,10 @@
 \chapter{Introduction}
 	Chemical data is growing exponentially as there are currently more than 123 million organic and inorganic substances to date \cite{CAS2016}, which means for drug development purposes, there is an abundance of chemical data to analyse in search for potential drugs. 
 	
-	Machine Learning is a form of artificial intelligence (AI) that enables computer programs to learn concepts from data without being explicitly programmed. This technique of AI can be applied to problems in many domains, which is what this paper aims to perform, by applying it to chemical datasets to build computer models, aka Virtual Screening, models which can predict with high accuracy, the probability of a drug passing through the blood brain barrier (BBB) of living organisms. 
+	Machine Learning is a form of artificial intelligence (AI) that enables computer programs to learn concepts from data without being explicitly programmed. This technique of AI can be applied to problems in many domains, which is what this paper aims to perform, by applying it to chemical datasets to build computer models, aka Virtual Screening, models which can predict with high accuracy, the probability of a drug passing through the blood-brain barrier (BBB) of living organisms. 
 	\\
 	
-	\textit{In Silico} models (computer models) have a profound use in virtual screening as they can enable scientist to scan through a large database of drugs to speed up a time consuming process of analysing drug candidates. 
+	\textit{In Silico} models (computer models) have a profound use in virtual screening as they can enable scientist to scan through a large database of drugs to speed up a time-consuming process of analysing drug candidates. 
 	
 	In the context of CNS (Central Nervous System) drug development, when a drug is absorbed into the blood stream, it needs to be able to pass through the Blood Brain Barrier (BBB) to its target which could be the brain or the nervous system, an example would an anti-migraine agent, ergotamine, 
 		\begin{figure}[H]
@@ -70,20 +70,20 @@
 			\caption{Chemical Representation of Ergotamine}
 			\label{fig:ergotamine}
 		\end{figure}
-	which has to pass through the blood brain barrier to the lining of the brain where it constricts the blood vessels there to decrease the pain from migraine headaches \cite{DrugsCom}. 
+	which has to pass through the blood-brain barrier to the lining of the brain where it constricts the blood vessels there to decrease the pain from migraine headaches \cite{DrugsCom}. 
 
-	According to Ana Teixeira et al, 2012 \cite{Anaetal2012}, only 2\% of the currently known small molecules can pass through the blood brain barrier, which translates to more time in the drug discovery pipeline spent on analysing drug candidates that can pass through the BBB barrier. \\
+	According to Ana Teixeira et al, 2012 \cite{Anaetal2012}, only 2\% of the currently known small molecules can pass through the blood-brain barrier, which translates to more time in the drug discovery pipeline spent on analysing drug candidates that can pass through the BBB barrier. \\
 	\section{Proposed Solution}
-		The problem of determining which drug candidates can pass through the blood brain barrier is a very challenging one and this paper approaches the problem through the use of computer models built with machine learning techniques, applied to a large database of molecules that pass through the Blood Brain Barrier, with the aim of predicting the probability of an unknown candidate drug passing through the BBB. \\
-		Ana et al \cite{Anaetal2012} points out that there is a lack of extensive dataset on BBB prediction as most of them are not comprehensive enough to build complex models out of, as a result, they have compiled a dataset of 2040 molecules for use in BBB prediction. Based on analysis carried out \cite{Anaetal2012} by Ana et al, They show that certain machine learning classifiers such as support vector machines and random forests outperform other classifiers especially for BBB classification tasks. This paper will attempt utilise that analysis as a baseline for developing our computer models.
+		The problem of determining which drug candidates can pass through the blood-brain barrier is a very challenging one and this paper approaches the problem through the use of computer models built with machine learning techniques, applied to a large database of molecules that pass through the Blood Brain Barrier, with the aim of predicting the probability of an unknown candidate drug passing through the BBB. \\
+		Ana et al \cite{Anaetal2012} points out that there is a lack of extensive dataset on BBB prediction as most of them are not comprehensive enough to build complex models out of, as a result, they have compiled a dataset of 2040 molecules for use in BBB prediction. Based on analysis carried out \cite{Anaetal2012} by Ana et al, They show that certain machine learning classifiers such as support vector machines and random forests outperform other classifiers, especially for BBB classification tasks. This paper will attempt to utilise that analysis as a baseline for developing our computer models.
 	%\section{Results}
 
 
 \chapter{Background}
-	Everything around us is composed of molecules, they are an electrically neutral group of two or more atoms held together by chemical bonds. They are the smallest particle in a compound that exhibit the chemical properties of the compound. 
+	Everything around us is composed of molecules, they are an electrically neutral group of two or more atoms held together by chemical bonds. They are the smallest particle in a compound that exhibits the chemical properties of the compound. 
 	Trees can be said to be made up of molecules and historically parts of trees have always been used to cure or alleviate symptoms of illness. Over time, the individual molecules in these herbal medicines were recognized for their effects and they were being produced synthetically, which further gave rise to Modern Drug Design and Discovery. \\
 	A potential molecule i.e drug candidate is usually screened against a target protein to test its effectiveness and the screening can either be virtual (Virtual Screening) or through a method known as High Throughput Screening (HTS) - a method of experimentation involving the use of robots and control software to conduct millions of scientific tests; These HTS machines can also be credited with the exponential growth in chemical data \cite{Dougetal2008}.
-	Drug discovery is a very expensive and time consuming process; It is usually broken down into numerous stages with the most expensive stage being the clinical trials. \\
+	Drug discovery is a very expensive and time-consuming process; It is usually broken down into numerous stages with the most expensive stage being the clinical trials. \\
 	The problem of the Blood Brain Barrier (BBB) prediction revolves around Chemistry and Computer Science being applied to the Drug Design domain with a thorough understanding of the constraints imposed by the Central Nervous System. This chapter introduces the necessary concepts needed to understand the solution taken to the BBB prediction problem.
 	
 	
@@ -102,7 +102,7 @@
 		This further raises the question of how to represent a molecule (Molecular Representation) in a format that can enable us to compare its similarity to another given molecule. The approach taken was to represent the molecule as a linear vector and then use known statistical techniques to compute the distance between another molecule. 
 			\subsubsection{Molecular Representation}
 			For the BBB task, the goal of molecular representation is to create a function $f(x)$ that receives as input, the SMILE representation of molecule $x$ and returns as output a feature vector. The \textbf{feature vector} is an n-dimensional vector of numerical features (Real numbers) that represent the molecule. 
-			%TODO: Draw diagram explaining the described function above??
+
 			There are other forms of molecular representation, as Jurgen \cite{Jurgen2004} highlights that other common representations of molecules include encoding the molecular data into a set, graph, vector or function-based representation to enable the use of distance as a form of molecular similarity \cite{Jurgen2004}. Each representation has its advantages and disadvantages, where graphs have their shortcomings, feature-based vectors can prove beneficial depending on the task to the accomplished. Building upon the research of Ana Teixeira et al \cite{Anaetal2012}, we would choose to represent the molecules in our dataset as a feature-vector of its chemical descriptors and as a vector of its molecular fingerprint, both which will be explained in the upcoming paragraphs. The Open-Source Cheminformatics Software, RDKit, implements the functionality we will need to extract the chemical descriptors and the molecular fingerprint vectors.
 				\paragraph{Chemical Descriptors as a Feature Vector:} 
 				Chemical Descriptors, also known as Molecular Descriptors, as defined by Roberto and Viviana, are the final result of a logic and mathematical procedure which transforms chemical information encoded within a symbolic representation of a molecule into a useful number or the result of some standardized experiment.\cite{RobertoViviana2009}.
@@ -115,12 +115,12 @@
 						\label{fig:random_molecules}
 					\end{figure}
 				Using the RDKit Software library, we can extract the relevant ~chemical descriptors. For our dataset, 206 Chemical descriptors were extracted, shown below in table \ref{table:random_chem_descriptors}, are the same random molecules but with the first 5 descriptors displayed.
-				%TODO: Fix the table display
+				
 					\begin{table}[ht!]
 						\centering
-						\begin{tabular}{ | c | c | c | c |   }
+						\begin{tabular}{ | p{3cm} | c | c | p{2cm} |   }
 							\hline
-							Molecule Name & MinEStateIndex & ExactMolWt & NumValenceElectrons \\
+							Molecule Name & MinEStateIndex & ExactMolWt & NumValence \newline Electrons \\
 							\hline
 							Mofegiline & -0.2557111626 & 197.101605856 & 76 \\
 							\hline
@@ -132,13 +132,13 @@
 							\hline
 							Duloxetine & 0.1002371504 & 297.118735228 & 108 \\
 							\hline
-							Meclorisone(meclorisone-dibutyrate) & -1.6040011915 & 426.136464736 & 154 \\
+							Meclorisone \newline(meclorisone-dibutyrate) & -1.6040011915 & 426.136464736 & 154 \\
 							\hline
 						\end{tabular}
 						\caption{Chemical Descriptors of 6 Random molecules from the dataset}
 						\label{table:random_chem_descriptors}
 					\end{table}
-				The beauty of the approach to the BBB problem is that from a statistical stand-point, we do not need a deep knowledge of Chemistry, we can simply make an educated neglect of the molecular names and the headers of the table \ref{table:random_chem_descriptors} and generate the matrix (rounded up to 3 decimal places ) shown as the feature vector \label{matrix:samp_feat_vec}
+				The beauty of the approach to the BBB problem is that from a statistical standpoint, we do not need a deep knowledge of Chemistry, we can simply make an educated neglect of the molecular names and the headers of table \ref{table:random_chem_descriptors} and generate the matrix (rounded up to 3 decimal places ) shown as the feature vector \label{matrix:samp_feat_vec}
 				\[ \left[ \begin{array}{c c c c}
 					-0.256 & 197.102 & 76 & ... \\
 					-0.951 & 256.125 & 96 & ... \\
@@ -164,16 +164,15 @@
 					\end{equation}
 				The table \ref{table:random_morgan_fingerprint} shows the transformation of a given molecule from our dataset into its SMILE format and then its fingerprint representation using the RDKit software library.
 					%\begin{sidewaystable}
-					%TODO: Fix the table here
 					\begin{table}[ht!]
 						\centering
-						\begin{tabular}{ | c | c | c | c |   }
+						\begin{tabular}{ | l | c  | p{3.5cm} |   }
 							\hline
-							Molecule Name & SMILE & Molecular Representation & Morgan Fingerprint \\
+							Molecule Name & SMILE & Morgan Fingerprint \\
 							\hline
-							111-trifluoro-2-chloroethane & C(CCl)(F)(F)F & \includegraphics[width=2cm,height=2cm]{images/111-trifluoro-2-chloroethane.png} & [0.0, 0.0, 0.0, \ldots, 1.0, 0.0, 0.0, \ldots ,0.0, 0.0, 0.0] \\
+							111-trifluoro-2-chloroethane & C(CCl)(F)(F)F  & [0.0, 0.0, 0.0, \ldots, \newline 1.0, 0.0, 0.0, \ldots ,0.0, 0.0, 0.0] \\ %& \includegraphics[width=3cm,height=1cm]{images/111-trifluoro-2-chloroethane.png}
 							\hline
-							Butanone & CCC(C)=O & \includegraphics[width=2cm,height=2cm]{images/Butanone.png} & [\ldots, 1.0, 0.0, 0.0, 0.0, \ldots, 0.0, 0.0 ] \\
+							Butanone & CCC(C)=O & [\ldots, 1.0, 0.0, 0.0, \newline 0.0, \ldots, 0.0, 0.0 ] \\ %& \includegraphics[width=3cm,height=1cm]{images/Butanone.png} 
 							\hline
 						\end{tabular}
 						\caption{Morgan Fingerprint representation of 2 Random molecules from the dataset}
@@ -183,8 +182,8 @@
 			\subsubsection{Similarity Measures} 
 			\label{subsubsection_similarity_measures}
 			The simplest way to cluster molecules together in a chemical database when performing virtual screening is through the concept of \textit{molecular similarity}. It is the core of Molecular Similarity Analysis (MSA) where the similarity measure, that characterizes the degree of proximity between pairs of molecules are manifested by their "molecular patterns", which are compromised of sets of features (chemical descriptors or Morgan fingerprint) \cite{Jurgen2004}. \\
-			Many different molecular similarity measures exists and some are more suitable to certain virtual screening tasks than another, which is what prompts the discussion of molecular similarity measures in section \ref{subsubsection_similarity_measures}. 
-			To determine the similarity between molecules, some form of similarity measure has to exist to compare molecules in the same representation. The similarity measures (similarity coefficient) are functions that maps pairs of compatible molecular representation into a real number. 
+			Many different molecular similarity measures exist and some are more suitable to certain virtual screening tasks than another, which is what prompts the discussion of molecular similarity measures in section \ref{subsubsection_similarity_measures}. 
+			To determine the similarity between molecules, some form of similarity measure has to exist to compare molecules in the same representation. The similarity measures (similarity coefficient) are functions that map pairs of compatible molecular representation into a real number. 
 			
 			For our prediction task, the main use of molecular similarity measures is in similarity searching when performing the nearest neighbour search. Here the molecules are ordered by their chosen chemical descriptors when we apply our similarity measure to calculate some form of structural relatedness between a target molecule and every other molecule in the dataset. The result is then a sorted list of molecules where the most similar molecules to our target molecule are located at the top of the list and in order of decreasing similarity.\\
 			According to Jurgen \cite{Jurgen2004}, the most important components of similarity measures are
@@ -193,7 +192,7 @@
 					\item \underline{The Weighing Scheme}: Used to assign differing degrees of importance to the various components of the molecular representation. An extra measure of accuracy in the weighing schemes would be the use of a chemical ontology database (e.g CheBL) when determining the importance of each component \cite{AnaPhd2014}.
 					\item \underline{Similarity Coefficient}: A quantitative measure of the degree of structural relatedness between two molecules.
 				\end{itemize}
-			The main application of any similarity measure hinges on the fact that \textbf{structurally similar molecules exhibit similar properties} as stated by Johnson and Maggiora (1990) \cite{JohnMaggiora1990}. However, they also noted that an exception to the rule is that sometimes a small change in the structure of the molecule can result in a radical change in the properties that it exhibits. Which is why Ana Teixeira (2014) \cite{AnaPhd2014} notes that the use of a chemical ontology database would be a plausible method to combat this exception. For our prediction task, the exception to this rule is ignored for practical purposes as majority of molecules exhibit similar properties to one another.\\
+			The main application of any similarity measure hinges on the fact that \textbf{structurally similar molecules exhibit similar properties} as stated by Johnson and Maggiora (1990) \cite{JohnMaggiora1990}. However, they also noted that an exception to the rule is that sometimes a small change in the structure of the molecule can result in a radical change in the properties that it exhibits. Which is why Ana Teixeira (2014) \cite{AnaPhd2014} notes that the use of a chemical ontology database would be a plausible method to combat this exception. For our prediction task, the exception to this rule is ignored for practical purposes a majority of molecules exhibit similar properties to one another.\\
 			In similarity measure calculations, the most common measure for calculating fingerprint similarity is the Tanimoto coefficient, given by 
 				\begin{equation}
 				Tanimoto(\vec{v_i}, \vec{v_j}) = 
@@ -216,17 +215,18 @@
 			\item Release of the drug 
 			\item Follow-up Monitoring
 		\end{itemize}
-	Majority of the targets for the drugs we consume are usually proteins e.g enzymes, receptors and nucleic acids and the structure of the target is confirmed through a virtual screening method known as \textit{molecular docking}; it can be used to predict how the drug will bind to its target protein though various search/optimisation algorithms \cite{Jurgen2004}.
+	Majority of the targets for the drugs we consume are usually proteins e.g enzymes, receptors and nucleic acids and the structure of the target is confirmed through a virtual screening method known as \textit{molecular docking}; it can be used to predict how the drug will bind to its target protein through various search/optimisation algorithms \cite{Jurgen2004}.
 	Another Virtual Screening technique usually used is \textit{Quantitative Structure-Activity Relationships} (QSAR), here the underlying idea is that molecules with similar structures behave in the same way, as a result, the activity of a protein against a certain group of compounds is recorded and a QSAR model is the constructed from there and used to determine whether a given compound will bind to the target, thus screening the virtual compound library for drugs of interest.
 	
 	\section[CNS Drug Design and the Blood Brain Barrier]{Central Nervous System Drug Design and the Blood Brain Barrier}
 	CNS Drugs aiming to pass through the Blood Brain Barrier often need to possess certain physical-chemical properties; some of which are Hydrogen bonding, ionization properties, molecular flexibility etc. \cite{Hassanetal2005}. The epithelial cells form an interface between the blood and the brain and these are commonly referred to as the Blood Brain Barrier. This interface occurs in other places within the body but what makes the BBB epithelial cells different are the tight junctions they form which makes it harder for drugs to pass through. Hassan and George (2005) further claim in their article that the majority of BBB penetration is passive diffusion through the cellular membrane.
 		\subsubsection{ADME Properties of CNS Drugs}
-		For a CNS drug to be therapeutically effective, it must be easily disposed asides from having a high degree of potency. The ADME properties of a drug refers to its ability to be easily absorbed, distributed, metabolised and excreted. Some properties of CNS drugs affect their ADME properties, some of which are \cite{Hassanetal2005}:
+		For a CNS drug to be therapeutically effective, it must be easily disposed asides from having a high degree of potency. The ADME properties of a drug refer to its ability to be easily absorbed, distributed, metabolised and excreted. Some properties of CNS drugs affect their ADME properties, some of which are \cite{Hassanetal2005}:
 			\begin{itemize}
 				\item \underline{Solubility}: A drug must be very soluble in the blood and still be in high enough concentration at its target, in this case, the Blood Brain Barrier, so that it can easily be absorbed.
 				\item \underline{Amount of Protein Binding}: Majority of CNS drugs tend to have high binding property towards proteins - this results in the drug being metabolised easily.
-				\item \underline{Partition Coefficient (LogP)}: This is sometimes referred to as the \textit{lipophilicity} of the compound and has served as one of the most important factors in drug design. Higher lipophilicity results in drugs with higher metabolic turnover but lower solubility and absorption \cite{Hassanetal2005}. 
+				\item \underline{Partition Coefficient (LogP)}: This is sometimes referred to as the \textit{lipophilicity} of the compound and has served as one of the most important factors in drug design. Higher lipophilicity results in drugs with a 
+				higher metabolic turnover but lower solubility and absorption \cite{Hassanetal2005}. 
 			\end{itemize}
 
 	
@@ -237,9 +237,9 @@
 			\item \underline{Supervised Learning}: Here the machine learning algorithms are provided with training data where the correct outputs to the inputs are labelled and the algorithm learns to generalise from the training data.
 			\item \underline{Unsupervised Learning}: This is the opposite of supervised learning, the training data contains only the inputs with no outputs; the algorithm then learns to generalise and cluster similar inputs together.
 			\item \underline{Reinforcement Learning}: This lies in between supervised and unsupervised learning as no correct labels are provided to the training data, however, the algorithm is corrected when it makes a wrong prediction and it is required to iterate over numerous possibilities till it makes the correct prediction
-			\item \underline{Evolutionary Learning}: This is a bio-inspired model where the concept of evolution is applied, numerous solutions are developed and are evaluated based on a fitness score. Models with higher fitness scores progress to the next training iteration whilst the lesser models are dropped till an optimal solution is found.
+			\item \underline{Evolutionary Learning}: This is a bio-inspired model where the concept of evolution is applied, numerous solutions are developed and are evaluated based on a fitness score. Models with a higher fitness scores progress to the next training iteration whilst the lesser models are dropped till an optimal solution is found.
 		\end{itemize}
-	For the blood brain barrier (BBB) task, supervised learning techniques would be utilised for prediction purposes whilst the unsupervised learning techniques would be used for data exploratory purposes and to further understand and highlight patterns in the BBB dataset. The \href{http://scikit-learn.org/stable/}{Scikit-Learn} software library would be used extensively for the implementation of the supervised and unsupervised learning models.
+	For the blood-brain barrier (BBB) task, supervised learning techniques would be utilised for prediction purposes whilst the unsupervised learning techniques would be used for data exploratory purposes and to further understand and highlight patterns in the BBB dataset. The \href{http://scikit-learn.org/stable/}{Scikit-Learn} software library would be used extensively for the implementation of the supervised and unsupervised learning models.
 	
 	\section{Data Representation and Preprocessing}
 	The \href{http://pandas.pydata.org/}{Pandas} and \href{http://www.numpy.org/}{Numpy} libraries are used throughout the project and they are also the underlying library used by Scikit-Learn. 
@@ -248,9 +248,22 @@
 			\caption{Functions to load, preprocess and transform the dataset}
 			\label{code:dataset_preprocess}
 		\end{listing}
-	In code listings \ref{code:dataset_preprocess}, the training data is loaded in using Numpy and then converted into the RDKit molecular format; the failed indices are recorded and deleted from the Numpy array and the resulting data is then transformed based on their chemical descriptors and stored in a Numpy array for use by the supervised and unsupervised models.
+	In code listings \ref{code:dataset_preprocess}, the training data shown in figure \ref{fig:input_dataset} is loaded using Numpy and then converted into the RDKit molecular format. 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1]{images/input_dataset}
+			\caption{Image of some sample rows from the dataset}
+			\label{fig:input_dataset}
+		\end{figure}
+	The failed indices are recorded and deleted from the Numpy array and the resulting data is then transformed based on their chemical descriptors and stored in a Numpy array for use by the supervised and unsupervised models, with an example of the processed results shown in figure \ref{fig:processed_dataset}.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=\textwidth,scale=1]{images/processed_dataset}
+			\caption{Image of some sample rows from the processed dataset}
+			\label{fig:processed_dataset}
+		\end{figure}
 	
-	It is worth noting the dataset used is a highly biased one; After preprocessing and cleaning, there are a total of 1563 molecules that pass through the blood brain barrier and a total of 477 molecules that do not pass through the barrier. This bias would be accounted for during the training phase as the machine learning classifiers would be cross validated as explained in the model evaluation section.
+	It is worth noting the dataset used is a highly biased one; After preprocessing and cleaning, there is a total of 1563 molecules that pass through the blood-brain barrier and a total of 477 molecules that do not pass through the barrier. This bias would be accounted for during the training phase as the machine learning classifiers would be cross validated as explained in the model evaluation section.
 	
 	
 	
@@ -264,7 +277,7 @@
 		
 		To illustrate further using the feature vector shown in \ref{matrix:samp_feat_vec}, the vector has a dimensional size of 206 features, as all the 2040 molecules have a chemical descriptor size of 206. Plotting a single molecule on a graph with 206 dimensions would be nearly impossible as 2D and 3D data are the best ways to illustrate statistical data for humans. By applying the Principal Component algorithm to the feature vector, it proceeds to find the direction of maximum variance for each molecule that is, it returns a new vector that contains the most information. The directions of maximum variance returned are referred to as the \textit{principal components}.
 		
-		In order to gain a deeper understanding of our data, the PCA algorithm is applied with the number of principal components set to 2 i.e (n\_components = 2). In the 2D representation shown below in figure \ref{fig:scatter_pca_2D}, the data points are tightly clustered in the middle, and whilst this looks like it is linearly inseparable, with some clustering techniques that would be shown later, a better representation where it is more distinguishible between the data points would be shown.
+		In order to gain a deeper understanding of our data, the PCA algorithm is applied with the number of principal components set to 2 i.e (n\_components = 2). In the 2D representation shown below in figure \ref{fig:scatter_pca_2D}, the data points are tightly clustered in the middle, and whilst this looks like it is linearly inseparable, with some clustering techniques that would be shown later, a better representation where it is more distinguishable between the data points would be shown.
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.5\textheight]{images/scatter_pca}
@@ -272,7 +285,7 @@
 			\label{fig:scatter_pca_2D}
 		\end{figure}
 	
-		To further examine the data, the next 3 principal components are selected to create a 3D plot. The 3D plots are shown in figures \ref{fig:scatter_pca_3D} and \ref{fig:scatter_pca_3D_2} also has the same clustering of a significant proportion of the blue molecules in the same space as the red molecules but looks more linearly separable than the 2D plot. As would be shown in the upcoming sections, with a little bit of feature engineering, it would be possible to seperate the data points into 2 clusters of red and blue i.e molecules that pass through the barrier and the ones that do not. 
+		To further examine the data, the next 3 principal components are selected to create a 3D plot. The 3D plots are shown in figures \ref{fig:scatter_pca_3D} and \ref{fig:scatter_pca_3D_2} also has the same clustering of a significant proportion of the blue molecules in the same space as the red molecules but looks more linearly separable than the 2D plot. As would be shown in the upcoming sections, with a little bit of feature engineering, it would be possible to separate the data points into 2 clusters of red and blue i.e molecules that pass through the barrier and the ones that do not. 
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth,scale=1,totalheight=0.4\textheight]{images/scatter_pca_3D}
@@ -286,12 +299,12 @@
 			\label{fig:scatter_pca_3D_2}
 		\end{figure}
 		
-		A major benefit of exploratory data anlysis as we have seen here is that it is worth gaining insights into the dataset to determine the kind of feature engineering required to achieve high performing machine learning models.
+		A major benefit of exploratory data analysis as we have seen here is that it is worth gaining insights into the dataset to determine the kind of feature engineering required to achieve high performing machine learning models.
 	
 	
 	
 		\subsection{Manifold Learning with t-SNE}
-		\paragraph{Manifold Learning algorithms} are also another form of dimensionalty reduction techniques similar to the Principal Component Analysis algorithm. The t-SNE algorithm, a manifold learning technique, would also be used to further visualise the data in another attempt to further see if it is visually possible to separate between the molecules that do and do not pass through (the red and blue dots). 
+		\paragraph{Manifold Learning algorithms} are also another form of dimensionality reduction techniques similar to the Principal Component Analysis algorithm. The t-SNE algorithm, a manifold learning technique, would also be used to further visualise the data in another attempt to further see if it is visually possible to separate between the molecules that do and do not pass through (the red and blue dots). 
 		
 		Manifold Learning Algorithms excel at data visualisation tasks, they provide more complex mappings and often better data representations but perform poorly for data classification tasks. They perform poorly because they do not allow transformations of new data once they have been fitted \cite{Yairetal2008}.\\
 		
@@ -352,7 +365,7 @@
 			
 			
 			\subsubsection{Agglomerative Clustering}
-			These are a form of hierarchial clustering techniques with major applications in natural language processing. Hierarchial techniques form clusters by continuously merging or splitting data points till it meets the required number of clusters. Agglomerative clustering works in a similar manner where each data point is a cluster of its own and iteratively the algorithm merges the clusters togethers using a \textit{merging strategy}. 
+			These are a form of hierarchical clustering techniques with major applications in natural language processing. Hierarchical techniques form clusters by continuously merging or splitting data points till it meets the required number of clusters. Agglomerative clustering works in a similar manner where each data point is a cluster of its own and iteratively the algorithm merges the clusters together using a \textit{merging strategy}. 
 			
 			The merging strategy used for our dataset was the \textbf{Ward Strategy}, where the algorithm minimises the sum of squared differences within all the clusters, which is similar in a way to the K-Means algorithm.
 			
@@ -378,7 +391,7 @@
 
 	\section{Machine Learning Models}
 		\subsection{K-Nearest Neighbours}
-		K-Nearest Neighbours (k-NN) is a form of instance based learning; Instanced-based learning techniques store the training example in memory and utilise them to make predictions. All data points (nearest neighbours) in the feature vector are defined in a form of euclidean space; where a prediction for an instance is made by finding its euclidean distance to its nearest $k$ neighbours. 
+		K-Nearest Neighbours (k-NN) is a form of instance-based learning; Instanced-based learning techniques store the training example in memory and utilise them to make predictions. All data points (nearest neighbours) in the feature vector are defined in a form of euclidean space; where a prediction for an instance is made by finding its euclidean distance to its nearest $k$ neighbours. 
 		
 			\begin{mdframed}[]
 				\paragraph{The k-NN training and classification Algorithm \cite{Mitchell1997}}
@@ -427,7 +440,7 @@
 		\subsection{Support Vector Machines}
 		Support Vector Machines (SVMs) are a set of supervised learning techniques that make predictions by learning the statistical hyper-plane (support vectors) that determines the categories of data in the input space. They are very effective in high dimensional situations as is the case with our dataset (2048 x 206) and also very memory efficient; as only a subset of the training points in the decision function i.e support vectors are stored in memory. 
 		
-		SVMs are computational intensive and as a result, they do not scale well with large datasets; The driving idea behind SVMs is to infer the hyper-plane that divides the data into categories. Applying this to our BBB dataset, the goal is to have the SVM learn the support vectors that classify a molecule as either positive (passes through the barrier) or negative. Figure \ref{fig:svm_mol} shows the result of applying the SVM classifier to the simple molecular dataset.
+		SVMs are computationally intensive and as a result, they do not scale well with large datasets; The driving idea behind SVMs is to infer the hyper-plane that divides the data into categories. Applying this to our BBB dataset, the goal is to have the SVM learn the support vectors that classify a molecule as either positive (passes through the barrier) or negative. Figure \ref{fig:svm_mol} shows the result of applying the SVM classifier to the simple molecular dataset.
 		%Scaling the data using a Standard Scaler and selecting the top 100 principal component, a mean accuracy of 84.9\% was achieved using both datasets
 		\begin{figure}[H]
 			\centering
@@ -436,7 +449,7 @@
 			\label{fig:svm_mol}
 		\end{figure}
 		
-		The figures show the algorithm applied on our datasets using numerous kernel functions. Kernel functions are basically a form of similarity functions, they compute the distances between data points in the input space. To enable the SVM classifier make predictions for a new data point, its distance to the support vectors are calculated using any of the kernel functions (linear, polynomial, sigmoid or Radial Basis function (RBF)) \cite{StephenM2014}. Due to the highly mathematical nature of these kernel functions, their intricate details can be safely ignored and their classification results instead focused on for our BBB classification tasks. 
+		The figures show the algorithm applied on our datasets using numerous kernel functions. Kernel functions are basically a form of similarity functions, they compute the distances between data points in the input space. To enable the SVM classifier to make predictions for a new data point, its distance to the support vectors are calculated using any of the kernel functions (linear, polynomial, sigmoid or Radial Basis function (RBF)) \cite{StephenM2014}. Due to the highly mathematical nature of these kernel functions, their intricate details can be safely ignored and their classification results instead focused on for our BBB classification tasks. 
 		
 		\begin{figure}[H]
 			\centering
@@ -475,7 +488,7 @@
 			\subsubsection{Random Forests}
 			Random forests are an ensemble of decision trees where each decision tree has been trained with a subsection of the dataset with the knowledge that the said tree would overfit on that part of the dataset. The overfitting of the random forest is reduced by averaging the result from all the individual trees to return a classification.
 			
-			An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset;With the number of trees in the random forest set to 20.
+			An accuracy of $\sim87\%$ was achieved using the random forest classifier on the simple molecular descriptor dataset whilst an accuracy of $\sim89\%$ was achieved on the Morgan fingerprint dataset; With the number of trees in the random forest set to 20.
 				
 			\subsubsection{Extremely Randomized Trees}
 			Extremely randomized trees also known as \textit{Extra Trees} are very similar to Random Forests. The difference between them is that at each step of the algorithm the entire dataset is used as opposed to partial datasets in random forests and the decision boundary is also chosen at random instead of the best one \cite{Pierre2006}.
@@ -483,7 +496,7 @@
 			The extra trees algorithm performed slightly better than the random forests algorithm; On the simple molecular dataset, the extra trees score an accuracy of $\sim90\%$ and on the Morgan fingerprint dataset, the extra trees score an accuracy of $\sim89\%$, performing just slightly less than the random forest on the same dataset with the number of extra trees was set to 20.
 			
 			\subsubsection{Gradient Tree Boosting}
-			Gradient boosted trees differ from random forests in the sense that in gradient tree boosting, very small trees called \textit{weak learners} are trained serially where the current tree learns from the mistakes of the previous tree. The weak learners usually have a shallow dept of 5 and can therefore make faster predictions. The learning rate is also another parameter of the gradient boosted trees that can be optimised; the learning rate is the degree to which the current tree learns from its predecessors \cite{Mueller2016} with a higher rate resulting in stronger corrections.
+			Gradient boosted trees differ from random forests in the sense that in gradient tree boosting, very small trees called \textit{weak learners} are trained serially where the current tree learns from the mistakes of the previous tree. The weak learners usually have a shallow dept of 5 and can, therefore, make faster predictions. The learning rate is also another parameter of the gradient boosted trees that can be optimised; the learning rate is the degree to which the current tree learns from its predecessors \cite{Mueller2016} with a higher rate resulting in stronger corrections.
 			
 			Applying the gradient boosted trees algorithm to both derivations of our dataset with
 			the number of estimators set to 150 and the learning rate to 0.45. An accuracy score of $\sim86\%$ was achieved on the simple molecular descriptors and $\sim82\%$ on the Morgan fingerprint dataset.
@@ -499,7 +512,7 @@
 				%This is a learning concept of the brain based on the mechanism neural plasticity proposed by Donald Hebb. The rule formulated states that changes in the strength of synaptic connections are proportional to the correlation in the firing of the two connecting neurons, the strength of the connection is proportional to the frequency of excitement between them. However, the connection between two neurons that never fire will eventually be broken. \\
 				%The idea of repetition enhances retention can also be applied here, where actions that are repeated continuously will create retention in the brain \cite{Cunninghametal1984}. An example is in the experiment carried out by Ivan Pavlov, where his dogs were conditioned to associate the ringing of a bell to the presence of food. As a result, the neurons responsible for salivating over food and for hearing the bell would have a very strong connection to the extent that merely hearing the bell was sufficient to cause the salivating neurons to fire. 
 			\subsubsection{Multi Layer Perceptron}
-			The Perceptron can also be referred to a collection of neurons along with a vector of inputs and a vector of weights to fasten the inputs to the neuron. This neuron in this network consists of its inputs, weights, threshold and activation function. Each neuron,receives an input along with the strength of the input i.e weight, which it multiplies together and if the value is greater than the threshold, the neuron fires. \\
+			The Perceptron can also be referred to a collection of neurons along with a vector of inputs and a vector of weights to fasten the inputs to the neuron. This neuron in this network consists of its inputs, weights, threshold and activation function. Each neuron, receives an input along with the strength of the input i.e weight, which it multiplies together and if the value is greater than the threshold, the neuron fires. \\
 			For our dataset the input $X = [x_1,x_2,x_3,...,x_n]$ to a Perceptron could be either a simple molecular feature vector value e.g the number of hydrogen atoms in the molecule or vectors of 1s and 0s if we're using the Morgan fingerprint dataset to train the network. Each neuron is also given a vector of small random positive and negative values as its weights. The neuron calculates its activation value as 
 				\begin{equation}
 				h = \sum_{i=1}^{m}w_ix_i
@@ -596,7 +609,7 @@
 		
 		Ensembles have the benefit that they tend to perform better than single classifiers \cite{Dietterich}; With this knowledge, all the previously trained classifier were combined to create an ensemble learner that makes predictions by taking a weighted vote of the individual prediction of the classifiers its composed of.
 		
-		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset with its learning curve shown in figure \ref{fig:learning_curve_ensemble}; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners and also that the ensemble classifier can achieve a much higher performance if trained with more data. Also the reduction in the training score shows that the classifier over fits less with more data.
+		The ensemble classifier achieved an accuracy of $\sim94\%$ on both the simple molecular and the fingerprint dataset with its learning curve shown in figure \ref{fig:learning_curve_ensemble}; Which further enforces the claim by Thomas G. Dietterich \cite{Dietterich} that ensemble learners perform better than individual learners and also that the ensemble classifier can achieve a much higher performance if trained with more data. Also, the reduction in the training score shows that the classifier over fits less with more data.
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1]{images/learning_curve_ensemble_clf}
@@ -608,13 +621,13 @@
 
 \chapter{Model Evaluation and Persistence}
 	\section{Model Evaluation}
-		The next step after training the classifier is to evaluate their performance. There are a myriad of techniques available for evaluating classifier performance and these techniques help us answer two basic questions about the model, which are:
+		The next step after training the classifier is to evaluate their performance. There is a myriad of techniques available for evaluating classifier performance and these techniques help us answer two basic questions about the model, which are:
 			\begin{itemize}
 				\item How accurate is the machine learning model?
 				\item How wrong is the model when it is wrong?
 			\end{itemize}
 			
-		\subsection{Measuring Accuracy using K-Fold Cross Validation}
+		\subsection{Measuring Accuracy using K-Fold Cross-Validation}
 		To avoid a machine learning model from over fitting (i.e failing to make meaningful predictions on new data), we employ a technique known as cross-validation. Here, a portion of the dataset is removed during the training phase and then used to evaluate the model during the test phase. Which further brings us to the concept of $k$-fold cross validation; In $k$-fold cross validation, the entire dataset is divided into $k$ equal folds and the model is trained $k$ times iteratively. In each iteration, the model is trained with the remaining $k-1$ folds and tested with the $k^{th}$ fold.
 			\begin{figure}[H]
 				\centering
@@ -649,7 +662,7 @@
 		%	\end{itemize}
 		%EnD remove
 		
-		Applying the confusion matrix metric to the ensemble classifier, the result is shown in figure \ref{fig:confusion_matrix}; The diagonals represent the number accuracte predictions made for each class, while the non-diagonals represent the misclassifications of the model. For example,in the confusion matrix, the ensemble classifier correctly predicted 454 moleculesas being able to passing through the barrier and falsely classified the remaining 15 molecules as not being able to pass.
+		Applying the confusion matrix metric to the ensemble classifier, the result is shown in figure \ref{fig:confusion_matrix}; The diagonals represent the number accurate predictions made for each class, while the non-diagonals represent the misclassification of the model. For example, in the confusion matrix, the ensemble classifier correctly predicted 454 molecules as being able to pass through the barrier and falsely classified the remaining 15 molecules as not being able to pass.
 			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\textwidth,scale=1]{images/confusion_matrix}
@@ -657,7 +670,7 @@
 				\label{fig:confusion_matrix}
 			\end{figure}
 			
-			\subsubsection{Reciever Operating Characteristic Curve (ROC curve)}
+			\subsubsection{Receiver Operating Characteristic Curve (ROC curve)}
 			The ROC curve according to Tom Fawcett is a technique for visualizing, organizing and selecting classifiers based on their performance \cite{TFawcett2005}.
 			
 			The ROC curve is illustrated by plotting the True Positive Rate (TPR; The fraction of true positives out of the positive classifications) against the False Positive Rate (FPR; The fraction of False positives out of the negative classifications) at various thresholds \cite{TFawcett2005}. Shown in figure \ref{fig:roc} is the ROC curve of the Ensemble classifier when evaluated with the simple molecular descriptor dataset. The diagonal represents the expected curve if the model were simply guessing randomly.
@@ -710,7 +723,7 @@
 \chapter{Conclusion}
 	In Chapter 1, we learnt that there is an abundance of chemical data and that machine learning methods can help discover patterns in these data especially in the field of Central Nervous System drug discovery.
 	
-	Different data exploratory techniques were applied to our dataset and after the visualisations highlighted that it was possible to detect the statistical pattern in the dataset, we then proceeded to training numerous machine learning models with our data. Eventually, an Ensemble classifier combining all the previously trained models, was created for use in any prediction task.
+	Different data exploratory techniques were applied to our dataset and after the visualisations highlighted that it was possible to detect the statistical pattern in the dataset, we then proceeded to train numerous machine learning models with our data. Eventually, an Ensemble classifier combining all the previously trained models was created for use in any prediction task.
 	\section{Integration into a Web Application}
 		The Ensemble classifier was wrapped in a Web server written in python using the Flask framework. It exposes an API on the endpoint "/api/prediction" where a simple POST request with the smile data shown below
 		\begin{minted}[obeytabs=false,tabsize=2]{bash}
