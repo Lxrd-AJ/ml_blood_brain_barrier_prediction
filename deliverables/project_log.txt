@@ -1,3 +1,27 @@
+commit c1e8645105068c5abcf0ebac7cb0a1981ddf0b94
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Thu May 11 07:32:31 2017 +0100
+
+    Uncommented code in viz code
+
+commit c58a1ef05de14344c9294aa61fbb5a371e86e0ff
+Author: Lxrd_AJ <ibraheemaj@icloud.com>
+Date:   Thu May 11 07:24:34 2017 +0100
+
+    Dockerfile updated
+
+commit ca0682094dba72b7ae05b0832d28fa89bde951ad
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Wed May 10 21:31:56 2017 +0100
+
+    Ethics form added
+
+commit b5e972c8c450fbd71e178c0665d600e57195cc68
+Author: AJ Ibraheem <ibraheemaj@icloud.com>
+Date:   Wed May 10 16:00:46 2017 +0100
+
+    Examiner's report complete
+
 commit 456052a60b0ab863b1bd0e213b366488a5b441af
 Author: AJ Ibraheem <ibraheemaj@icloud.com>
 Date:   Tue May 9 14:14:03 2017 +0100
